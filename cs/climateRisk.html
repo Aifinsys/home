@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>WACI Calculation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2, h3 { color: #333; }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .math { font-style: italic; }
+        .copyright {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            padding: 5px;
+            font-size: 12px; }
+
+        .footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: #fff;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+    <h1>計算加權平均碳強度 (WACI)</h1>
+    <h2>WACI (Weighted Average Carbon Intensity)</h2>
+    <p>反應整個投資組合的碳強度，考慮每項投資的投資金額與其碳排放的加權平均值：</p>
+    <h3>表格數據</h3>
+    <table>
+        <tr>
+            <th>企業名稱</th>
+            <th>權重 (%)</th>
+            <th>碳強度 (噸CO2e/百萬美元)</th>
+        </tr>
+        <tr>
+            <td>企業A (煤炭)</td>
+            <td>20%</td>
+            <td>1,000</td>
+        </tr>
+        <tr>
+            <td>企業B (製造)</td>
+            <td>35%</td>
+            <td>100</td>
+        </tr>
+        <tr>
+            <td>企業C (科技)</td>
+            <td>45%</td>
+            <td>20</td>
+        </tr>
+    </table>
+    <h3>公式</h3>
+    <p>WACI = <span class="math">\(\sum (\text{企業碳強度} \times \text{投資權重})\)</span></p>
+    <h3>計算</h3>
+    <p>WACI = <span class="math">\((1,000 \times 0.2) + (100 \times 0.35) + (20 \times 0.45)\)</span></p>
+    <p>WACI = <span class="math">\(200 + 35 + 9 = 244 \, \text{噸CO2e/百萬美元}\)</span></p>
+    <br>
+    <div class="footer">
+            <button onclick="window.location.href='index.html'">回首頁</button>
+        </div>
+
+    <br>
+        <div class="copyright">2025 Copyright © Ai Fintech Crop.</div>
+</body>
+</html>
