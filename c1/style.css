@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left; /* 文字靠左對齊 */
+    width: 80%;
+    max-width: 600px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: center; /* 標題置中 */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto; /* 按鈕置中 */
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.image-container {
+    position: fixed;
+    bottom: 50px; /* 距離頁底2公分 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 圖片之間的間距 */
+}
+
+.image-container img {
+    width: 150px; /* 圖片寬度 */
+    height: auto; /* 保持圖片比例 */
+    cursor: pointer;
+    margin: 0 10px; /* 圖片之間的間距 */
+}
+
+
+#quizContainer {
+    display: none;
+}
+
+#questionCount {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#questionNumber {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#questionText {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+#options p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+#answerInput {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+#explanation {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
