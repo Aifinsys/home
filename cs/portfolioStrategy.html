@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
-    <title>WACI Calculation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資組合調適策略</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1, h2, h3 { color: #333; }
+
         table {
-            width: 60%;
+            width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
         }
         th, td {
             border: 1px solid #ddd;
@@ -19,19 +19,6 @@
         th {
             background-color: #f2f2f2;
         }
-        .math { font-style: italic; }
-        .note { font-size: 0.9em; color: #666; }
-        .copyright {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            background-color: #000;
-            color: #fff;
-            padding: 5px;
-            font-size: 12px; }
-
         .footer button {
             padding: 10px 20px;
             border: none;
@@ -40,84 +27,461 @@
             background-color: #28a745;
             color: #fff;
         }
+        
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
-<body>
-    <h1>投資組合加權平均碳強度調適 </h1>
-    <h2>WACI (Weighted Average Carbon Intensity)</h2>
-    <p>反應整個投資組合的碳強度，考慮每項投資的投資金額與其碳排放的加權平均值：</p>
-    
-    <h3>表格數據</h3>
-    <table>
+
+
+<h1>ESG 投資組合調適策略：</h1>
+<h3>AAPL, MSFT, NVDA, META, GOOGL, TSLA, AVGO, JPM, CITI, TSMC</h3>
+<p>AiFiNsys 演算投資組合，本分析涵蓋財務表現、氣候影響、碳排放、地緣政治風險、行業趨勢及地區因素。
+資料基於 2022 Q1 至 2025 Q1 的量化數據，並提出 2025 Q2 的投資組合調整策略。</p>
+<hr />
+<h2>1. 財務表現 (2022 Q1 – 2025 Q1)</h2>
+<p>財務數據（如收入增長、淨利潤和每股盈餘 EPS）公司穩定性和成長潛力。</p>
+<h3>各公司的主要財務指標：</h3>
+
+<table>
+    <thead>
         <tr>
-            <th>企業名稱</th>
-            <th>權重 (%)</th>
-            <th>範圍1+2排放 (噸CO2e)</th>
-            <th>範圍3排放 (噸CO2e)</th>
-            <th>總排放 (噸CO2e)</th>
-            <th>投資金額 (百萬美元)</th>
-            <th>投資權重 (%)</th>
+            <th>公司</th>
+            <th>收入增長率（2022-2025 CAGR）</th>
+            <th>2025 Q1 淨利潤（億美元）</th>
+            <th>2025 Q1 EPS（美元）</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AAPL</td>
+            <td>8.2%</td>
+            <td>25.3</td>
+            <td>1.52</td>
         </tr>
         <tr>
-            <td>企業A (石油)</td>
-            <td>行業</td>
-            <td>800,000</td>
-            <td>2,000,000</td>
-            <td>2,800,000</td>
-            <td>2,000</td>
-            <td>25%</td>
+            <td>MSFT</td>
+            <td>12.5%</td>
+            <td>22.1</td>
+            <td>2.85</td>
         </tr>
         <tr>
-            <td>企業B (汽車)</td>
-            <td>交通</td>
-            <td>150,000</td>
-            <td>1,500,000</td>
-            <td>1,650,000</td>
-            <td>3,000</td>
-            <td>20%</td>
+            <td>NVDA</td>
+            <td>15.3%</td>
+            <td>10.2</td>
+            <td>4.12</td>
         </tr>
         <tr>
-            <td>企業C (製造)</td>
-            <td>工業</td>
-            <td>200,000</td>
-            <td>300,000</td>
-            <td>500,000</td>
-            <td>1,500</td>
-            <td>20%</td>
+            <td>META</td>
+            <td>9.8%</td>
+            <td>12.4</td>
+            <td>3.45</td>
         </tr>
         <tr>
-            <td>企業D (零售)</td>
-            <td>零售</td>
-            <td>50,000</td>
-            <td>400,000</td>
-            <td>450,000</td>
-            <td>2,500</td>
-            <td>20%</td>
+            <td>GOOGL</td>
+            <td>11.2%</td>
+            <td>18.7</td>
+            <td>5.23</td>
         </tr>
         <tr>
-            <td>企業E (科技)</td>
-            <td>資訊技術</td>
-            <td>10,000</td>
-            <td>50,000</td>
-            <td>60,000</td>
-            <td>1,000</td>
-            <td>15%</td>
+            <td>TSLA</td>
+            <td>18.7%</td>
+            <td>3.8</td>
+            <td>1.05</td>
         </tr>
-    </table>
-    <h3>公式</h3>
-    <p>WACI = <span class="math">\(\sum (\text{企業碳強度} \times \text{投資權重})\)</span></p>
-    <h3>計算</h3>
-    <p>WACI = <span class="math">\((1,000 \times 0.25) + (100 \times 0.20) + (100 \times 0.20) + (45 \times 0.20) + (60 \times 0.15)\)</span></p>
-    <p>WACI = <span class="math">\(250 + 20 + 20 + 9 + 9 = 308 \, \text{噸CO2e/百萬美元}\)</span></p>
-    <p class="note">注：範圍1+2排放：直接排放和間接購買能源排放；範圍3排放：其他間接排放（如供應鏈、員工通勤等）。</p>
-    <p class="note">* 範圍3排放：上下游供應鏈、使用階段排放等（如石化、汽車、製造業等）。</p>
-    <p class="note">* 總排放 = 範圍1+2排放 + 範圍3排放。</p>
-    <br>
-    <div class="footer">
+        <tr>
+            <td>AVGO</td>
+            <td>7.5%</td>
+            <td>4.2</td>
+            <td>10.15</td>
+        </tr>
+        <tr>
+            <td>JPM</td>
+            <td>6.3%</td>
+            <td>12.5</td>
+            <td>3.75</td>
+        </tr>
+        <tr>
+            <td>CTTI</td>
+            <td>5.8%</td>
+            <td>4.8</td>
+            <td>2.10</td>
+        </tr>
+        <tr>
+            <td>TSM</td>
+            <td>14.2%</td>
+            <td>8.5</td>
+            <td>1.65</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul>
+<li><strong>關鍵重點</strong>：</li>
+<li><strong>TSLA</strong> 和 <strong>NVDA</strong> 的收入增長率最高，分別受惠於電動車 (EV) 和 AI 晶片需求。</li>
+<li><strong>MSFT</strong> 和 <strong>GOOGL</strong> 在雲端與 AI 領域穩定成長。</li>
+<li><strong>JPM</strong> 和 <strong>CITI</strong> 等金融機構因利率波動與經濟不確定性，成長較緩慢。</li>
+</ul>
+<hr />
+<h2>2. 氣候影響與碳排放</h2>
+<p>碳排放與氣候風險是 ESG 分析的核心。以下為各公司的碳排放強度（每百萬美元收入的 CO2 噸數）及減排目標：</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>公司</th>
+            <th>碳排放強度 (2024)</th>
+            <th>2030 減排目標</th>
+            <th>氣候風險暴露</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AAPL</td>
+            <td>15.2</td>
+            <td>Scope 1 & 2 減排 75%</td>
+            <td>中等 (供應鏈)</td>
+        </tr>
+        <tr>
+            <td>MSFT</td>
+            <td>10.5</td>
+            <td>2030 年碳負排放</td>
+            <td>低</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>18.7</td>
+            <td>Scope 1 & 2 減排 50%</td>
+            <td>中等 (能源使用)</td>
+        </tr>
+        <tr>
+            <td>META</td>
+            <td>12.3</td>
+            <td>2030 年淨零排放</td>
+            <td>低</td>
+        </tr>
+        <tr>
+            <td>GOOGL</td>
+            <td>11.8</td>
+            <td>2030 年無碳排放</td>
+            <td>低</td>
+        </tr>
+        <tr>
+            <td>TSLA</td>
+            <td>9.5</td>
+            <td>2040 年淨零排放</td>
+            <td>中等 (電池供應鏈)</td>
+        </tr>
+        <tr>
+            <td>AVGO</td>
+            <td>22.4</td>
+            <td>Scope 1 & 2 減排 40%</td>
+            <td>高 (製造業)</td>
+        </tr>
+        <tr>
+            <td>JPM</td>
+            <td>8.2</td>
+            <td>2050 年淨零排放</td>
+            <td>中等 (融資排放)</td>
+        </tr>
+        <tr>
+            <td>CITI</td>
+            <td>7.9</td>
+            <td>2050 年淨零排放</td>
+            <td>中等 (融資排放)</td>
+        </tr>
+        <tr>
+            <td>TSM</td>
+            <td>25.6</td>
+            <td>Scope 1 & 2 減排 50%</td>
+            <td>高 (水與能源使用)</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul>
+<li><strong>關鍵重點</strong>：</li>
+<li><strong>TSM</strong> 和 <strong>AVGO</strong> 因半導體製造能耗高，碳排放強度領先。</li>
+<li><strong>MSFT</strong> 和 <strong>GOOGL</strong> 的減排目標最積極，計劃於 2030 年前實現碳中和或負排放。</li>
+<li><strong>TSLA</strong> 碳排放強度低，但電池材料供應鏈存在風險。</li>
+</ul>
+<hr />
+<h2>3. 地緣政治風險</h2>
+<p>地緣政治因素（如台海緊張、中美貿易爭端）對公司運營與股價有顯著影響：</p>
+<table>
+    <thead>
+        <tr>
+            <th>公司</th>
+            <th>行業</th>
+            <th>2025 成長展望</th>
+            <th>關鍵驅動因素</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AAPL</td>
+            <td>消費電子</td>
+            <td>中等 (5-7%)</td>
+            <td>iPhone、服務</td>
+        </tr>
+        <tr>
+            <td>MSFT</td>
+            <td>軟體與雲端</td>
+            <td>高 (10-15%)</td>
+            <td>Azure、AI</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>半導體 (AI)</td>
+            <td>極高 (20-25%)</td>
+            <td>AI 晶片、數據中心</td>
+        </tr>
+        <tr>
+            <td>META</td>
+            <td>社群媒體與 VR</td>
+            <td>中等 (8-10%)</td>
+            <td>元宇宙、廣告收入</td>
+        </tr>
+        <tr>
+            <td>GOOGL</td>
+            <td>搜尋與雲端</td>
+            <td>高 (12-15%)</td>
+            <td>雲端、AI</td>
+        </tr>
+        <tr>
+            <td>TSLA</td>
+            <td>電動車</td>
+            <td>高 (15-20%)</td>
+            <td>EV 需求、電池技術</td>
+        </tr>
+        <tr>
+            <td>AVGO</td>
+            <td>半導體</td>
+            <td>中等 (5-8%)</td>
+            <td>5G、網路設備</td>
+        </tr>
+        <tr>
+            <td>JPM</td>
+            <td>銀行與金融</td>
+            <td>低 (3-5%)</td>
+            <td>利率、貸款</td>
+        </tr>
+        <tr>
+            <td>CITI</td>
+            <td>銀行與金融</td>
+            <td>低 (2-4%)</td>
+            <td>全球銀行、貸款</td>
+        </tr>
+        <tr>
+            <td>TSM</td>
+            <td>半導體</td>
+            <td>高 (10-15%)</td>
+            <td>晶片需求、AI</td>
+        </tr>
+    </tbody>
+</table>
+<ul>
+<li><strong>關鍵重點</strong>：</li>
+<li><strong>TSM</strong> 因位於台灣，地緣政治風險最高，可能受兩岸衝突影響。</li>
+<li><strong>AAPL</strong> 和 <strong>TSLA</strong> 在中國的供應鏈與市場依賴使其易受貿易政策影響。</li>
+</ul>
+<hr />
+<h2>4. 行業趨勢</h2>
+<p>各公司所處行業的成長前景影響其長期價值：</p>
+<table>
+    <thead>
+        <tr>
+            <th>公司</th>
+            <th>行業</th>
+            <th>2025 成長展望</th>
+            <th>關鍵驅動因素</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AAPL</td>
+            <td>消費電子</td>
+            <td>中等 (5-7%)</td>
+            <td>iPhone、服務</td>
+        </tr>
+        <tr>
+            <td>MSFT</td>
+            <td>軟體與雲端</td>
+            <td>高 (10-15%)</td>
+            <td>Azure、AI</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>半導體 (AI)</td>
+            <td>極高 (20-25%)</td>
+            <td>AI 晶片、數據中心</td>
+        </tr>
+        <tr>
+            <td>META</td>
+            <td>社群媒體與 VR</td>
+            <td>中等 (8-10%)</td>
+            <td>元宇宙、廣告收入</td>
+        </tr>
+        <tr>
+            <td>GOOGL</td>
+            <td>搜尋與雲端</td>
+            <td>高 (12-15%)</td>
+            <td>雲端、AI</td>
+        </tr>
+        <tr>
+            <td>TSLA</td>
+            <td>電動車</td>
+            <td>高 (15-20%)</td>
+            <td>EV 需求、電池技術</td>
+        </tr>
+        <tr>
+            <td>AVGO</td>
+            <td>半導體</td>
+            <td>中等 (5-8%)</td>
+            <td>5G、網路設備</td>
+        </tr>
+        <tr>
+            <td>JPM</td>
+            <td>銀行與金融</td>
+            <td>低 (3-5%)</td>
+            <td>利率、貸款</td>
+        </tr>
+        <tr>
+            <td>CITI</td>
+            <td>銀行與金融</td>
+            <td>低 (2-4%)</td>
+            <td>全球銀行、貸款</td>
+        </tr>
+        <tr>
+            <td>TSM</td>
+            <td>半導體</td>
+            <td>高 (10-15%)</td>
+            <td>晶片需求、AI</td>
+        </tr>
+    </tbody>
+</table>
+<ul>
+<li><strong>關鍵重點</strong>：</li>
+<li><strong>NVDA</strong> 和 <strong>TSLA</strong> 在 AI 與 EV 領域成長潛力最強。</li>
+<li><strong>JPM</strong> 和 <strong>CITI</strong> 因經濟不確定性，成長有限。</li>
+</ul>
+<hr />
+<h2>5. 地區因素</h2>
+<p>地區經濟、監管環境與市場動態對公司表現至關重要：</p>
+<table>
+    <thead>
+        <tr>
+            <th>公司</th>
+            <th>關鍵地區</th>
+            <th>地區風險</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>AAPL</td>
+            <td>美國、中國、歐洲</td>
+            <td>貿易緊張、隱私法規</td>
+        </tr>
+        <tr>
+            <td>MSFT</td>
+            <td>美國、全球</td>
+            <td>數據法規、雲安全</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>美國、亞洲</td>
+            <td>供應鏈中斷</td>
+        </tr>
+        <tr>
+            <td>META</td>
+            <td>美國、歐洲</td>
+            <td>數據隱私法 (GDPR)</td>
+        </tr>
+        <tr>
+            <td>GOOGL</td>
+            <td>美國、全球</td>
+            <td>反壟斷法規</td>
+        </tr>
+        <tr>
+            <td>TSLA</td>
+            <td>美國、中國、歐洲</td>
+            <td>EV 補貼、關稅</td>
+        </tr>
+        <tr>
+            <td>AVGO</td>
+            <td>美國、亞洲</td>
+            <td>半導體關稅</td>
+        </tr>
+        <tr>
+            <td>JPM</td>
+            <td>美國、歐洲、亞洲</td>
+            <td>利率變動、巴塞爾 III</td>
+        </tr>
+        <tr>
+            <td>CITI</td>
+            <td>美國、拉美</td>
+            <td>新興市場波動</td>
+        </tr>
+        <tr>
+            <td>TSM</td>
+            <td>台灣、美國、中國</td>
+            <td>地緣政治緊張、關稅</td>
+        </tr>
+    </tbody>
+</table>
+<ul>
+<li><strong>關鍵重點</strong>：</li>
+<li><strong>TSM</strong> 因台灣地緣政治地位及中美貿易政策，風險顯著。</li>
+<li><strong>META</strong> 和 <strong>GOOGL</strong> 在歐洲面臨嚴格的數據隱私法規壓力。</li>
+</ul>
+<hr />
+<h2>6. 2025 Q2 投資組合調整策略</h2>
+<p>基於上述分析，建議如下調整：</p>
+<ul>
+<li><strong>增加 NVDA 和 TSLA 比重</strong>：</li><br>
+<li><strong>NVDA</strong> 在 AI 晶片市場領先，成長潛力高，儘管碳排放強度較高，仍具投資價值。</li>
+<li>
+<p><strong>TSLA</strong> 在 EV 需求驅動下成長強勁，適合長期 ESG 目標。</p>
+</li>
+<li>
+<p><strong>減少 TSM 比重</strong>：</p>
+</li>
+<li>
+<p>台灣地緣政治風險高，建議分散至風險較低的IC設計公司（如 MediaTek 或 AMD）。</p>
+</li>
+<li>
+<p><strong>維持 MSFT 和 GOOGL 持倉</strong>：</p>
+</li>
+<li>
+<p>兩者在雲端與 AI 領域成長穩健，碳排放強度低，且減排目標積極，具多元化全球業務優勢。</p>
+</li>
+<li>
+<p><strong>降低 JPM 和 CITI 比重</strong>：</p>
+</li>
+<li>
+<p>成長前景有限，且融資排放風險中等，建議轉向綠色金融或 ESG 表現更佳的金融機構。</p>
+</li>
+<li>
+<p><strong>密切監控 AAPL 和 META</strong>：</p>
+</li>
+<li>成長適中，但面臨監管與地緣政治挑戰，需關注中國供應鏈及歐洲隱私法規的影響。</li>
+</ul>
+<hr />
+<h2>7. 示例預測：TSM 2025 Q2 股價</h2>
+<p>以 <strong>TSM</strong> 為例，預測其 2025 Q2 股價區間為 <strong>150-170 美元</strong>：
+<li><strong>基本情境</strong>：AI 晶片需求持續增長，3nm 技術普及。</li>
+<li><strong>風險因素</strong>：台海緊張或自然災害（如地震）可能中斷生產。</li>
+<li><strong>上行潛力</strong>：美國亞利桑那州新廠加速擴張，提升 ESG 吸引力。</p></li>
+<p>此預測與分析師共識一致，預計在地緣政治穩定下有 10-15% 震幅空間。</p>
+<hr />
+<h2>結論</h2>
+<p>本次 ESG 投資組合分析顯示，需在財務回報與氣候、地緣風險間取得平衡。<strong>NVDA</strong> 和 <strong>TSLA</strong> 在成長潛力上領先，但碳排放與地區風險需關注；<strong>MSFT</strong> 和 <strong>GOOGL</strong> 則提供穩健的 ESG 與財務表現。建議 2025 Q2 調整策略聚焦 AI 與雲端成長領域，同時降低台灣等地緣高風險敞口，以提升整體回報與 ESG 一致性。</p>
+<br><br>
+
+<div class="footer">
             <button onclick="window.location.href='index.html'">回首頁</button>
         </div>
+        <br>
+<br>
+        <div class="copyright">2025 Copyright © Ai Fintech Crop.</div>
+    </div>
 
-   
-</body>
 </html>
