@@ -51,14 +51,14 @@ button {
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    gap: 20px; /* 圖片之間的間距 */
+    gap: 10px; /* 圖片之間的間距 */
 }
 
 .image-container img {
     width: 150px; /* 圖片寬度 */
     height: auto; /* 保持圖片比例 */
     cursor: pointer;
-    margin: 0 10px; /* 圖片之間的間距 */
+    margin: 10px; /* 圖片之間的間距 */
 }
 
 
