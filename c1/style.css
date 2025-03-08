@@ -29,6 +29,8 @@ button {
     font-size: 16px;
     cursor: pointer;
     display: block;
+    background-color: #28a745;
+    color: #fff;
     margin: 20px auto; /* 按鈕置中 */
 }
 
