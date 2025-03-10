@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主動管理基本定律</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #e9ecef;
+            color: #000;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .page-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            width: 900px;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #000;
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            font-weight: bold;
+        }
+        .formula-container {
+            background: white;
+            padding: 30px;
+            margin: 30px auto;
+            text-align: center;
+            position: relative;
+            width: 80%;
+        }
+        .formula-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-size: 2.5em;
+        }
+        .formula-component {
+            cursor: pointer;
+            padding: 10px;
+            position: relative;
+            border-radius: 0;
+            transition: transform 0.2s ease;
+        }
+        .formula-component:hover {
+            transform: scale(1.1);
+        }
+        .term-sections-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 60px;
+            position: relative;
+            padding: 0 20px;
+        }
+        .term-section {
+            background: white;
+            padding: 20px;
+            position: relative;
+            border: 1px solid #000;
+            border-radius: 0;
+            margin: 0 auto;
+            width: 80%;
+            transition: transform 0.2s ease;
+        }
+        .term-section.highlight {
+            transform: scale(1.02);
+        }
+        .term-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .term-description {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        /* 顏色定義 */
+        .color-ir, .color-ir .MathJax {
+            color: #0066CC !important; /* 藍色 */
+        }
+        .color-ic, .color-ic .MathJax {
+            color: #E74C3C !important; /* 紅色 */
+        }
+        .color-br, .color-br .MathJax {
+            color: #27AE60 !important; /* 綠色 */
+        }
+        .term-section[id="ir-section"] .term-title {
+            color: #0066CC;
+        }
+        .term-section[id="ic-section"] .term-title {
+            color: #E74C3C;
+        }
+        .term-section[id="br-section"] .term-title {
+            color: #27AE60;
+        }
+        /* MathJax 樣式覆蓋 */
+        .MathJax {
+            font-size: 32px !important;
+        }
+        /* 添加裝飾性邊框 */
+        .page-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid #eee;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1>主動管理基本定律</h1>
+       
+        <div class="formula-container">
+             
+            <div class="formula-wrapper">
+                <div class="formula-component color-ir" data-term="ir">
+                    \[\large IR\]
+                </div>
+                <div class="formula-component" data-term="equals">
+                    \[\large =\]
+                </div>
+                <div class="formula-component color-ic" data-term="ic">
+                    \[\large IC\]
+                </div>
+                <div class="formula-component color-br" data-term="br">
+                    \[\large \sqrt{BR}\]
+                </div>
+            </div>
+            <h2>Fundamental Law of Active Management</h2>
+        </div>
+
+        <div class="term-sections-container">
+            <div class="term-section" id="ir-section">
+                <div class="term-title">資訊比率 (Information Ratio)</div>
+                <div class="term-description">衡量超額風險所帶來的超額報酬，是投資組合管理效率的關鍵指標。代表每單位主動風險可以帶來多少超額報酬。</div>
+            </div>
+
+            <div class="term-section" id="ic-section">
+                <div class="term-title">資訊系數 (Information Coefficient)</div>
+                <div class="term-description">評估模型或投資策略中的預測值與實際投資結果之間的相關性；表示投資經理或基金選股能力的準確度，範圍在-1到1之間。IC越高，代表預測能力越強。</div>
+            </div>
+
+            <div class="term-section" id="br-section">
+                <div class="term-title">廣度 (Breadth)</div>
+                <div class="term-description">在同一時間做了多少個互相獨立的投資決策，反映投資組合的分散程度和獨立betting的次數。廣度越大，分散化效果越好，可以降低投資風險。</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.formula-component').forEach(component => {
+            component.addEventListener('mouseenter', () => {
+                const term = component.getAttribute('data-term');
+                if (term && term !== 'equals') {
+                    document.getElementById(`${term}-section`).classList.add('highlight');
+                }
+            });
+            
+            component.addEventListener('mouseleave', () => {
+                const term = component.getAttribute('data-term');
+                if (term && term !== 'equals') {
+                    document.getElementById(`${term}-section`).classList.remove('highlight');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
