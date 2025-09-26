@@ -1,443 +1,2255 @@
 <!DOCTYPE html>
-<html  >
+<html lang="zh-TW">
 <head>
-  <!-- Site made with Mobirise Website Builder v5.9.18, https://mobirise.com -->
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Mobirise v5.9.18, mobirise.com">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Permissions-Policy" content="unload=()">
+  <title>中山永續金融科技 - AI 演算衝擊資產避險方案</title>
+  <meta name="description" content="通過 AI 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響">
   <link rel="shortcut icon" href="assets/images/nslogo-96x93.png" type="image/x-icon">
-  <meta name="description" content="中山永續金融科技">
-  
-  
-  <title>AiFinTech</title>
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="assets/socicon/css/styles.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
-  <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=Zo3BTe"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=Zo3BTe" type="text/css">
 
-  
-  
-  
+  <!-- Modern CSS Framework -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #059669;
+      --secondary-color: #10b981;
+      --accent-color: #34d399;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --bg-light: #f0fdf4;
+      --bg-darker: #ecfdf5;
+      --white: #ffffff;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+      --shadow-colored: 0 10px 40px -10px rgba(34, 197, 94, 0.3);
+      --gradient-primary: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --gradient-secondary: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
+      --gradient-hero: linear-gradient(135deg, rgba(5, 150, 105, 0.9) 0%, rgba(16, 185, 129, 0.8) 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      background-color: var(--white);
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      padding: 1rem 0;
+    }
+
+    .navbar.scrolled {
+      padding: 0.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      color: var(--text-dark) !important;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 12px;
+    }
+
+    .nav-link {
+      color: var(--text-dark) !important;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+      padding: 0.5rem 1rem !important;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--primary-color) !important;
+    }
+
+    .navbar-toggler {
+      border: none;
+      color: var(--text-dark);
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.25);
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2830, 41, 59, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 80%;
+    }
+
+    .section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--gradient-primary);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZG9lcyBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjA1IiBkPSJNMjAgMGM2IDAgMTEgNSAxMSAxMXMtNSAxMS0xMSAxMS0xMS01LTExLTExUzE0IDAgMjAgMFoiLz48L3N2Zz4=') repeat;
+      opacity: 0.3;
+      animation: floatingDots 20s linear infinite;
+    }
+
+    @keyframes floatingDots {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-40px, -40px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-color);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #065f46;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--text-dark);
+    }
+
+    .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 2rem;
+      height: 100%;
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: white;
+      box-shadow: var(--shadow-colored);
+      transition: all 0.3s ease;
+    }
+
+    .feature-icon:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 15px 50px -10px rgba(34, 197, 94, 0.4);
+    }
+
+    .news-item {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .news-item:hover {
+      transform: translateX(10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .partner-logo {
+      max-height: 80px;
+      max-width: 120px;
+      object-fit: contain;
+      filter: grayscale(100%);
+      transition: all 0.3s ease;
+    }
+
+    .partner-logo:hover {
+      filter: grayscale(0%);
+      transform: scale(1.1);
+    }
+
+    .tech-partner-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .tech-partner-item:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .tech-partner-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2.5rem;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+
+    .tech-partner-item:hover .tech-partner-icon {
+      background: var(--gradient-primary);
+      color: white;
+      transform: scale(1.1);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .tech-partner-item h6 {
+      color: var(--text-dark);
+      font-weight: 600;
+      margin: 0;
+      transition: color 0.3s ease;
+    }
+
+    .tech-partner-item:hover h6 {
+      color: var(--primary-color);
+    }
+
+    /* Apple partner special styling to match other logos */
+    .partner-apple-icon {
+      font-size: 4rem;
+      color: #999;
+      filter: grayscale(100%);
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .apple-partner:hover .partner-apple-icon {
+      filter: grayscale(0%);
+      transform: scale(1.1);
+      color: #000;
+    }
+
+    .partner-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .partner-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .process-step {
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-number::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: var(--gradient-secondary);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .process-step:hover .step-number::before {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    .contact-info {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      height: 100%;
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 1rem;
+      box-shadow: var(--shadow-colored);
+    }
+
+    .footer {
+      background: var(--text-dark);
+      color: white;
+      padding: 50px 0 20px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.5);
+    }
+
+    .social-link:hover::before {
+      left: 100%;
+    }
+
+    .social-link i {
+      z-index: 2;
+      position: relative;
+    }
+
+    /* Contact section social links - different style for better contrast */
+    .contact-social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .contact-social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: white;
+      color: var(--primary-color);
+      border-radius: 15px;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 2px solid transparent;
+    }
+
+    .contact-social-link:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px) rotate(5deg);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+      border-color: var(--secondary-color);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Advanced 3D Carousel Styles */
+    .news-carousel {
+      position: relative;
+      height: 450px;
+      perspective: 1200px;
+      overflow: visible;
+    }
+
+    .carousel-inner {
+      height: 100%;
+      transform-style: preserve-3d;
+      position: relative;
+      border-radius: 25px;
+      overflow: hidden;
+    }
+
+    .carousel-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 25px !important;
+      background-size: cover;
+      background-position: center;
+      transform-origin: center;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .carousel-item * {
+      border-radius: inherit;
+    }
+
+    /* 3D positioning for cards with maintained border radius */
+    .carousel-item.active {
+      transform: translateZ(0) scale(1);
+      z-index: 3;
+      opacity: 1;
+      border-radius: 25px !important;
+    }
+
+    .carousel-item.carousel-item-next,
+    .carousel-item.carousel-item-prev {
+      transform: translateX(30%) translateZ(-200px) rotateY(-45deg) scale(0.8);
+      z-index: 2;
+      opacity: 0.7;
+      border-radius: 25px !important;
+    }
+
+    .carousel-item.carousel-item-prev {
+      transform: translateX(-30%) translateZ(-200px) rotateY(45deg) scale(0.8);
+      border-radius: 25px !important;
+    }
+
+    /* Ensure border radius during transitions */
+    .carousel-item.carousel-item-start,
+    .carousel-item.carousel-item-end {
+      border-radius: 25px !important;
+    }
+
+    .carousel-item.carousel-item-next.carousel-item-start,
+    .carousel-item.carousel-item-prev.carousel-item-end {
+      border-radius: 25px !important;
+    }
+
+    /* Enhanced overlay with animated patterns */
+    .carousel-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.85), rgba(16, 185, 129, 0.7));
+      z-index: 1;
+      border-radius: 25px;
+    }
+
+    .carousel-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="2" fill="%23ffffff" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="%23ffffff" opacity="0.05"/><circle cx="40" cy="80" r="1.5" fill="%23ffffff" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+      z-index: 1;
+      animation: patternFloat 20s linear infinite;
+      border-radius: 25px;
+    }
+
+    @keyframes patternFloat {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100px, -100px); }
+    }
+
+    .carousel-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 3rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      border-radius: 25px;
+    }
+
+    .carousel-content h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      transform: translateY(20px);
+      transition: transform 0.6s ease;
+    }
+
+    .carousel-item.active .carousel-content h3 {
+      transform: translateY(0);
+    }
+
+    .carousel-content p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: all 0.6s ease 0.2s;
+    }
+
+    .carousel-item.active .carousel-content p {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Custom navigation buttons */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 60px;
+      height: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+
+    .news-carousel:hover .carousel-control-prev,
+    .news-carousel:hover .carousel-control-next {
+      opacity: 1;
+    }
+
+    .carousel-control-prev {
+      left: -80px;
+    }
+
+    .carousel-control-next {
+      right: -80px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      width: 20px;
+      height: 20px;
+      filter: invert(1);
+    }
+
+    /* Modern indicators */
+    .carousel-indicators {
+      bottom: -50px;
+      margin-bottom: 0;
+      gap: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .carousel-indicators [data-bs-target] {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(5, 150, 105, 0.3);
+      border: 2px solid var(--primary-color);
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-indicators .active {
+      width: 40px;
+      border-radius: 20px;
+      background: var(--primary-color);
+    }
+
+    /* Floating elements */
+    .news-floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-icon {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.1);
+      font-size: 2rem;
+      animation: floatAround 15s linear infinite;
+    }
+
+    .floating-icon:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-icon:nth-child(2) {
+      top: 60%;
+      right: 15%;
+      animation-delay: 5s;
+    }
+
+    .floating-icon:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 10s;
+    }
+
+    @keyframes floatAround {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      25% {
+        transform: translateY(-20px) rotate(90deg);
+      }
+      50% {
+        transform: translateY(-10px) rotate(180deg);
+      }
+      75% {
+        transform: translateY(-30px) rotate(270deg);
+      }
+    }
+
+    /* Clickable news items */
+    .news-clickable {
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .news-clickable:hover {
+      transform: scale(1.02);
+    }
+
+    .news-read-more {
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+    }
+
+    .carousel-item.active .news-read-more {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.4s;
+    }
+
+    .read-more-btn {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px 24px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .read-more-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(5px);
+    }
+
+    .read-more-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .read-more-btn:hover i {
+      transform: translateX(3px);
+    }
+
+    /* Click ripple effect */
+    .click-ripple {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .click-ripple::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: all 0.6s ease;
+    }
+
+    .news-clickable.clicked .click-ripple::before {
+      width: 200%;
+      height: 200%;
+      opacity: 0;
+    }
+
+    /* Modal styles for news details */
+    .news-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+    }
+
+    .news-modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .news-modal-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.4s ease;
+    }
+
+    .news-modal-header {
+      padding: 2rem;
+      border-bottom: 1px solid #eee;
+      position: relative;
+    }
+
+    .news-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s ease;
+    }
+
+    .news-modal-close:hover {
+      color: var(--primary-color);
+    }
+
+    .news-modal-body {
+      padding: 2rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Smooth scrolling enhancement */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    /* Advanced animations */
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 0.8s ease-out;
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.8s ease-out;
+    }
+
+    /* Smooth section transitions */
+    .section {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .section.transitioning {
+      opacity: 0.95;
+      transform: translateY(-10px);
+    }
+
+    /* Elastic scroll effect */
+    html {
+      scroll-behavior: auto;
+    }
+
+    body {
+      scroll-snap-type: y proximity;
+      scroll-padding-top: 80px;
+    }
+
+    .scroll-snap {
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
+
+    /* Intersection observer triggered animations */
+    .fade-up-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .fade-up-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Parallax effect */
+    .parallax {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    /* Glass morphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Particle effect container */
+    .particles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: particleFloat 15s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* About Section Styles */
+    .about-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .about-image-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .about-main-image {
+      transition: transform 0.5s ease;
+    }
+
+    .about-image-wrapper:hover .about-main-image {
+      transform: scale(1.05);
+    }
+
+    .about-image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .about-image-wrapper:hover .about-image-overlay {
+      opacity: 0.1;
+    }
+
+    .about-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .about-card:hover {
+      transform: translateX(10px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .about-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--gradient-primary);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-colored);
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-colored);
+    }
+
+    .stat-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+      box-shadow: var(--shadow-colored);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .cta-container {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 25px;
+      box-shadow: var(--shadow-colored);
+    }
+
+    .cta-container h4 {
+      color: white;
+      font-weight: 600;
+    }
+
+    .cta-container * {
+      color: white !important;
+    }
+
+    .btn-outline-primary {
+      border: 2px solid white;
+      color: white;
+      background: transparent;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+      background: white;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Smooth scroll with easing */
+    .smooth-scroll {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+
+    .scroll-snap {
+      scroll-snap-align: start;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .section {
+        padding: 60px 0;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .carousel-item {
+        height: 300px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  
-  <section data-bs-version="5.1" class="menu menu2 cid-sFCw1qGFAI" once="menu" id="menu2-23">
-    
-    <nav class="navbar navbar-dropdown navbar-expand-lg">
-        <div class="container">
-            <div class="navbar-brand">
-                <span class="navbar-logo">
-                    
-                        <a href="index.html"><img src="assets/images/nslogo-96x93.png" alt="" style="height: 3.7rem;"></a>
-                    
-                </span>
-                <span class="navbar-caption-wrap"><a class="navbar-caption text-success text-primary display-2" href="index.html">中山永續金融科技</a></span>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <img src="assets/images/nslogo-96x93.png" alt="Logo">
+        中山永續金融科技
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#home">首頁</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">關於我們</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#products">產品服務</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">聯絡我們</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="hero-content">
+            <h1>AI 演算衝擊資產避險方案</h1>
+            <p>通過 AI 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響，支援企業永續投資、策略決策及法規遵循等應用，並提升在氣候衝擊時資產避險的能力。</p>
+            <div class="d-flex gap-3 flex-wrap">
+              <a href="#products" class="btn btn-primary">了解產品</a>
+              <a href="#about" class="btn btn-secondary">關於我們</a>
             </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="position-relative">
+            <img src="assets/images/mbr-2-1256x837.jpg" alt="AI Technology" class="img-fluid rounded floating">
+            <div class="particles-container">
+              <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
+              <div class="particle" style="left: 40%; animation-delay: 2s;"></div>
+              <div class="particle" style="left: 60%; animation-delay: 4s;"></div>
+              <div class="particle" style="left: 80%; animation-delay: 6s;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section class="section bg-light scroll-snap">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll gradient-text">最新消息</h2>
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div id="newsCarousel" class="carousel slide news-carousel animate-on-scroll" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover">
+            <!-- Floating Elements -->
+            <div class="news-floating-elements">
+              <i class="fas fa-chart-line floating-icon"></i>
+              <i class="fas fa-lightbulb floating-icon"></i>
+              <i class="fas fa-rocket floating-icon"></i>
+            </div>
+
+            <div class="carousel-inner">
+              <div class="carousel-item active news-clickable" data-news-id="1" style="background-image: url('assets/images/mbr-2-1256x837.jpg');">
+                <div class="carousel-content">
+                  <div>
+                    <h3><i class="fas fa-calendar-alt me-3"></i>高雄金融園區廠商發表</h3>
+                    <p class="lead">展示最新 AI 氣候風險評估技術，與產業夥伴共同探索永續金融科技的創新應用。</p>
+                    <div class="news-read-more">
+                      <span class="read-more-btn">閱讀更多 <i class="fas fa-arrow-right ms-2"></i></span>
+                    </div>
+                  </div>
                 </div>
+                <div class="click-ripple"></div>
+              </div>
+              <div class="carousel-item news-clickable" data-news-id="2" style="background-image: url('assets/images/nslogo-770x746.png');">
+                <div class="carousel-content">
+                  <div>
+                    <h3><i class="fas fa-rocket me-3"></i>香港科技園 Pitch</h3>
+                    <p class="lead">在國際舞台展示我們的創新技術，與全球科技專家進行深度交流與合作。</p>
+                    <div class="news-read-more">
+                      <span class="read-more-btn">閱讀更多 <i class="fas fa-arrow-right ms-2"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="click-ripple"></div>
+              </div>
+              <div class="carousel-item news-clickable" data-news-id="3" style="background-image: url('assets/images/mbr-2-816x544.jpg');">
+                <div class="carousel-content">
+                  <div>
+                    <h3><i class="fas fa-chart-line me-3"></i>ETF 展覽</h3>
+                    <p class="lead">展示永續投資解決方案，為投資者提供氣候風險評伆的專業工具。</p>
+                    <div class="news-read-more">
+                      <span class="read-more-btn">閱讀更多 <i class="fas fa-arrow-right ms-2"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="click-ripple"></div>
+              </div>
+              <div class="carousel-item news-clickable" data-news-id="4" style="background-image: url('assets/images/mbr-1-816x544.png');">
+                <div class="carousel-content">
+                  <div>
+                    <h3><i class="fas fa-globe me-3"></i>2025永續金融科技國際投資論壇</h3>
+                    <p class="lead">推動永續金融科技發展，建立國際合作網絡，共創綠色金融未來。</p>
+                    <div class="news-read-more">
+                      <span class="read-more-btn">閱讀更多 <i class="fas fa-arrow-right ms-2"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="click-ripple"></div>
+              </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+              <span class="visually-hidden">Previous</span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-5" href="index.html#features1-1i">科學</a></li>
-                    <li class="nav-item"><a class="nav-link link text-black text-primary display-5" href="index.html#header14-1j">關於</a>
-                    </li><li class="nav-item"><a class="nav-link link text-black text-primary display-5" href="index.html#features3-1p">永續</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-5" href="index.html#form5-1m">機會</a></li></ul>
-                
-                <div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="index.html">Ai FinTech Corp.</a></div>
+            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="2"></button>
+              <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="3"></button>
             </div>
+          </div>
         </div>
-    </nav>
-</section>
+      </div>
+    </div>
+  </section>
 
-<section data-bs-version="5.1" class="header14 cid-sFzxmVl7J6" id="header14-1f">
-
-    
-
-    
-
+  <!-- Partners Section -->
+  <section class="section scroll-snap">
     <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-12 col-md-6 image-wrapper">
-                <img src="assets/images/mbr-2-1256x837.jpg" alt="">
-            </div>
-            <div class="col-12 col-md">
-                <div class="text-wrapper">
-                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1"><strong>Ai 科學建模</strong><br><strong>氣候風險評估專家</strong></h1>
-                    <p class="mbr-text mbr-fonts-style display-7">
-                        <br>通過 Ai 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響，支援企業永續投資、策略決策及法規遵循等應用，並提升在氣候衝擊時資產避險的能力。<br><br> </p>
-                    <div class="mbr-section-btn mt-3"><a class="btn btn-secondary display-4" href="page1.html">解決方案</a>
-                        <a class="btn btn-primary display-4" href="index.html#features24-20">氣候因子</a></div>
-                </div>
-            </div>
+      <h2 class="section-title animate-on-scroll">合作夥伴</h2>
+
+      <!-- Current Partners -->
+      <div class="row mb-5">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="partner-item animate-on-scroll">
+            <h6>高雄金融科技創新園區</h6>
+          </div>
         </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="partner-item animate-on-scroll">
+            <h6>台灣人工智慧協會</h6>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="partner-item animate-on-scroll">
+            <h6>中山創業育成中心</h6>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technology Partners -->
+      <div class="row justify-content-center">
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/google-cloud-logo-2.webp" alt="Google Cloud" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/aifinsys1-3-240x240.png" alt="Partner" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/mbr-1-240x240.png" alt="Partner" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/aws1-240x180.png" alt="AWS" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center apple-partner">
+            <i class="fab fa-apple partner-apple-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/nvidia-240x135.png" alt="NVIDIA" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/mbr-2-240x120.png" alt="Partner" class="partner-logo">
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="text-center">
+            <img src="assets/images/aimoea2-1-240x240.png" alt="Partner" class="partner-logo">
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <h5 class="mb-4">相關連結</h5>
+        <div class="social-links">
+          <a href="#" class="social-link" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="social-link" title="加入我們">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section data-bs-version="5.1" class="features1 cid-sFzyUE9AaP" id="features1-1i">
-    
-
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-lg-9">
-                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                    <strong>科學</strong></h3>
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="card col-12 col-md-6 col-lg-3">
-                <div class="card-wrapper">
-                    <div class="card-box align-center">
-                        <div class="iconfont-wrapper">
-                            <span class="mbr-iconfont mobi-mbri-target mobi-mbri"></span>
-                        </div>
-                        <h5 class="card-title mbr-fonts-style display-5"><strong>數據分析 Ai 運算避險</strong></h5>
-                        <p class="card-text mbr-fonts-style display-7">利用大數據、雲計算技術收集和分析氣候數據， AI 和機器學習技術對氣候數據進行深入演算，識別模擬預測風險機率，協助提高資產避險的精度。</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card col-12 col-md-6 col-lg-3">
-                <div class="card-wrapper">
-                    <div class="card-box align-center">
-                        <div class="iconfont-wrapper">
-                            <span class="mbr-iconfont mobi-mbri-contact-form mobi-mbri"></span>
-                        </div>
-                        <h5 class="card-title mbr-fonts-style display-5"><strong>永續 TCFD 框架應用</strong></h5>
-                        <p class="card-text mbr-fonts-style display-7">根據氣候相關財務揭露(TCFD)框架，協助企業面臨的氣候衝擊風險與機會，收集前瞻性的財務影響資訊，評估相應之資產規劃以支持避險決策。</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card col-12 col-md-6 col-lg-3">
-                <div class="card-wrapper">
-                    <div class="card-box align-center">
-                        <div class="iconfont-wrapper">
-                            <span class="mbr-iconfont mobi-mbri-change-style mobi-mbri"></span>
-                        </div>
-                        <h5 class="card-title mbr-fonts-style display-5"><strong>文創產業 氣候參數</strong></h5>
-                        <p class="card-text mbr-fonts-style display-7">利用氣候數據演算，提供準確合理的環境情景，強化遊戲設計與用戶黏著性，嵌入動畫設計中，快速生成動態環境豐富感，提升製作與開發效益。</p>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</section>
-
-<section data-bs-version="5.1" class="header14 cid-sFzz5E692j" id="header14-1j">
-
-    
-
-    
-
+  <!-- About Section -->
+  <section id="about" class="section bg-light scroll-snap">
     <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-12 col-md-6 image-wrapper">
-                <img src="assets/images/nslogo-770x746.png" alt="">
-            </div>
-            <div class="col-12 col-md">
-                <div class="text-wrapper">
-                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-2">
-                        <strong>關於</strong></h1>
-                    <p class="mbr-text mbr-fonts-style display-7">中山大學學生團隊組合研發：<br>TG-CI 氣候衝擊波動率(因子) {氣候衝擊指數原型}<br><br>採用溫差、海水、洪災、旱災、坡災、空汙、颱風及地震等 8大實體風險類型的歷史數據及混合情景框架，生成原始大數據模型，經過增強演算與決策邏輯分析，進行資產特定層面的脆弱度評估。<br><br>運用專利的 Ai 演算法擴展到氣候變遷領域，全方位整合各項財務數據與規範準則。增強金融數據與量化演算在各種氣候衝擊情況下的關聯性、提煉出更精確且實用的避險決策。<br></p>
-                    <div class="mbr-section-btn mt-3"><a class="btn btn-primary display-4" href="index.html#features24-20">氣候因子</a></div>
-                </div>
-            </div>
+      <!-- Section Header -->
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <h2 class="section-title animate-on-scroll gradient-text">關於我們</h2>
+          <p class="lead animate-on-scroll">中山大學學生團隊致力於氣候風險評估技術創新</p>
         </div>
-    </div>
-</section>
+      </div>
 
-<section data-bs-version="5.1" class="features3 cid-sFzFvgBfc0" id="features3-1p">
-    
-    
+      <!-- Main Content -->
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-5 mb-4 mb-lg-0">
+          <div class="about-image-container animate-on-scroll">
+            <div class="about-image-wrapper">
+              <img src="assets/images/nslogo-770x746.png" alt="About Us" class="img-fluid about-main-image">
+              <div class="about-image-overlay"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="about-content">
+            <div class="about-card animate-on-scroll slide-in-right">
+              <div class="about-icon">
+                <i class="fas fa-building"></i>
+              </div>
+              <h4>公司簡介</h4>
+              <p>中山大學學生團隊組合研發：<strong>TG-CI 氣候衝擊波動率(因子)</strong> {氣候衝擊指數原型}</p>
+              <p>採用溫差、海水、洪災、旱災、坡災、空汙、颱風及地震等 <span class="highlight">8大實體風險類型</span> 的歷史數據及混合情景框架，生成原始大數據模型，經過增強演算與決策邏輯分析，進行資產特定層面的脆弱度評估。</p>
+            </div>
+
+            <div class="about-card animate-on-scroll slide-in-right">
+              <div class="about-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <h4>永續使命及願景</h4>
+              <p>運用專利的 <strong>AI 演算法</strong> 擴展到氣候變遷領域，全方位整合各項財務數據與規範準則。增強金融數據與量化演算在各種氣候衝擊情況下的關聯性、提煉出更精確且實用的避險決策。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics/Features Row -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="stat-card animate-on-scroll">
+            <div class="stat-icon">
+              <i class="fas fa-database"></i>
+            </div>
+            <h3 class="stat-number">8+</h3>
+            <p class="stat-label">氣候風險類型</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="stat-card animate-on-scroll">
+            <div class="stat-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="stat-number">AI</h3>
+            <p class="stat-label">智能演算技術</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="stat-card animate-on-scroll">
+            <div class="stat-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="stat-number">TCFD</h3>
+            <p class="stat-label">框架應用</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="stat-card animate-on-scroll">
+            <div class="stat-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="stat-number">100%</h3>
+            <p class="stat-label">精準分析</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="section scroll-snap">
     <div class="container">
-        <div class="mbr-section-head">
-            <h4 class="mbr-section-title mbr-fonts-style align-center mb-5 display-2"><strong>永續</strong></h4>
-            
+      <h2 class="section-title animate-on-scroll">產品服務</h2>
+
+      <!-- Main Products -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-5">
+          <div class="animate-on-scroll">
+            <h3 class="mb-4">氣候因子決策模組</h3>
+            <p class="lead mb-4"><strong>實體氣候衝擊風險因子 (TG-CIVIX)<br>轉型氣候衝擊風險因子 (TG-CIFlag)</strong></p>
+          </div>
         </div>
-        <div class="row mt-4">
-            <div class="item features-image сol-12 col-md-6 col-lg-4">
-                <div class="item-wrapper">
-                    <div class="item-img">
-                        <img src="assets/images/mbr-2-816x544.jpg" alt="">
-                    </div>
-                    <div class="item-content">
-                        <h5 class="item-title mbr-fonts-style display-5"><strong>永續環境評估工具</strong></h5>
-                        
-                        <p class="mbr-text mbr-fonts-style mt-3 display-7">評估企業在環境保護（E）、社會責任（S）和公司治理（G）方面表現的指標。它幫助投資者和利害關係者了解企業在可持續發展方面的風險和機會。</p>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="item features-image сol-12 col-md-6 col-lg-4">
-                <div class="item-wrapper">
-                    <div class="item-img">
-                        <img src="assets/images/mbr-1-816x544.png" alt="">
-                    </div>
-                    <div class="item-content">
-                        <h5 class="item-title mbr-fonts-style display-5"><strong>永續資源價值創造</strong></h5>
-                        
-                        <p class="mbr-text mbr-fonts-style mt-3 display-7">助於提升企業長期價值(S8)，並吸引責任投資；促進支持生產活動、創造合宜就業機會、創業精神、創意與創新，支持達成更廣泛的全球性永續發展目標。</p>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="item features-image сol-12 col-md-6 col-lg-4">
-                <div class="item-wrapper">
-                    <div class="item-img">
-                        <img src="assets/images/mbr-3-816x544.jpg" alt="">
-                    </div>
-                    <div class="item-content">
-                        <h5 class="item-title mbr-fonts-style display-5"><strong>永續情境壓力分析</strong></h5>
-                        
-                        <p class="mbr-text mbr-fonts-style mt-3 display-7">建立多種氣候情境（如轉型情境、實體情境），並使用這些情境來模擬不同時間點下，進行壓力測試，以評估投資組合在不同氣候變遷情景下的韌性。<br></p>
-                    </div>
-                    
-                </div>
-            </div>
+      </div>
+
+      <!-- Service Process -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="process-step animate-on-scroll">
+            <div class="step-number">1</div>
+            <h5>大數據雲語言模型</h5>
+            <p>隨時採用最新大語言模型(LLM)，提升大數據即時與正確性，推理過程避免AI幻覺產生。</p>
+          </div>
         </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="process-step animate-on-scroll">
+            <div class="step-number">2</div>
+            <h5>集成增強智能演算</h5>
+            <p>系統化監督式學習的演算法，集結有效的模型組合，智能量化分析出精確的預測模型。</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="process-step animate-on-scroll">
+            <div class="step-number">3</div>
+            <h5>風險因子混合調適</h5>
+            <p>智能預測模型結合氣候風險因子，適配產業類型組合，演算資產風險影響機率與調適參數。</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="process-step animate-on-scroll">
+            <div class="step-number">4</div>
+            <h5>氣候衝擊避險模組</h5>
+            <p>避險機率參數與混合式專家資料集(MoE)協同，輸出精確避險決策方法與文件資料。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="row mt-5">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h5>數據分析 AI 運算避險</h5>
+            <p>利用大數據、雲計算技術收集和分析氣候數據，AI 和機器學習技術對氣候數據進行深入演算，識別模擬預測風險機率，協助提高資產避險的精度。</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h5>永續 TCFD 框架應用</h5>
+            <p>根據氣候相關財務揭露(TCFD)框架，協助企業面臨的氣候衝擊風險與機會，收集前瞻性的財務影響資訊，評估相應之資產規劃以支持避險決策。</p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card feature-card animate-on-scroll">
+            <div class="feature-icon">
+              <i class="fas fa-gamepad"></i>
+            </div>
+            <h5>文創產業 氣候參數</h5>
+            <p>利用氣候數據演算，提供準確合理的環境情景，強化遊戲設計與用戶黏著性，嵌入動畫設計中，快速生成動態環境豐富感，提升製作與開發效益。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <div class="cta-container animate-on-scroll">
+            <h4 class="mb-4">準備好體驗我們的創新技術了嗎？</h4>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+              <a href="#contact" class="btn btn-primary btn-lg">
+                <i class="fas fa-cogs me-2"></i>了解產品
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section data-bs-version="5.1" class="features23 cid-sFAyHxWQ1N" id="features24-20">
-
-    
-    
+  <!-- Contact Section -->
+  <section id="contact" class="section bg-light scroll-snap">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card-wrapper mb-4">
-                    <div class="card-box align-center">
-                        <h4 class="card-title mbr-fonts-style mb-4 display-2">
-                            <strong>氣候因子決策模組</strong></h4>
-                        <p class="mbr-text mbr-fonts-style mb-4 display-5"><strong>實體氣候衝擊風險因子 (TG-CIVIX)<br>轉型氣候衝擊風險因子 (TG-CIFlag)</strong></p>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item first mbr-flex p-4">
-                    <div class="icon-wrap w-100">
-                        <div class="icon-box">
-                            <span class="step-number mbr-fonts-style display-5">1</span>
-                        </div>
-                    </div>
+      <h2 class="section-title animate-on-scroll">聯絡我們</h2>
+      <p class="text-center mb-5 animate-on-scroll">高雄金融科技創新園區 Finnovation Hub</p>
 
-                    <div class="text-box">
-                        <h4 class="icon-title card-title mbr-black mbr-fonts-style display-7"><strong>大數據雲語言模型</strong></h4>
-                        <h5 class="mbr-text mbr-black mbr-fonts-style display-4">隨時採用最新大語言模型(LLM)，提升大數據即時與正確性，推理過程避免Ai幻覺產生。<br></h5>
-                    </div>
-                </div>
-                <!-- <span mbr-icon class="mbr-iconfont mobi-mbri-devices mobi-mbri"></span> -->
+      <div class="row">
+        <div class="col-lg-6 col-md-6 mb-4">
+          <div class="contact-info animate-on-scroll">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item mbr-flex p-4">
-                    <div class="icon-wrap w-100">
-                        <div class="icon-box">
-                            <span class="step-number mbr-fonts-style display-5">2</span>
-                        </div>
-                    </div>
-                    <div class="text-box">
-                        <h4 class="icon-title card-title mbr-black mbr-fonts-style display-7">
-                            <strong>集成增強智能演算</strong></h4>
-                        <h5 class="mbr-text mbr-black mbr-fonts-style display-4">系統化監督式學習的演算法，集結有效的模型組合，智能量化分析出精確的預測模型。</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item mbr-flex p-4">
-                    <div class="icon-wrap w-100">
-                        <div class="icon-box">
-                            <span class="step-number mbr-fonts-style display-5">3</span>
-                        </div>
-                    </div>
-                    <div class="text-box">
-                        <h4 class="icon-title card-title mbr-black mbr-fonts-style display-7"><strong>風險因子混合調適</strong></h4>
-                        <h5 class="mbr-text mbr-black mbr-fonts-style display-4">智能預測模型結合氣候風險因子，適配產業類型組合，演算資產風險影響機率與調適參數。<br><br></h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item mbr-flex p-4">
-                    <div class="icon-wrap w-100">
-                        <div class="icon-box">
-                            <span class="step-number mbr-fonts-style display-5">4</span>
-                        </div>
-                    </div>
-                    <div class="text-box">
-                        <h4 class="icon-title card-title mbr-black mbr-fonts-style display-7">
-                            <strong>氣候衝擊避險模組</strong></h4>
-                        <h5 class="mbr-text mbr-black mbr-fonts-style display-4">避險機率參數與混合式專家資料集(MoE)協同， 輸出精確避險決策方法與文件資料。</h5>
-                    </div>
-                </div>
-            </div>
-            
-            
-            
-            
+            <h5>地址</h5>
+            <p>高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓</p>
+          </div>
         </div>
+        <div class="col-lg-6 col-md-6 mb-4">
+          <div class="contact-info animate-on-scroll">
+            <div class="contact-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h5>營業時間</h5>
+            <p>9:00 - 18:00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Maps -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="animate-on-scroll">
+            <iframe
+              frameborder="0"
+              style="border:0; width: 100%; height: 400px; border-radius: 15px;"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7366.632000142929!2d120.298093!3d22.604672!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e0377e88e5971%3A0xb290fef7c8c08c3a!2z8Ag2LCBLYW9oc2l1bmcgQ2l0eSwgQ2lhbmpoZW4gRGlzdHJpY3QsIEZ1c2luZyA0dGggUmQsIDHomZ_mhbblr4zpm4blnJjlpKfmqJM!5e0!3m2!1sen!2stw!4v1739846727901!5m2!1sen!2stw"
+              allowfullscreen="">
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="text-center mt-5">
+        <h5 class="mb-4">追蹤我們</h5>
+        <div class="contact-social-links">
+          <a href="#" class="contact-social-link" title="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="contact-social-link" title="Facebook">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="#" class="contact-social-link" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section data-bs-version="5.1" class="clients1 cid-sFAw7z51L3" id="clients1-1u">
-    
-    <div class="images-container container">
-        <div class="mbr-section-head">
-            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                <strong>夥伴</strong></h3>
-            <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-2 display-7">數據資源與設備應用</h4>
-            
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-3 card">
-                <img src="assets/images/google-cloud-logo-2.webp" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/aifinsys1-3-240x240.png" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/mbr-1-240x240.png" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/aws1-240x180.png" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/mbr-240x240.png" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/nvidia-240x135.png" alt="Mobirise Website Builder">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/mbr-2-240x120.png" alt="">
-            </div>
-            <div class="col-md-3 card">
-                <img src="assets/images/aimoea2-1-240x240.png" alt="Mobirise Website Builder">
-            </div>
-        </div>
-    </div>
-</section>
-
-<section data-bs-version="5.1" class="form5 cid-sFzDs3t9EG" id="form5-1m">
-    
-    
+  <!-- Footer -->
+  <footer class="footer">
     <div class="container">
-        <div class="mbr-section-head">
-            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2"><strong>機會</strong></h3>
-            <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-2 display-7">加入我們的創新團隊，攜手共創未來！<div>準備好挑戰極限，熱衷挑戰新Ai 技術，富有無限創意與動力，並與一群志同道合的人一起成長，這裡就是你的舞台！</div><div>請提供 GitHub與HuggingFace 網址</div></h4>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
-                <form action="https://formspree.io/f/xanqaopj" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name"><input type="hidden" name="AiFinSYS">
-                    <div class="row">
-                        <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out
-                            the form!</div>
-                        <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! some
-                            problem!</div>
-                    </div>
-                    <div class="dragArea row">
-                        <div class="col-md col-sm-12 form-group mb-3" data-for="name">
-                            <input type="text" name="name" placeholder="Name" data-form-field="name" class="form-control" value="" id="name-form5-1m">
-                        </div>
-                        <div class="col-md col-sm-12 form-group mb-3" data-for="email">
-                            <input type="email" name="email" placeholder="E-mail" data-form-field="email" class="form-control" value="" id="email-form5-1m">
-                        </div>
-                        <div class="col-12 form-group mb-3" data-for="url">
-                            <input type="url" name="url" placeholder="GitHub or H.Face" data-form-field="url" class="form-control" value="" id="url-form5-1m">
-                        </div>
-                        <div class="col-12 form-group mb-3" data-for="textarea">
-                            <textarea name="textarea" placeholder="Message" data-form-field="textarea" class="form-control" id="textarea-form5-1m"></textarea>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn"><button type="submit" class="btn btn-primary display-4">Send message</button></div>
-                    </div>
-                </form>
-            </div>
-        </div>
+      <div class="text-center">
+        <p class="mb-0">© Copyright 2025 AiFinTech Corp. All Rights Reserved.</p>
+      </div>
     </div>
-</section>
+  </footer>
 
-<section data-bs-version="5.1" class="contacts2 cid-sFzIA7KGYz" id="contacts2-1r">
-    <!---->
-    
-    
-    <div class="container">
-        <div class="mbr-section-head">
-            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                <strong>聯絡</strong></h3>
-            <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-2 display-7">高雄金融科技創新園區 Finnovation Hub</h4>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="card col-12 col-md-6">
-                <div class="card-wrapper">
-                    <div class="image-wrapper">
-                        <span class="mbr-iconfont mobi-mbri-globe mobi-mbri"></span>
-                    </div>
-                    <div class="text-wrapper">
-                        <h6 class="card-title mbr-fonts-style mb-1 display-5">
-                            <strong>地址</strong></h6>
-                        <p class="mbr-text mbr-fonts-style display-7">
-                            高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓
-                        </p>
-                    </div>
-                </div>
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Enhanced smooth scrolling with easing
+    let isScrolling = false;
+
+    function easeOutQuart(t) {
+      return 1 - (--t) * t * t * t;
+    }
+
+    function smoothEasing(t) {
+      // Smooth cubic bezier easing (ease-out)
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function smoothScrollTo(target, duration = 500) {
+      const targetPosition = target.offsetTop - 80;
+      const startPosition = window.pageYOffset;
+      const distance = targetPosition - startPosition;
+      let startTime = null;
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = smoothEasing(progress);
+
+        window.scrollTo(0, startPosition + distance * ease);
+
+        if (progress < 1) {
+          requestAnimationFrame(animation);
+        } else {
+          isScrolling = false;
+        }
+      }
+
+      if (!isScrolling) {
+        isScrolling = true;
+        requestAnimationFrame(animation);
+      }
+    }
+
+    // Navbar scroll effect with parallax - optimized with passive listener
+    let lastScrollTop = 0;
+    let ticking = false;
+
+    function updateScrollEffects() {
+      const navbar = document.getElementById('mainNavbar');
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      // Parallax effect for hero section
+      const hero = document.querySelector('.hero');
+      if (hero && scrollTop < hero.offsetHeight) {
+        hero.style.transform = `translateY(${scrollTop * 0.5}px)`;
+      }
+
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollEffects);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Active nav link with smooth transitions
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    let navTicking = false;
+
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= (sectionTop - 200)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === current) {
+          link.classList.add('active');
+        }
+      });
+      navTicking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!navTicking) {
+        requestAnimationFrame(updateActiveNav);
+        navTicking = true;
+      }
+    }, { passive: true });
+
+    // Enhanced smooth scroll for navigation links with momentum
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          // Add momentum scroll effect
+          document.body.style.scrollBehavior = 'auto';
+          smoothScrollTo(target, 500);
+        }
+      });
+    });
+
+    // Momentum scroll effect
+    let isScrollingMomentum = false;
+    let scrollVelocity = 0;
+    let lastScrollY = window.pageYOffset;
+
+    function momentumScroll() {
+      if (Math.abs(scrollVelocity) > 0.5) {
+        window.scrollBy(0, scrollVelocity);
+        scrollVelocity *= 0.95; // Friction
+        requestAnimationFrame(momentumScroll);
+      } else {
+        isScrollingMomentum = false;
+      }
+    }
+
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.pageYOffset;
+      scrollVelocity = currentScrollY - lastScrollY;
+      lastScrollY = currentScrollY;
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (!isScrollingMomentum && Math.abs(scrollVelocity) > 2) {
+          isScrollingMomentum = true;
+          scrollVelocity *= 0.3;
+          requestAnimationFrame(momentumScroll);
+        }
+      }, 50);
+    }, { passive: true });
+
+    // Advanced scroll animations with stagger effect
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('animated');
+          }, index * 100); // Stagger animation
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Particle animation system
+    function createParticles() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        hero.appendChild(particle);
+      }
+    }
+
+    // Mouse movement parallax effect - optimized with throttling
+    let mouseTicking = false;
+    let mouseX = 0, mouseY = 0;
+
+    function updateParallax() {
+      const parallaxElements = document.querySelectorAll('.parallax');
+      parallaxElements.forEach((element, index) => {
+        const speed = (index + 1) * 0.05;
+        const x = (mouseX - 0.5) * speed * 100;
+        const y = (mouseY - 0.5) * speed * 100;
+        element.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      mouseTicking = false;
+    }
+
+    document.addEventListener('mousemove', function(e) {
+      mouseX = e.clientX / window.innerWidth;
+      mouseY = e.clientY / window.innerHeight;
+
+      if (!mouseTicking) {
+        requestAnimationFrame(updateParallax);
+        mouseTicking = true;
+      }
+    }, { passive: true });
+
+    // Advanced card hover effects
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-15px) scale(1.02)';
+        this.style.boxShadow = '0 25px 60px -12px rgba(5, 150, 105, 0.3)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+        this.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+      });
+    });
+
+    // Typing animation for hero text
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.textContent = '';
+
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+
+      type();
+    }
+
+    // Initialize effects when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      createParticles();
+
+      // Add loading animation classes
+      setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 100);
+
+      // Initialize carousel with custom options
+      const carousel = document.querySelector('#newsCarousel');
+      if (carousel) {
+        // Override Bootstrap's transition duration
+        const carouselItems = carousel.querySelectorAll('.carousel-item');
+        carouselItems.forEach(item => {
+          item.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        });
+
+        carousel.addEventListener('slide.bs.carousel', function (e) {
+          // Ensure border radius is maintained during transition
+          const activeItem = e.target.querySelector('.carousel-item.active');
+          const nextItem = e.relatedTarget;
+
+          // Force border radius on all items during transition
+          carouselItems.forEach(item => {
+            item.style.borderRadius = '25px';
+            if (item.querySelector('::before')) {
+              item.style.setProperty('--before-border-radius', '25px');
+            }
+            if (item.querySelector('::after')) {
+              item.style.setProperty('--after-border-radius', '25px');
+            }
+          });
+
+          if (nextItem) {
+            nextItem.style.borderRadius = '25px';
+            nextItem.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+              nextItem.style.transform = 'scale(1)';
+            }, 200);
+          }
+        });
+
+        // Faster manual navigation
+        const prevButton = carousel.querySelector('.carousel-control-prev');
+        const nextButton = carousel.querySelector('.carousel-control-next');
+
+        [prevButton, nextButton].forEach(button => {
+          if (button) {
+            button.addEventListener('click', function(e) {
+              // Override default bootstrap transition for manual clicks
+              carouselItems.forEach(item => {
+                item.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+              });
+
+              // Restore normal transition after animation
+              setTimeout(() => {
+                carouselItems.forEach(item => {
+                  item.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                });
+              }, 300);
+            });
+          }
+        });
+      }
+    });
+
+    // Performance optimization with throttling
+    function throttle(func, limit) {
+      let inThrottle;
+      return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+          func.apply(context, args);
+          inThrottle = true;
+          setTimeout(() => inThrottle = false, limit);
+        }
+      }
+    }
+
+    // Throttled scroll listener with passive option
+    const throttledScrollHandler = throttle(function() {
+      // Additional scroll effects can be added here
+    }, 16); // ~60fps
+
+    window.addEventListener('scroll', throttledScrollHandler, { passive: true });
+
+    // Intersection observer for section visibility
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(section => {
+      sectionObserver.observe(section);
+    });
+
+    // News modal functionality
+    const newsData = {
+      1: {
+        title: '高雄金融園區廠商發表',
+        date: '2024年12月15日',
+        content: `
+          <p>在高雄金融科技創新園區的年度廠商發表會上，我們成功展示了最新的 AI 氣候風險評估技術。</p>
+          <p>此次發表吸引了超過 200 名產業專家和投資者參與，大家對我們的 TG-CI 氣候衝擊波動率模型表現出極大的興趣。</p>
+          <p><strong>主要亮點：</strong></p>
+          <ul>
+            <li>8大實體風險類型的歷史數據分析</li>
+            <li>混合情景框架的應用</li>
+            <li>資產特定層面的脆弱度評估</li>
+            <li>實時風險監控和預警系統</li>
+          </ul>
+          <p>未來我們將繼續深化與產業夥伴的合作，共同推動永續金融科技的創新發展。</p>
+        `
+      },
+      2: {
+        title: '香港科技園 Pitch 活動',
+        date: '2024年11月28日',
+        content: `
+          <p>我們的團隊受邀參加香港科技園主辦的國際初創企業競賽，在國際舞台上展示我們的創新技術。</p>
+          <p>此次 Pitch 活動聚集了來自全球的科技專家和投資者，我們在競賽中獲得了優異的成績。</p>
+          <p><strong>成果亮點：</strong></p>
+          <ul>
+            <li>獲得「最佳技術創新獎」</li>
+            <li>與多家國際金融機構達成初步合作意向</li>
+            <li>接受了多家媒體的專訪</li>
+            <li>建立了廣泛的國際合作網絡</li>
+          </ul>
+        `
+      },
+      3: {
+        title: 'ETF 展覽成果豐硝',
+        date: '2024年11月10日',
+        content: `
+          <p>在台灣最大的 ETF 展覽會上，我們展示了永續投資解決方案，為投資者提供氣候風險評估的專業工具。</p>
+          <p>我們的展台吸引了大量的投資人和資產管理公司代表，大家對 ESG 投資的興趣持續增長。</p>
+          <p><strong>展示亮點：</strong></p>
+          <ul>
+            <li>氣候風險評估工具的現場演示</li>
+            <li>ESG 投資組合優化建議</li>
+            <li>永續金融產品的市場趨勢分析</li>
+            <li>投資人教育的互動系統</li>
+          </ul>
+        `
+      },
+      4: {
+        title: '2025永續金融科技國際投資論壇',
+        date: '2025年1月15日',
+        content: `
+          <p>我們將於 2025 年主辦永續金融科技國際投資論壇，邀請全球頂尖專家共同探討未來趨勢。</p>
+          <p>此次論壇旨在推動永續金融科技的發展，建立國際合作網絡，共創綠色金融的美好未來。</p>
+          <p><strong>論壇亮點：</strong></p>
+          <ul>
+            <li>邀請 50+ 國際頂尖專家演講</li>
+            <li>AI 與氣候金融的融合發展</li>
+            <li>永續投資的未來趨勢</li>
+            <li>全球氣候治理的金融解決方案</li>
+            <li>實作工作坊和網絡交流</li>
+          </ul>
+        `
+      }
+    };
+
+    // Add click handlers for news items
+    document.querySelectorAll('.news-clickable').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.closest('.carousel-control-prev') || e.target.closest('.carousel-control-next')) {
+          return;
+        }
+
+        // Add click effect
+        this.classList.add('clicked');
+        setTimeout(() => {
+          this.classList.remove('clicked');
+        }, 600);
+
+        const newsId = this.dataset.newsId;
+        const newsInfo = newsData[newsId];
+
+        if (newsInfo) {
+          showNewsModal(newsInfo);
+        }
+      });
+    });
+
+    function showNewsModal(newsInfo) {
+      // Create modal if it doesn't exist
+      let modal = document.getElementById('newsModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'newsModal';
+        modal.className = 'news-modal';
+        modal.innerHTML = `
+          <div class="news-modal-content">
+            <div class="news-modal-header">
+              <button class="news-modal-close" onclick="closeNewsModal()">×</button>
+              <h2 id="modalTitle"></h2>
+              <p class="text-muted" id="modalDate"></p>
             </div>
-            <div class="card col-12 col-md-6">
-                <div class="card-wrapper">
-                    <div class="image-wrapper">
-                        <span class="mbr-iconfont mobi-mbri-clock mobi-mbri"></span>
-                    </div>
-                    <div class="text-wrapper">
-                        <h6 class="card-title mbr-fonts-style mb-1 display-5">
-                            <strong>時間</strong></h6>
-                        <p class="mbr-text mbr-fonts-style display-7">
-                            9:00 - 18:00
-                        </p>
-                    </div>
-                </div>
+            <div class="news-modal-body" id="modalContent">
             </div>
-            
-            
-        </div>
-    </div>
-</section>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
 
-<section data-bs-version="5.1" class="map2 cid-sFAxp7Y5iM" id="map2-1y">
-    
-    
-    <div>
-        
-        <div class="google-map"><iframe frameborder="0" style="border:0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7366.632000142929!2d120.298093!3d22.604672!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e0377e88e5971%3A0xb290fef7c8c08c3a!2zODA2LCBLYW9oc2l1bmcgQ2l0eSwgQ2lhbmpoZW4gRGlzdHJpY3QsIEZ1c2luZyA0dGggUmQsIDHomZ_mhbblr4zpm4blnJjlpKfmqJM!5e0!3m2!1sen!2stw!4v1739846727901!5m2!1sen!2stw" allowfullscreen=""></iframe></div>
-    </div>
-</section>
+      // Update modal content
+      document.getElementById('modalTitle').textContent = newsInfo.title;
+      document.getElementById('modalDate').textContent = newsInfo.date;
+      document.getElementById('modalContent').innerHTML = newsInfo.content;
 
-<section data-bs-version="5.1" class="footer3 cid-sFCygHrmNf" once="footers" id="footer3-24">
+      // Show modal
+      modal.classList.add('show');
+    }
 
-    
+    function closeNewsModal() {
+      const modal = document.getElementById('newsModal');
+      if (modal) {
+        modal.classList.remove('show');
+      }
+    }
 
-    
+    // Close modal when clicking outside
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('newsModal');
+      if (modal && e.target === modal) {
+        closeNewsModal();
+      }
+    });
 
-    <div class="container">
-        <div class="row align-center mbr-white">
-            
-            
-            <div class="row row-copirayt">
-                <p class="mbr-text mb-0 mbr-fonts-style mbr-white align-center display-7">
-                    © Copyright 2025 AiFinTech Corp. All Rights Reserved.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-  
-  
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeNewsModal();
+      }
+    });
+  </script>
 </body>
 </html>
