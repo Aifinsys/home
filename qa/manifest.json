@@ -1,0 +1,17 @@
+{
+  "name": "中華國際量化科學發展協會",
+  "short_name": "CIADQS",
+  "description": "推廣量化科學教育及其應用，提升社會大眾之數據素養與科學思維能力",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a5276",
+  "theme_color": "#1a5276",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%231a5276%22>📊</text></svg>",
+      "sizes": "72x72 96x96 128x128 144x144 152x152 192x192 384x384 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

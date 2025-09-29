@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中華國際量化科學發展協會 | China International Association for the Development of Quantitative Science</title>
+    <meta name="description" content="推廣量化科學教育及其應用，提升社會大眾之數據素養與科學思維能力">
+    <meta name="theme-color" content="#1a5276">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚛️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚛️</text></svg>">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2e86c1;
+            --accent-color: #3498db;
+            --light-color: #ebf5fb;
+            --dark-color: #154360;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+        
+        .logo-text span {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Services Section */
+        .services {
+            background-color: var(--light-color);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        /* Membership Section */
+        .membership-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .membership-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .membership-card.popular {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-bottom-left-radius: 10px;
+        }
+        
+        .membership-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        
+        .membership-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .membership-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .membership-features li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Events Section */
+        .events {
+            background-color: var(--light-color);
+        }
+        
+        .events-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .events-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--accent-color);
+            transform: translateX(-50%);
+        }
+        
+        .event-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .event-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .event-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .event-date {
+            flex: 0 0 150px;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            z-index: 1;
+        }
+        
+        .event-content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 0 20px;
+        }
+        
+        .event-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .contact-details {
+            list-style: none;
+        }
+        
+        .contact-details li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-details i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 20px;
+        }
+        
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+        
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .contact-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .contact-form button:hover {
+            background-color: var(--dark-color);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-text);
+            padding: 60px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .events-timeline::before {
+                left: 30px;
+            }
+            
+            .event-item {
+                flex-direction: row !important;
+            }
+            
+            .event-date {
+                flex: 0 0 100px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .mobile-menu {
+                display: none;
+            }
+            
+            .mobile-menu.active {
+                display: block;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .membership-card.popular {
+                transform: scale(1);
+            }
+        }
+        
+        /* PWA Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .install-prompt button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .install-prompt button.close {
+            background-color: #ccc;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">📊</div>
+                <div class="logo-text">
+                    <h1>中華國際量化科學發展協會</h1>
+                    <span>China International Association for the Development of Quantitative Science</span>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="mobile-menu" id="mainNav">
+                <ul>
+                    <li><a href="#home">首頁</a></li>
+                    <li><a href="#about">關於我們</a></li>
+                    <li><a href="#services">量化科學</a></li>
+                    <li><a href="#membership">加入會員</a></li>
+                    <li><a href="#events">協會活動</a></li>
+                    <li><a href="#contact">聯絡我們</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>推動量化科學發展，培養數據驅動思維</h2>
+            <p>中華國際量化科學發展協會致力於推廣量化科學教育與應用，透過數據分析、數學建模與統計方法，提升社會大眾的數據素養與科學思維能力。</p>
+            <a href="#membership" class="cta-button">立即加入會員</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>關於我們</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>協會宗旨與使命</h3>
+                    <p>本會以推廣量化科學教育及其應用為宗旨，藉由數據蒐集、統計分析、數學建模及計算方法之研究與實踐，提升社會大眾之數據素養與科學思維能力。</p>
+                    <p>我們透過辦理課程、研討會、工作坊、出版刊物及跨領域合作，促進量化方法於教育、產業及公共領域之發展與應用，以培育具備數據分析、問題解決及創新能力的人才。</p>
+                    <p>我們的使命是增進社會整體之科學素養，推動教育與研究之永續發展。</p>
+                    <a href="#contact" class="cta-button">了解更多</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="量化科學分析">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>量化科學應用</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📈</div>
+                    <h3>自然科學應用</h3>
+                    <p>物理學、氣象學、生物學等領域的量化分析與建模，將自然現象轉化為可測量的數據模型。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👥</div>
+                    <h3>社會科學應用</h3>
+                    <p>經濟學、心理學、教育學等社會科學領域的量化研究，將人類行為與社會現象數據化。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚙️</div>
+                    <h3>工程與技術應用</h3>
+                    <p>品質工程、金融工程、運籌與物流等領域的量化方法應用，提升效率與優化流程。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏥</div>
+                    <h3>醫學與健康應用</h3>
+                    <p>流行病學、臨床試驗、醫學影像等醫療領域的量化分析，促進精準醫療發展。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>資料科學與AI應用</h3>
+                    <p>預測建模、自然語言處理、電腦視覺等AI技術的量化方法，推動人工智慧發展。</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎓</div>
+                    <h3>教育與培訓</h3>
+                    <p>提供量化科學相關課程、工作坊與認證，培養專業數據分析人才。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Section -->
+    <section id="membership">
+        <div class="container">
+            <div class="section-title">
+                <h2>加入會員</h2>
+            </div>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 40px;">成為中華國際量化科學發展協會的一員，享受專業資源、學習機會與交流平台，共同推動量化科學的發展與應用。</p>
+            
+            <div class="membership-options">
+                <div class="membership-card">
+                    <h3>個人會員</h3>
+                    <div class="price">NT$ 1,200<span>/年</span></div>
+                    <ul class="membership-features">
+                        <li>參與協會所有活動與課程</li>
+                        <li>獲得協會最新研究報告與刊物</li>
+                        <li>使用協會線上資源與資料庫</li>
+                        <li>參與會員專屬交流活動</li>
+                        <li>享有合作單位優惠</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">立即加入</a>
+                </div>
+                
+                <div class="membership-card popular">
+                    <div class="popular-badge">最受歡迎</div>
+                    <h3>團體會員</h3>
+                    <div class="price">NT$ 12,000<span>/年</span></div>
+                    <ul class="membership-features">
+                        <li>所有個人會員權益</li>
+                        <li>可推派3位代表參與活動</li>
+                        <li>企業專屬諮詢服務</li>
+                        <li>優先參與合作研究計畫</li>
+                        <li>企業品牌曝光機會</li>
+                        <li>客製化培訓課程</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">立即加入</a>
+                </div>
+                
+                <div class="membership-card">
+                    <h3>贊助會員</h3>
+                    <div class="price">自訂<span>金額</span></div>
+                    <ul class="membership-features">
+                        <li>支持量化科學推廣</li>
+                        <li>獲得協會感謝與認可</li>
+                        <li>參與特別贊助活動</li>
+                        <li>年度報告與成果分享</li>
+                        <li>稅務減免優惠</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">聯絡我們</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events" id="events">
+        <div class="container">
+            <div class="section-title">
+                <h2>協會活動</h2>
+            </div>
+            <div class="events-timeline">
+                <div class="event-item">
+                    <div class="event-date">
+                        <h4>8月</h4>
+                        <p>2025</p>
+                    </div>
+                    <div class="event-content">
+                        <h3>量化科學基礎課程</h3>
+                        <p>為初學者設計的量化科學入門課程，涵蓋數據分析基礎、統計方法與簡單建模技巧。</p>
+                        <p><strong>地點：</strong>台灣大學量化科學中心</p>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <h4>3月</h4>
+                        <p>2025</p>
+                    </div>
+                    <div class="event-content">
+                        <h3>AI與量化金融研討會</h3>
+                        <p>探討人工智慧在金融領域的量化應用，邀請業界專家分享最新趨勢與實務案例。</p>
+                        <p><strong>地點：</strong>高雄金融科技創新園區</p>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <h4>08月</h4>
+                        <p>2024</p>
+                    </div>
+                    <div class="event-content">
+                        <h3>年度量化科學論壇</h3>
+                        <p>協會年度盛事，匯集國內外量化科學專家，分享最新研究成果與應用案例。</p>
+                        <p><strong>地點：</strong>高雄金融科技創新園區</p>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-date">
+                        <h4>3月</h4>
+                        <p>2024</p>
+                    </div>
+                    <div class="event-content">
+                        <h3>數據可視化工作坊</h3>
+                        <p>學習如何將複雜數據轉化為易懂的可視化圖表，提升數據溝通效果。</p>
+                        <p><strong>地點：</strong>台中創新園區</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>聯絡我們</h2>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>協會資訊</h3>
+                    <ul class="contact-details">
+                        <li><i class="fas fa-map-marker-alt"></i> 高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓</li>
+                        <li><i class="fas fa-phone"></i> (07) 365-6039</li>
+                        <li><i class="fas fa-envelope"></i> info@ciadqs.org.tw</li>
+                        <li><i class="fas fa-clock"></i> 週一至週五 9:00-17:00</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 30px;">關注我們</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <input type="text" placeholder="您的姓名" required>
+                        <input type="email" placeholder="電子郵件" required>
+                        <input type="text" placeholder="主題">
+                        <textarea placeholder="您的訊息" required></textarea>
+                        <button type="submit">送出訊息</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>關於協會</h3>
+                    <p>中華國際量化科學發展協會以推廣量化科學教育及其應用為宗旨，提升社會大眾之數據素養與科學思維能力。</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>快速連結</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">首頁</a></li>
+                        <li><a href="#about">關於我們</a></li>
+                        <li><a href="#services">量化科學</a></li>
+                        <li><a href="#membership">加入會員</a></li>
+                        <li><a href="#events">協會活動</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>資源中心</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">研究報告</a></li>
+                        <li><a href="#">教學資源</a></li>
+                        <li><a href="#">專業認證</a></li>
+                        <li><a href="#">最新消息</a></li>
+                        <li><a href="#">常見問題</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>聯絡我們</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓</li>
+                        <li><i class="fas fa-phone"></i> (07) 365-6039</li>
+                        <li><i class="fas fa-envelope"></i> info@ciadqs.org.tw</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 中華國際量化科學發展協會 版權所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PWA Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <p>將協會網站安裝到您的設備，方便離線瀏覽</p>
+        <button id="installBtn">安裝</button>
+        <button class="close" id="closePrompt">稍後</button>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('mainNav').classList.toggle('active');
+        });
+        
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu after clicking a link
+                    document.getElementById('mainNav').classList.remove('active');
+                }
+            });
+        });
+        
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('感謝您的訊息！我們會盡快回覆您。');
+            this.reset();
+        });
+        
+        // PWA Functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker 註冊成功: ', registration.scope);
+                })
+                .catch(function(err) {
+                    console.log('ServiceWorker 註冊失敗: ', err);
+                });
+            });
+        }
+        
+        // Install Prompt
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installBtn = document.getElementById('installBtn');
+        const closePrompt = document.getElementById('closePrompt');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install prompt after 5 seconds
+            setTimeout(() => {
+                installPrompt.style.display = 'block';
+            }, 5000);
+        });
+        
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installPrompt.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+        
+        closePrompt.addEventListener('click', () => {
+            installPrompt.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

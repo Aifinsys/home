@@ -1,0 +1,21 @@
+{
+    "name": "中華海峽兩岸選擇權教育研究協會",
+    "short_name": "選擇權協會",
+    "description": "提供專業選擇權教育與研究，豐富您的投資知識。",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#0A2463",
+    "theme_color": "#0A2463",
+    "icons": [
+        {
+            "src": "images/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
