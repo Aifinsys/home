@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Permissions-Policy" content="unload=()">
-  <title>中山永續金融科技 - AI 演算衝擊資產避險方案</title>
-  <meta name="description" content="通過 AI 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響">
+  <meta http-equiv="Permissions-Policy" content="unload=(), geolocation=(), microphone=(), camera=()">
+  <title>Ai FinTech Corp. - AI 科學建模氣候風險評估</title>
+  <meta name="description" content="運用AI驅動的氣候風險評估與科學建模技術，提供企業量化分析氣候風險的專業解決方案">
   <link rel="shortcut icon" href="assets/images/nslogo-96x93.png" type="image/x-icon">
 
   <!-- Modern CSS Framework -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <style>
     :root {
@@ -40,6 +43,7 @@
     html {
       scroll-behavior: smooth;
       scroll-padding-top: 80px;
+      height: 100%;
     }
 
     body {
@@ -47,6 +51,11 @@
       line-height: 1.6;
       color: var(--text-dark);
       background-color: var(--white);
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .navbar {
@@ -102,6 +111,27 @@
       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2830, 41, 59, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
 
+    .language-switcher {
+      margin-left: 10px;
+    }
+
+    .language-switcher button {
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+      font-weight: 500;
+    }
+
+    .language-switcher button:hover {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+    }
+
     .nav-link::after {
       content: '';
       position: absolute;
@@ -132,6 +162,8 @@
       color: white;
       position: relative;
       overflow: hidden;
+      will-change: auto;
+      transform: translateZ(0);
     }
 
     .hero::before {
@@ -157,6 +189,8 @@
       background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZG9lcyBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjA1IiBkPSJNMjAgMGM2IDAgMTEgNSAxMSAxMXMtNSAxMS0xMSAxMS0xMS01LTExLTExUzE0IDAgMjAgMFoiLz48L3N2Zz4=') repeat;
       opacity: 0.3;
       animation: floatingDots 20s linear infinite;
+      will-change: transform;
+      transform: translateZ(0);
     }
 
     @keyframes floatingDots {
@@ -189,13 +223,29 @@
       padding: 12px 30px;
       border-radius: 50px;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.15s ease-out;
+      color: white !important;
+      position: relative;
+      overflow: hidden;
+      will-change: transform, background-color, box-shadow;
     }
 
     .btn-primary:hover {
       background: #047857;
       transform: translateY(-2px);
       box-shadow: var(--shadow-colored);
+      color: white !important;
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px);
+      background: #065f46;
+      transition: all 0.05s ease-out;
+    }
+
+    .btn-primary:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
     }
 
     .btn-secondary {
@@ -282,13 +332,13 @@
       max-height: 80px;
       max-width: 120px;
       object-fit: contain;
-      filter: grayscale(100%);
+      filter: grayscale(0%);
       transition: all 0.3s ease;
     }
 
     .partner-logo:hover {
-      filter: grayscale(0%);
-      transform: scale(1.1);
+      filter: grayscale(0%) brightness(1.1);
+      transform: scale(1.05);
     }
 
     .tech-partner-item {
@@ -341,15 +391,15 @@
     /* Apple partner special styling to match other logos */
     .partner-apple-icon {
       font-size: 4rem;
-      color: #999;
-      filter: grayscale(100%);
+      color: #000;
+      filter: grayscale(0%);
       transition: all 0.3s ease;
       display: inline-block;
     }
 
     .apple-partner:hover .partner-apple-icon {
-      filter: grayscale(0%);
-      transform: scale(1.1);
+      filter: grayscale(0%) brightness(1.2);
+      transform: scale(1.05);
       color: #000;
     }
 
@@ -375,6 +425,15 @@
       text-align: center;
       padding: 2rem;
       position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .process-step h5 {
+      transition: all 0.3s ease;
+    }
+
+    .process-step p {
+      transition: all 0.3s ease;
     }
 
     .step-number {
@@ -409,7 +468,18 @@
 
     .process-step:hover .step-number::before {
       opacity: 1;
-      transform: scale(1.2);
+      transform: scale(1.05);
+    }
+
+    .process-step:hover h5 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    .process-step:hover p {
+      font-weight: 500;
+      font-size: 1.05rem;
     }
 
     .contact-info {
@@ -562,6 +632,13 @@
       50% {
         transform: scale(1.05);
       }
+    }
+
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(5, 150, 105, 0.6); }
+      100% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.3); }
     }
 
     @keyframes float {
@@ -804,7 +881,7 @@
       position: absolute;
       color: rgba(255, 255, 255, 0.1);
       font-size: 2rem;
-      animation: floatAround 15s linear infinite;
+      animation: floatAround 8s ease-in-out infinite;
     }
 
     .floating-icon:nth-child(1) {
@@ -816,13 +893,13 @@
     .floating-icon:nth-child(2) {
       top: 60%;
       right: 15%;
-      animation-delay: 5s;
+      animation-delay: 2.5s;
     }
 
     .floating-icon:nth-child(3) {
       bottom: 20%;
       left: 20%;
-      animation-delay: 10s;
+      animation-delay: 5s;
     }
 
     @keyframes floatAround {
@@ -994,11 +1071,131 @@
       }
     }
 
-    /* Smooth scrolling enhancement */
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 80px;
+    /* Contact Form Styles */
+    .contact-form-section {
+      position: relative;
+      overflow: hidden;
     }
+
+    .contact-form-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23059669" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>') repeat;
+      z-index: 0;
+    }
+
+    .contact-form-card {
+      background: white;
+      border-radius: 25px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-floating {
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      padding: 1rem 1rem 1rem 3rem;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .form-floating > .form-control:focus,
+    .form-floating > .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.25);
+      background: white;
+    }
+
+    .form-floating > label {
+      padding: 1rem 1rem 1rem 3rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .form-floating > label i {
+      position: absolute;
+      left: 1rem;
+      color: var(--primary-color);
+      opacity: 0.7;
+    }
+
+    .form-check {
+      margin-bottom: 1rem;
+    }
+
+    .form-check-input {
+      width: 1.2em;
+      height: 1.2em;
+      margin-top: 0.1em;
+    }
+
+    .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .form-check-label {
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+
+    #formMessage {
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    #formMessage.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    #formMessage.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .form-control.is-valid {
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+    }
+
+    .form-control.is-invalid {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .invalid-feedback {
+      display: block;
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      padding-left: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .contact-form-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* Smooth scrolling enhancement - removed duplicate */
 
     /* Advanced animations */
     .floating {
@@ -1029,14 +1226,9 @@
       transform: translateY(-10px);
     }
 
-    /* Elastic scroll effect */
-    html {
-      scroll-behavior: auto;
-    }
-
+    /* Elastic scroll effect - optimized */
     body {
-      scroll-snap-type: y proximity;
-      scroll-padding-top: 80px;
+      scroll-snap-type: none;
     }
 
     .scroll-snap {
@@ -1263,31 +1455,688 @@
       box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
     }
 
-    /* Smooth scroll with easing */
-    .smooth-scroll {
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
+    .btn-highlight {
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: var(--text-dark) !important;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
     }
 
-    .scroll-snap {
-      scroll-snap-align: start;
+    .btn-highlight:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 12px 35px rgba(255, 255, 255, 0.5);
+      color: var(--text-dark) !important;
+      border-color: var(--primary-color);
     }
+
+    .btn-highlight i {
+      color: var(--secondary-color) !important;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+    }
+
+    .btn-highlight:hover i {
+      color: var(--primary-color) !important;
+      transform: translateX(2px);
+    }
+
+    /* Medium tablet size optimization - 830px breakpoint */
+    @media (max-width: 991px) and (min-width: 769px) {
+      .hero {
+        padding: 120px 0 80px;
+        min-height: calc(100vh - 80px);
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .hero .btn {
+        font-size: 1rem;
+        padding: 12px 24px;
+      }
+
+      .hero-content {
+        padding-top: 2rem;
+      }
+    }
+
+    /* Smooth scroll with easing - removed duplicate */
 
     @media (max-width: 768px) {
+      html {
+        scroll-padding-top: 70px;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-size: 14px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-width: 100vw;
+        height: 100vh;
+      }
+
+      * {
+        max-width: 100vw;
+      }
+
+      .container, .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      .row {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+      }
+
+      .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+      .col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
+      .col, .col-auto, .col-sm, .col-sm-auto, .col-sm-1, .col-sm-2,
+      .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7,
+      .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
+      .col-md, .col-md-auto, .col-md-1, .col-md-2, .col-md-3,
+      .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8,
+      .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+      .col-lg, .col-lg-auto, .col-lg-1, .col-lg-2, .col-lg-3,
+      .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8,
+      .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        padding-left: 5px;
+        padding-right: 5px;
+        max-width: 100%;
+      }
+
+      .navbar {
+        padding: 0.5rem 0;
+      }
+
+      .navbar-brand {
+        font-size: 1.1rem;
+      }
+
+      .navbar-brand img {
+        height: 30px;
+        width: auto;
+      }
+
+      .hero {
+        min-height: 85vh;
+        padding: 80px 0 40px;
+      }
+
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .hero .btn {
+        font-size: 0.9rem;
+        padding: 0.7rem 1.5rem;
       }
 
       .section {
-        padding: 60px 0;
+        padding: 30px 0;
       }
 
       .section-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+      }
+
+      /* 最新消息區塊優化 */
+      #news.section {
+        padding: 25px 0;
+      }
+
+      #news .section-title {
+        margin-bottom: 1rem;
+      }
+
+      .carousel-content {
+        padding: 1rem;
+      }
+
+      .carousel-content h3 {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .carousel-content p {
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        line-height: 1.3;
+      }
+
+      .card, .feature-card, .process-step {
+        margin-bottom: 1rem;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
       }
 
       .carousel-item {
-        height: 300px;
+        height: 250px;
+      }
+
+      .news-modal-content {
+        width: 95%;
+        margin: 20px auto;
+      }
+
+      .carousel-item {
+        height: 220px;
+      }
+
+      .carousel-inner {
+        height: 220px;
+      }
+
+      /* 小螢幕時的現代化carousel控制按鈕 */
+      .carousel-control-prev,
+      .carousel-control-next {
+        opacity: 1 !important;
+        width: 45px;
+        height: 45px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+        border-radius: 50%;
+        margin: 0 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .carousel-control-prev:hover,
+      .carousel-control-next:hover {
+        background: linear-gradient(135deg, rgba(74, 144, 226, 0.95), rgba(80, 157, 224, 0.85));
+        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .carousel-control-prev {
+        left: 10px;
+      }
+
+      .carousel-control-next {
+        right: 10px;
+      }
+
+      .carousel-control-prev-icon,
+      .carousel-control-next-icon {
+        width: 18px;
+        height: 18px;
+        background-size: 18px 18px;
+        filter: invert(0.3);
+        transition: filter 0.3s ease;
+      }
+
+      .carousel-control-prev:hover .carousel-control-prev-icon,
+      .carousel-control-next:hover .carousel-control-next-icon {
+        filter: invert(1);
+      }
+
+      .news-carousel {
+        margin: 0 30px;
+      }
+
+      .carousel-indicators {
+        margin-bottom: -30px;
+        margin-top: 15px;
+      }
+
+      /* 手機版合作夥伴常態顯示有顏色 */
+      .partner-logo {
+        filter: grayscale(0%) !important;
+      }
+
+      .partner-apple-icon {
+        filter: grayscale(0%) !important;
+        color: #000 !important;
+      }
+
+      .partner-logo:hover {
+        transform: scale(1.02) !important;
+      }
+    }
+
+    /* Custom Select inside Custom Input Field */
+    .custom-input-field .custom-select {
+      position: relative;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .custom-input-field .custom-select-trigger {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 1rem 3rem 0.25rem 3rem;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text-dark);
+      width: 100%;
+      min-height: inherit;
+    }
+
+    .custom-input-field .custom-select-trigger span {
+      flex: 1;
+      text-align: left;
+      color: #212529;
+    }
+
+    .custom-input-field .custom-select-arrow {
+      transition: transform 0.3s ease;
+      color: var(--text-light);
+      margin-left: 0.5rem;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .custom-input-field.focused .custom-select-arrow,
+    .custom-select.active .custom-select-arrow {
+      transform: translateY(-50%) rotate(180deg);
+      color: var(--primary-color);
+    }
+
+    .custom-input-field .custom-select-options {
+      position: absolute;
+      top: 100%;
+      left: -2px;
+      right: -2px;
+      background: var(--white);
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      max-height: 300px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.15s ease-in-out;
+      margin-top: 2px;
+    }
+
+    .custom-select.active .custom-select-options {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .custom-input-field .custom-option {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 1rem;
+    }
+
+    .custom-input-field .custom-option:last-child {
+      border-bottom: none;
+    }
+
+    .custom-input-field .custom-option:hover {
+      background-color: #e9ecef;
+      color: var(--primary-color);
+    }
+
+    .custom-input-field .custom-option.selected {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .custom-input-field .custom-option i {
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Textarea specific icon positioning */
+    .custom-textarea + .custom-input-label::before {
+      content: none;
+    }
+
+    .custom-input-field:has(.custom-textarea) .custom-input-icon {
+      top: 1.3rem;
+      transform: none;
+    }
+
+    /* Custom Input Field Styles */
+    .custom-input-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-input-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      transition: all 0.15s ease-in-out;
+      min-height: calc(3.5rem + 4px);
+    }
+
+    .custom-input-field:hover {
+      border-color: var(--primary-color);
+    }
+
+    .custom-input-field.focused {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.25);
+      background: white;
+    }
+
+    .custom-input-field.invalid {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .custom-input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-color);
+      opacity: 0.7;
+      z-index: 2;
+    }
+
+    .custom-input {
+      width: 100%;
+      padding: 1rem 1rem 0.25rem 3rem;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text-dark);
+    }
+
+    .custom-input::placeholder {
+      color: transparent;
+    }
+
+    .custom-input-label {
+      position: absolute;
+      top: 1rem;
+      left: 3rem;
+      color: var(--text-light);
+      font-weight: 500;
+      pointer-events: none;
+      transition: all 0.15s ease-in-out;
+      transform-origin: 0 0;
+    }
+
+    .custom-input-field.focused .custom-input-label,
+    .custom-input-field.has-value .custom-input-label {
+      opacity: 0.65;
+      transform: scale(0.85) translateY(-0.5rem) translateX(-1rem);
+    }
+
+    .custom-textarea {
+      resize: vertical;
+      min-height: 120px;
+      max-height: 200px;
+      padding-top: 1.8rem;
+      overflow-y: auto;
+    }
+
+    /* Solutions Module Styles */
+    .solutions-section {
+      background: linear-gradient(135deg, rgba(44, 95, 115, 0.03) 0%, rgba(127, 176, 105, 0.03) 100%);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .solutions-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+      border-radius: 50%;
+      opacity: 0.1;
+      transform: rotate(45deg);
+    }
+
+    .solution-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(44, 95, 115, 0.08);
+      border: 1px solid rgba(44, 95, 115, 0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    }
+
+    .solution-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(44, 95, 115, 0.15);
+    }
+
+    .solution-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(44, 95, 115, 0.1);
+    }
+
+    .solution-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      box-shadow: 0 8px 20px rgba(44, 95, 115, 0.2);
+    }
+
+    .solution-icon i {
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .solution-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 0;
+    }
+
+    .solution-content {
+      flex: 1;
+    }
+
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .feature-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--accent-color);
+      margin-right: 0.5rem;
+      border-radius: 2px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .feature-list li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+    }
+
+    .feature-list li:hover {
+      transform: translateX(5px);
+      color: var(--primary-color);
+    }
+
+    .system-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: rgba(248, 250, 252, 0.8);
+      border-radius: 15px;
+      border-left: 4px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .system-item:hover {
+      background: rgba(44, 95, 115, 0.05);
+      border-left-color: var(--secondary-color);
+      transform: translateX(5px);
+    }
+
+    .system-item:nth-child(1):hover {
+      border-left-color: #17a2b8;
+    }
+
+    .system-item:nth-child(2):hover {
+      border-left-color: #ffc107;
+    }
+
+    .system-item:nth-child(3):hover {
+      border-left-color: #28a745;
+    }
+
+    .system-icon {
+      width: 45px;
+      height: 45px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+
+    .system-icon i {
+      font-size: 1.2rem;
+    }
+
+    .system-details {
+      flex: 1;
+    }
+
+    .system-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .system-desc {
+      font-size: 0.85rem;
+      color: #6B7280;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .solutions-section {
+        padding: 2rem 1rem;
+      }
+
+      .solution-card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .solution-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .solution-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+
+      .system-item {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .system-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
       }
     }
   </style>
@@ -1299,17 +2148,28 @@
     <div class="container">
       <a class="navbar-brand" href="#home">
         <img src="assets/images/nslogo-96x93.png" alt="Logo">
-        中山永續金融科技
+        中山永續金融科技 Ai FinTech Corp.
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="d-flex align-items-center">
+        <div class="language-switcher me-3">
+          <button class="btn btn-sm" id="langToggle">
+            <i class="fas fa-globe me-1"></i>
+            <span id="currentLang">中文</span>
+          </button>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link active" href="#home">首頁</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#news">最新消息</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#about">關於我們</a>
@@ -1331,10 +2191,10 @@
       <div class="row align-items-center">
         <div class="col-lg-6">
           <div class="hero-content">
-            <h1>AI 演算衝擊資產避險方案</h1>
-            <p>通過 AI 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響，支援企業永續投資、策略決策及法規遵循等應用，並提升在氣候衝擊時資產避險的能力。</p>
+            <h1>Ai 科學建模氣候風險評估專家</h1>
+            <p>通過 Ai 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響，支援企業永續投資、策略決策及法規遵循等應用，並提升在氣候衝擊時資產避險的能力。</p>
             <div class="d-flex gap-3 flex-wrap">
-              <a href="#products" class="btn btn-primary">了解產品</a>
+              <a href="demo.html" class="btn btn-primary">了解產品</a>
               <a href="#about" class="btn btn-secondary">關於我們</a>
             </div>
           </div>
@@ -1355,12 +2215,12 @@
   </section>
 
   <!-- News Section -->
-  <section class="section bg-light scroll-snap">
+  <section id="news" class="section bg-light scroll-snap">
     <div class="container">
       <h2 class="section-title animate-on-scroll gradient-text">最新消息</h2>
       <div class="row justify-content-center">
         <div class="col-lg-10">
-          <div id="newsCarousel" class="carousel slide news-carousel animate-on-scroll" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover">
+          <div id="newsCarousel" class="carousel slide news-carousel animate-on-scroll" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
             <!-- Floating Elements -->
             <div class="news-floating-elements">
               <i class="fas fa-chart-line floating-icon"></i>
@@ -1508,17 +2368,6 @@
         </div>
       </div>
 
-      <div class="text-center mt-5">
-        <h5 class="mb-4">相關連結</h5>
-        <div class="social-links">
-          <a href="#" class="social-link" title="LinkedIn">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="#" class="social-link" title="加入我們">
-            <i class="fab fa-github"></i>
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1529,7 +2378,7 @@
       <div class="row mb-5">
         <div class="col-12 text-center">
           <h2 class="section-title animate-on-scroll gradient-text">關於我們</h2>
-          <p class="lead animate-on-scroll">中山大學學生團隊致力於氣候風險評估技術創新</p>
+          <p class="lead animate-on-scroll">Ai FinTech Corp. 致力於提供先進的AI氣候風險評估與科學建模解決方案</p>
         </div>
       </div>
 
@@ -1550,7 +2399,7 @@
                 <i class="fas fa-building"></i>
               </div>
               <h4>公司簡介</h4>
-              <p>中山大學學生團隊組合研發：<strong>TG-CI 氣候衝擊波動率(因子)</strong> {氣候衝擊指數原型}</p>
+              <p>Ai FinTech Corp. 獨家研發：<strong>TG-CI 氣候衝擊波動率(因子)</strong> {氣候衝擊指數原型}</p>
               <p>採用溫差、海水、洪災、旱災、坡災、空汙、颱風及地震等 <span class="highlight">8大實體風險類型</span> 的歷史數據及混合情景框架，生成原始大數據模型，經過增強演算與決策邏輯分析，進行資產特定層面的脆弱度評估。</p>
             </div>
 
@@ -1559,7 +2408,7 @@
                 <i class="fas fa-leaf"></i>
               </div>
               <h4>永續使命及願景</h4>
-              <p>運用專利的 <strong>AI 演算法</strong> 擴展到氣候變遷領域，全方位整合各項財務數據與規範準則。增強金融數據與量化演算在各種氣候衝擊情況下的關聯性、提煉出更精確且實用的避險決策。</p>
+              <p>運用進階 <strong>AI 演算法</strong> 於氣候變遷領域，結合大型語言模型整合，增強智能演算法編輯。提供混合風險因子調適和氣候影響避險模組，支援永續投資、策略決策及法規遵循。</p>
             </div>
           </div>
         </div>
@@ -1628,15 +2477,15 @@
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="process-step animate-on-scroll">
             <div class="step-number">1</div>
-            <h5>大數據雲語言模型</h5>
-            <p>隨時採用最新大語言模型(LLM)，提升大數據即時與正確性，推理過程避免AI幻覺產生。</p>
+            <h5>大型語言模型整合</h5>
+            <p>整合最新大型語言模型(LLM)技術，提升氣候數據處理的即時性與準確性，避免模型幻覺並提供可靠的風險分析結果。</p>
           </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="process-step animate-on-scroll">
             <div class="step-number">2</div>
-            <h5>集成增強智能演算</h5>
-            <p>系統化監督式學習的演算法，集結有效的模型組合，智能量化分析出精確的預測模型。</p>
+            <h5>增強智能演算法編輯</h5>
+            <p>運用先進的機器學習演算法，結合系統化監督式學習機制，編輯和最佳化預測模型，提供高精度的氣候風險量化分析。</p>
           </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-4">
@@ -1662,8 +2511,8 @@
             <div class="feature-icon">
               <i class="fas fa-chart-line"></i>
             </div>
-            <h5>數據分析 AI 運算避險</h5>
-            <p>利用大數據、雲計算技術收集和分析氣候數據，AI 和機器學習技術對氣候數據進行深入演算，識別模擬預測風險機率，協助提高資產避險的精度。</p>
+            <h5>科學數據分析</h5>
+            <p>運用大數據和雲計算技術收集氣候數據，結合AI和機器學習演算法進行深度分析，識別風險模式並模擬預測機率，為資產風險緩解提供科學依據。</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 mb-4">
@@ -1671,8 +2520,8 @@
             <div class="feature-icon">
               <i class="fas fa-shield-alt"></i>
             </div>
-            <h5>永續 TCFD 框架應用</h5>
-            <p>根據氣候相關財務揭露(TCFD)框架，協助企業面臨的氣候衝擊風險與機會，收集前瞻性的財務影響資訊，評估相應之資產規劃以支持避險決策。</p>
+            <h5>永續性評估</h5>
+            <p>運用TCFD（氣候相關財務揭露）框架應用，進行環境、社會及公司治理（ESG）評估。協助企業識別氣候相關風險與機會，為永續資源價值創造提供策略指導。</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 mb-4">
@@ -1680,20 +2529,104 @@
             <div class="feature-icon">
               <i class="fas fa-gamepad"></i>
             </div>
-            <h5>文創產業 氣候參數</h5>
-            <p>利用氣候數據演算，提供準確合理的環境情景，強化遊戲設計與用戶黏著性，嵌入動畫設計中，快速生成動態環境豐富感，提升製作與開發效益。</p>
+            <h5>氣候風險建模</h5>
+            <p>分析溫度變化、海水、洪災、旱災、坡災、空污、颱風及地震等8種實體風險類型。運用AI演算法開發預測模型，為不同產業和投資組合提供精確的氣候影響評估。</p>
           </div>
         </div>
       </div>
 
       <!-- CTA Section -->
+      <!-- Solutions Module -->
+      <div class="row mt-5 mb-5">
+        <div class="col-12">
+          <div class="solutions-section">
+            <h3 class="text-center mb-5 animate-on-scroll gradient-text">解決方案模組</h3>
+            <div class="row">
+              <div class="col-lg-6 mb-4">
+                <div class="solution-card solution-overview animate-on-scroll">
+                  <div class="solution-header">
+                    <div class="solution-icon">
+                      <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4 class="solution-title">大數據模組平台</h4>
+                  </div>
+                  <div class="solution-content">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="solution-features">
+                          <h6 class="feature-title">核心功能：</h6>
+                          <ul class="feature-list">
+                            <li><i class="fas fa-chart-trending-up text-success me-2"></i>產業市場輿情分析</li>
+                            <li><i class="fas fa-cloud-rain text-success me-2"></i>氣候情境趨勢預測</li>
+                            <li><i class="fas fa-brain text-success me-2"></i>專家閉鎖演算法</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="solution-targets">
+                          <h6 class="feature-title">目標客戶：</h6>
+                          <ul class="feature-list">
+                            <li><i class="fas fa-building text-primary me-2"></i>指數成分股公司</li>
+                            <li><i class="fas fa-university text-primary me-2"></i>金融保險控股公司</li>
+                            <li><i class="fas fa-handshake text-primary me-2"></i>B2B/B2C商業服務</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 mb-4">
+                <div class="solution-card solution-systems animate-on-scroll">
+                  <div class="solution-header">
+                    <div class="solution-icon">
+                      <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="solution-title">三大核心系統</h4>
+                  </div>
+                  <div class="solution-content">
+                    <div class="system-item">
+                      <div class="system-icon">
+                        <i class="fas fa-chart-bar text-info"></i>
+                      </div>
+                      <div class="system-details">
+                        <h6 class="system-title">ESG x MoE 財務避險分析系統</h6>
+                        <p class="system-desc">整合ESG指標與混合專家模型的風險分析</p>
+                      </div>
+                    </div>
+                    <div class="system-item">
+                      <div class="system-icon">
+                        <i class="fas fa-balance-scale text-warning"></i>
+                      </div>
+                      <div class="system-details">
+                        <h6 class="system-title">資產與投資組合效益調節系統</h6>
+                        <p class="system-desc">智能化資產配置與組合優化管理</p>
+                      </div>
+                    </div>
+                    <div class="system-item">
+                      <div class="system-icon">
+                        <i class="fas fa-brain text-success"></i>
+                      </div>
+                      <div class="system-details">
+                        <h6 class="system-title">行為金融與避險驅動增強系統</h6>
+                        <p class="system-desc">結合行為金融學的智能避險決策</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row mt-5">
         <div class="col-12 text-center">
           <div class="cta-container animate-on-scroll">
             <h4 class="mb-4">準備好體驗我們的創新技術了嗎？</h4>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
-              <a href="#contact" class="btn btn-primary btn-lg">
-                <i class="fas fa-cogs me-2"></i>了解產品
+              <a href="demo.html" class="btn btn-highlight btn-lg">
+                <i class="fas fa-rocket me-2"></i>了解產品
               </a>
             </div>
           </div>
@@ -1715,7 +2648,8 @@
               <i class="fas fa-map-marker-alt"></i>
             </div>
             <h5>地址</h5>
-            <p>高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓</p>
+            <p>高雄市前鎮區復興四路1號宏泰高雄新創大樓2樓<br>
+            <small class="text-muted">No. 1, Fuxing 4th Road, Qianzhen District, Kaohsiung City</small></p>
           </div>
         </div>
         <div class="col-lg-6 col-md-6 mb-4">
@@ -1761,6 +2695,152 @@
     </div>
   </section>
 
+  <!-- Contact Form Section -->
+  <section class="section contact-form-section" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 80px 0;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center mb-5">
+          <h2 class="section-title animate-on-scroll gradient-text">立即聯絡我們</h2>
+          <p class="lead animate-on-scroll">想了解更多關於 AI 氣候風險評估的資訊，或是有興趣加入我們的團隊？<br>留下您的聯絡方式，我們將盡快與您聯繫。</p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          <div class="contact-form-card animate-on-scroll">
+            <form id="contactForm" class="contact-form">
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-user custom-input-icon"></i>
+                      <input type="text" class="custom-input" id="fullName" name="fullName" required>
+                      <label class="custom-input-label">您的姓名</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-envelope custom-input-icon"></i>
+                      <input type="email" class="custom-input" id="email" name="email" required>
+                      <label class="custom-input-label">電子信箱</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-phone custom-input-icon"></i>
+                      <input type="tel" class="custom-input" id="phone" name="phone">
+                      <label class="custom-input-label">聯絡電話 (可選)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-building custom-input-icon"></i>
+                      <input type="text" class="custom-input" id="company" name="company">
+                      <label class="custom-input-label">公司名稱 (可選)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-8 col-md-10 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-lightbulb custom-input-icon"></i>
+                      <div class="custom-select" id="customSelect">
+                        <div class="custom-select-trigger">
+                          <span></span>
+                          <i class="fas fa-chevron-down custom-select-arrow"></i>
+                        </div>
+                        <div class="custom-select-options">
+                          <div class="custom-option" data-value="ai-climate-risk">
+                            <i class="fas fa-brain me-2"></i>氣候風險評估技術
+                          </div>
+                          <div class="custom-option" data-value="sustainable-investment">
+                            <i class="fas fa-leaf me-2"></i>ESG 永續投資
+                          </div>
+                          <div class="custom-option" data-value="tcfd-framework">
+                            <i class="fas fa-chart-line me-2"></i>TCFD 框架應用
+                          </div>
+                          <div class="custom-option" data-value="partnership">
+                            <i class="fas fa-handshake me-2"></i>合作夥伴關係
+                          </div>
+                          <div class="custom-option" data-value="career">
+                            <i class="fas fa-users me-2"></i>加入我們團隊
+                          </div>
+                          <div class="custom-option" data-value="consultation">
+                            <i class="fas fa-comments me-2"></i>技術諮詢服務
+                          </div>
+                          <div class="custom-option" data-value="other">
+                            <i class="fas fa-ellipsis-h me-2"></i>其他需求
+                          </div>
+                        </div>
+                      </div>
+                      <input type="hidden" id="interest" name="interest" required>
+                      <label class="custom-input-label">需求</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-8 col-md-10 mb-4">
+                  <div class="custom-input-container">
+                    <div class="custom-input-field">
+                      <i class="fas fa-comment-dots custom-input-icon"></i>
+                      <textarea class="custom-input custom-textarea" id="message" name="message"></textarea>
+                      <label class="custom-input-label">詳細訊息 (可選)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter" value="yes">
+                  <label class="form-check-label" for="newsletter">
+                    我同意接收最新產品資訊和行業動態電子報
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="privacy" name="privacy" required>
+                  <label class="form-check-label" for="privacy">
+                    我已閱讀並同意 <a href="#" class="text-primary">隱私權政策</a>
+                  </label>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                  <i class="fas fa-paper-plane me-2"></i>送出資訊
+                </button>
+              </div>
+
+              <div id="formMessage" class="mt-3" style="display: none;"></div>
+            </form>
+
+            <!-- Loading spinner -->
+            <div id="formLoader" class="text-center" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2">正在送出...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
@@ -1774,29 +2854,66 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
+    // Initialize EmailJS
+    emailjs.init('user_aifinsys123'); // You'll need to replace with your actual public key
+
     // Enhanced smooth scrolling with easing
     let isScrolling = false;
 
-    function easeOutQuart(t) {
-      return 1 - (--t) * t * t * t;
+    // Bouncy easing function
+    function easeOutBounce(t) {
+      if (t < (1/2.75)) {
+        return (7.5625*t*t);
+      } else if (t < (2/2.75)) {
+        return (7.5625*(t-=(1.5/2.75))*t + .75);
+      } else if (t < (2.5/2.75)) {
+        return (7.5625*(t-=(2.25/2.75))*t + .9375);
+      } else {
+        return (7.5625*(t-=(2.625/2.75))*t + .984375);
+      }
     }
 
-    function smoothEasing(t) {
-      // Smooth cubic bezier easing (ease-out)
-      return 1 - Math.pow(1 - t, 3);
+    // Elastic easing function
+    function easeOutElastic(t) {
+      const p = 0.3;
+      return Math.pow(2,-10*t) * Math.sin((t-p/4)*(2*Math.PI)/p) + 1;
     }
 
-    function smoothScrollTo(target, duration = 500) {
-      const targetPosition = target.offsetTop - 80;
+    // Back easing (overshoot effect)
+    function easeInOutBack(t) {
+      const c1 = 1.70158;
+      const c2 = c1 * 1.525;
+
+      return t < 0.5
+        ? (Math.pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
+        : (Math.pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
+    }
+
+    // Cool wave-like easing
+    function easeOutWave(t) {
+      return 1 - Math.cos(t * Math.PI * 0.5) + Math.sin(t * Math.PI * 4) * 0.1 * (1 - t);
+    }
+
+    function smoothScrollTo(target, duration = 600) {
+      const navbar = document.getElementById('mainNavbar');
+      const navbarHeight = navbar ? navbar.offsetHeight : 80;
+      const targetPosition = target.offsetTop - navbarHeight;
       const startPosition = window.pageYOffset;
       const distance = targetPosition - startPosition;
       let startTime = null;
+
+      // Add visual feedback during scroll
+      document.body.style.cursor = 'wait';
+      target.style.filter = 'brightness(1.05)';
+      target.style.transition = 'filter 0.2s ease';
 
       function animation(currentTime) {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const ease = smoothEasing(progress);
+
+        // Use stable cubic bezier easing (ease-out-cubic)
+        const ease = 1 - Math.pow(1 - progress, 3);
 
         window.scrollTo(0, startPosition + distance * ease);
 
@@ -1804,6 +2921,8 @@
           requestAnimationFrame(animation);
         } else {
           isScrolling = false;
+          document.body.style.cursor = 'auto';
+          target.style.filter = 'brightness(1)';
         }
       }
 
@@ -1849,8 +2968,12 @@
     const navLinks = document.querySelectorAll('.nav-link');
 
     let navTicking = false;
+    let manualNavClick = false;
 
     function updateActiveNav() {
+      // Skip auto-update if user manually clicked a nav link
+      if (manualNavClick) return;
+
       let current = '';
       sections.forEach(section => {
         const sectionTop = section.offsetTop;
@@ -1882,43 +3005,36 @@
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-          // Add momentum scroll effect
-          document.body.style.scrollBehavior = 'auto';
-          smoothScrollTo(target, 500);
+          // Set manual click flag to prevent auto-update
+          manualNavClick = true;
+
+          // Remove active class from all nav links
+          navLinks.forEach(link => link.classList.remove('active'));
+          // Add active class to clicked link
+          this.classList.add('active');
+
+          // Use native smooth scroll for better performance
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+          // Close mobile menu if open
+          const navbarCollapse = document.querySelector('.navbar-collapse');
+          if (navbarCollapse.classList.contains('show')) {
+            navbarCollapse.classList.remove('show');
+          }
+
+          // Re-enable auto-update after scroll completes
+          setTimeout(() => {
+            manualNavClick = false;
+          }, 1000);
         }
       });
     });
 
-    // Momentum scroll effect
-    let isScrollingMomentum = false;
-    let scrollVelocity = 0;
-    let lastScrollY = window.pageYOffset;
-
-    function momentumScroll() {
-      if (Math.abs(scrollVelocity) > 0.5) {
-        window.scrollBy(0, scrollVelocity);
-        scrollVelocity *= 0.95; // Friction
-        requestAnimationFrame(momentumScroll);
-      } else {
-        isScrollingMomentum = false;
-      }
-    }
-
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.pageYOffset;
-      scrollVelocity = currentScrollY - lastScrollY;
-      lastScrollY = currentScrollY;
-
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        if (!isScrollingMomentum && Math.abs(scrollVelocity) > 2) {
-          isScrollingMomentum = true;
-          scrollVelocity *= 0.3;
-          requestAnimationFrame(momentumScroll);
-        }
-      }, 50);
-    }, { passive: true });
+    // Momentum scroll effect - disabled to prevent scroll jitter
+    // Original momentum effect removed for better performance
 
     // Advanced scroll animations with stagger effect
     const observerOptions = {
@@ -2022,10 +3138,10 @@
       // Initialize carousel with custom options
       const carousel = document.querySelector('#newsCarousel');
       if (carousel) {
-        // Override Bootstrap's transition duration
+        // Override Bootstrap's transition duration for consistent speed
         const carouselItems = carousel.querySelectorAll('.carousel-item');
         carouselItems.forEach(item => {
-          item.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          item.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         });
 
         carousel.addEventListener('slide.bs.carousel', function (e) {
@@ -2062,13 +3178,13 @@
             button.addEventListener('click', function(e) {
               // Override default bootstrap transition for manual clicks
               carouselItems.forEach(item => {
-                item.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                item.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
               });
 
               // Restore normal transition after animation
               setTimeout(() => {
                 carouselItems.forEach(item => {
-                  item.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                  item.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 });
               }, 300);
             });
@@ -2110,6 +3226,383 @@
     sections.forEach(section => {
       sectionObserver.observe(section);
     });
+
+    // Language data
+    const languageData = {
+      zh: {
+        title: "Ai FinTech Corp. - AI 科學建模氣候風險評估",
+        navigation: {
+          home: "首頁",
+          news: "最新消息",
+          about: "關於我們",
+          products: "產品服務",
+          contact: "聯絡我們"
+        },
+        hero: {
+          title: "Ai 科學建模氣候風險評估專家",
+          description: "通過 Ai 演算技術、多情境模擬和數據整合，量化分析氣候風險對企業和投資的財務影響，支援企業永續投資、策略決策及法規遵循等應用，並提升在氣候衝擊時資產避險的能力。",
+          btnProduct: "了解產品",
+          btnAbout: "關於我們"
+        },
+        services: {
+          title: "產品服務",
+          service1: {
+            title: "科學數據分析",
+            description: "運用大數據和雲計算技術收集氣候數據，結合AI和機器學習演算法進行深度分析，識別風險模式並模擬預測機率，為資產風險緩解提供科學依據。"
+          },
+          service2: {
+            title: "永續性評估",
+            description: "運用TCFD（氣候相關財務揭露）框架應用，進行環境、社會及公司治理（ESG）評估。協助企業識別氣候相關風險與機會，為永續資源價值創造提供策略指導。"
+          },
+          service3: {
+            title: "氣候風險建模",
+            description: "分析溫度變化、海水、洪災、旱災、坡災、空汙、颱風及地震等8種實體風險類型。運用AI演算法開發預測模型，為不同產業和投資組合提供精確的氣候影響評估。"
+          }
+        },
+        about: {
+          title: "關於我們",
+          subtitle: "Ai FinTech Corp. 致力於提供先進的AI氣候風險評估與科學建模解決方案",
+          companyTitle: "公司簡介",
+          companyDesc: "Ai FinTech Corp. 獨家研發：TG-CI 氣候衝擊波動率(因子) {氣候衝擊指數原型}",
+          companyDesc2: "採用溫差、海水、洪災、旱災、坡災、空汙、颱風及地震等 8大實體風險類型 的歷史數據及混合情景框架，生成原始大數據模型，經過增強演算與決策邏輯分析，進行資產特定層面的脆弱度評估。",
+          missionTitle: "永續使命及願景",
+          missionDesc: "運用進階 AI 演算法 於氣候變遷領域，結合大型語言模型整合，增強智能演算法編輯。提供混合風險因子調適和氣候影響避險模組，支持永續投資、策略決策及法規遵循。"
+        },
+        contact: {
+          title: "聯絡我們",
+          subtitle: "高雄金融科技創新園區 Finnovation Hub",
+          address: "地址",
+          phone: "電話",
+          businessHours: "營業時間",
+          followUs: "追蹤我們",
+          formTitle: "立即聯絡我們",
+          formSubtitle: "想了解更多關於 AI 氣候風險評估的資訊，或是有興趣加入我們的團隊？\n留下您的聯絡方式，我們將盡快與您聯繫。",
+          form: {
+            fullName: "您的姓名",
+            email: "電子信箱",
+            phone: "聯絡電話 (可選)",
+            company: "公司名稱 (可選)",
+            interest: "需求",
+            message: "詳細訊息 (可選)",
+            submitButton: "送出資訊",
+            submitting: "送出中...",
+            newsletter: "我同意接收最新產品資訊和行業動態電子報",
+            privacy: "我已閱讀並同意",
+            privacyPolicy: "隱私權政策",
+            options: {
+              aiClimate: "氣候風險評估技術",
+              sustainable: "ESG 永續投資",
+              tcfd: "TCFD 框架應用",
+              partnership: "合作夥伴關係",
+              career: "加入我們團隊",
+              consultation: "技術諮詢服務",
+              other: "其他需求"
+            }
+          }
+        },
+        technology: {
+          title: "氣候因子決策模組",
+          subtitle: "實體氣候衝擊風險因子 (TG-CIVIX)\n轉型氣候衝擊風險因子 (TG-CIFlag)",
+          step1: {
+            title: "大型語言模型整合",
+            description: "整合最新大型語言模型(LLM)技術，提升氣候數據處理的即時性與準確性，避免模型幻覺並提供可靠的風險分析結果。"
+          },
+          step2: {
+            title: "增強智能演算法編輯",
+            description: "運用先進的機器學習演算法，結合系統化監督式學習機制，編輯和最佳化預測模型，提供高精度的氣候風險量化分析。"
+          },
+          step3: {
+            title: "風險因子混合調適",
+            description: "智能預測模型結合氣候風險因子，適配產業類型組合，演算資產風險影響機率與調適參數。"
+          },
+          step4: {
+            title: "氣候衝擊避險模組",
+            description: "避險機率參數與混合式專家資料集(MoE)協同，輸出精確避險決策方法與文件資料。"
+          }
+        },
+        stats: {
+          riskTypes: "氣候風險類型",
+          aiTech: "智能演算技術",
+          years: "年經驗",
+          clients: "服務客戶"
+        },
+        partners: {
+          title: "合作夥伴"
+        },
+        solutions: {
+          title: "解決方案模組",
+          platform: {
+            title: "大數據模組平台",
+            coreFeatures: "核心功能：",
+            targetClients: "目標客戶：",
+            feature1: "產業市場輿情分析",
+            feature2: "氣候情境趨勢預測",
+            feature3: "專家閉鎖演算法",
+            client1: "指數成分股公司",
+            client2: "金融保險控股公司",
+            client3: "B2B/B2C商業服務"
+          },
+          systems: {
+            title: "三大核心系統",
+            system1: {
+              title: "ESG x MoE 財務避險分析系統",
+              desc: "整合ESG指標與混合專家模型的風險分析"
+            },
+            system2: {
+              title: "資產與投資組合效益調節系統",
+              desc: "智能化資產配置與組合優化管理"
+            },
+            system3: {
+              title: "行為金融與避險驅動增強系統",
+              desc: "結合行為金融學的智能避險決策"
+            }
+          }
+        },
+        news: {
+          title: "最新消息",
+          readMore: "閱讀更多",
+          news1: {
+            title: "高雄金融園區廠商發表",
+            description: "展示最新 AI 氣候風險評估技術，與產業夥伴共同探索永續金融科技的創新應用。"
+          },
+          news2: {
+            title: "金融科技高峰論壇",
+            description: "參與亞洲最大的金融科技論壇，分享 AI 氣候風險評估的最新研究成果。"
+          },
+          news3: {
+            title: "ETF 展覽",
+            description: "展示永續投資解決方案，為投資者提供氣候風險評伆的專業工具。"
+          }
+        },
+        cta: {
+          title: "準備好體驗我們的創新技術了嗎？",
+          button: "了解產品"
+        }
+      },
+      en: {
+        title: "Ai FinTech Corp. - AI Climate Risk Assessment & Scientific Modeling",
+        navigation: {
+          home: "Home",
+          news: "Latest News",
+          about: "About Us",
+          products: "Products & Services",
+          contact: "Contact Us"
+        },
+        hero: {
+          title: "AI Climate Risk Assessment & Scientific Modeling Expert",
+          description: "Utilizing AI-driven climate risk assessment and scientific modeling technology, through big data analysis and machine learning algorithms, we provide precise climate risk quantitative analysis for enterprises and investment institutions, supporting sustainable investment decisions, strategic planning and regulatory compliance, enhancing asset hedging capabilities under climate impacts.",
+          btnProduct: "Learn More",
+          btnAbout: "About Us"
+        },
+        services: {
+          title: "Products & Services",
+          service1: {
+            title: "Scientific Data Analysis",
+            description: "Uses big data and cloud computing technology to collect climate data, combined with AI and machine learning algorithms for in-depth analysis, identifying risk patterns and simulating prediction probabilities, providing scientific basis for asset risk mitigation."
+          },
+          service2: {
+            title: "Sustainability Assessment",
+            description: "Application of TCFD (Task Force on Climate-related Financial Disclosures) framework, conducting Environmental, Social, and Governance (ESG) evaluation. Assists enterprises in identifying climate-related risks and opportunities, providing strategic guidance for sustainable resource value creation."
+          },
+          service3: {
+            title: "Climate Risk Modeling",
+            description: "Analyzes 8 physical risk types: temperature variation, sea water, floods, droughts, landslides, air pollution, typhoons, and earthquakes. Develops predictive models using AI algorithms to provide precise climate impact assessments for different industries and investment portfolios."
+          }
+        },
+        about: {
+          title: "About Us",
+          subtitle: "Ai FinTech Corp. is committed to providing advanced AI climate risk assessment and scientific modeling solutions",
+          companyTitle: "Company Profile",
+          companyDesc: "Ai FinTech Corp. exclusively develops: TG-CI Climate Impact Volatility (Factor) {Climate Impact Index Prototype}",
+          companyDesc2: "Adopts historical data from 8 major physical risk types including temperature differences, seawater, floods, droughts, landslides, air pollution, typhoons and earthquakes, along with hybrid scenario frameworks to generate original big data models. Through enhanced algorithms and decision logic analysis, conducts asset-specific vulnerability assessments.",
+          missionTitle: "Sustainable Mission and Vision",
+          missionDesc: "Applies advanced AI algorithms in the climate change field, integrating large language models and enhanced intelligent algorithm compilation. Provides hybrid risk factor adaptation and climate impact hedging modules, supporting sustainable investment, strategic decision-making and regulatory compliance."
+        },
+        contact: {
+          title: "Contact Us",
+          subtitle: "Finnovation Hub, Kaohsiung Financial Technology Innovation Park",
+          address: "Address",
+          phone: "Phone",
+          businessHours: "Business Hours",
+          followUs: "Follow Us",
+          formTitle: "Contact Us Now",
+          formSubtitle: "Want to learn more about AI climate risk assessment, or interested in joining our team?\nLeave your contact information and we will get back to you as soon as possible.",
+          form: {
+            fullName: "Your Full Name",
+            email: "Email Address",
+            phone: "Phone Number (Optional)",
+            company: "Company Name (Optional)",
+            interest: "Requirements",
+            message: "Detailed Message (Optional)",
+            submitButton: "Submit Information",
+            submitting: "Submitting...",
+            newsletter: "I agree to receive product updates and industry newsletters",
+            privacy: "I have read and agree to the",
+            privacyPolicy: "Privacy Policy",
+            options: {
+              aiClimate: "Climate Risk Assessment Technology",
+              sustainable: "ESG Sustainable Investment",
+              tcfd: "TCFD Framework Application",
+              partnership: "Partnership Opportunities",
+              career: "Join Our Team",
+              consultation: "Technical Consulting Services",
+              other: "Other Requirements"
+            }
+          }
+        },
+        technology: {
+          title: "Climate Factor Decision Module",
+          subtitle: "Physical Climate Impact Risk Factor (TG-CIVIX)\nTransition Climate Impact Risk Factor (TG-CIFlag)",
+          step1: {
+            title: "Large Language Model Integration",
+            description: "Integrates the latest Large Language Model (LLM) technology to enhance the real-time processing and accuracy of climate data, avoiding model hallucinations and providing reliable risk analysis results."
+          },
+          step2: {
+            title: "Enhanced Intelligent Algorithm Compilation",
+            description: "Applies advanced machine learning algorithms combined with systematic supervised learning mechanisms to compile and optimize predictive models, providing high-precision climate risk quantitative analysis."
+          },
+          step3: {
+            title: "Hybrid Risk Factor Adaptation",
+            description: "Intelligent predictive models combine climate risk factors, adapting to industry type combinations, calculating asset risk impact probabilities and adaptation parameters."
+          },
+          step4: {
+            title: "Climate Impact Hedging Modules",
+            description: "Hedging probability parameters collaborate with Mixture of Experts (MoE) datasets to output precise hedging decision methods and documentation."
+          }
+        },
+        stats: {
+          riskTypes: "Climate Risk Types",
+          aiTech: "AI Technology",
+          years: "Years Experience",
+          clients: "Clients Served"
+        },
+        partners: {
+          title: "Partners"
+        },
+        solutions: {
+          title: "Solution Modules",
+          platform: {
+            title: "Big Data Module Platform",
+            coreFeatures: "Core Features:",
+            targetClients: "Target Clients:",
+            feature1: "Industry Market Sentiment Analysis",
+            feature2: "Climate Scenario Trend Prediction",
+            feature3: "Expert Ensemble Algorithms",
+            client1: "Index Component Companies",
+            client2: "Financial Insurance Holdings",
+            client3: "B2B/B2C Business Services"
+          },
+          systems: {
+            title: "Three Core Systems",
+            system1: {
+              title: "ESG x MoE Financial Hedging Analysis System",
+              desc: "Integrated ESG indicators with mixed expert model risk analysis"
+            },
+            system2: {
+              title: "Asset & Portfolio Optimization System",
+              desc: "Intelligent asset allocation and portfolio optimization management"
+            },
+            system3: {
+              title: "Behavioral Finance & Hedging Enhancement System",
+              desc: "Smart hedging decisions combining behavioral finance"
+            }
+          }
+        },
+        news: {
+          title: "Latest News",
+          readMore: "Read More",
+          news1: {
+            title: "Kaohsiung Financial Park Company Presentation",
+            description: "Showcasing the latest AI climate risk assessment technology, exploring innovative applications of sustainable fintech with industry partners."
+          },
+          news2: {
+            title: "Fintech Summit Forum",
+            description: "Participating in Asia's largest fintech forum, sharing the latest research achievements in AI climate risk assessment."
+          },
+          news3: {
+            title: "ETF Exhibition",
+            description: "Demonstrating sustainable investment solutions, providing professional climate risk assessment tools for investors."
+          },
+          news4: {
+            title: "2025 Sustainable FinTech International Investment Forum",
+            description: "Promoting sustainable fintech development, establishing international cooperation networks, and creating a green financial future together."
+          }
+        },
+        cta: {
+          title: "Ready to experience our innovative technology?",
+          button: "Learn More"
+        }
+      }
+    };
+
+    // English version of news data
+    const newsDataEn = {
+      1: {
+        title: 'Kaohsiung Financial Park Company Presentation',
+        date: 'December 15, 2024',
+        content: `
+          <p>At the annual company presentation at Kaohsiung Financial Technology Innovation Park, we successfully showcased our latest AI climate risk assessment technology.</p>
+          <p>This presentation attracted over 200 industry experts and investors, who showed great interest in our TG-CI climate impact volatility model.</p>
+          <p><strong>Key Highlights:</strong></p>
+          <ul>
+            <li>Historical data analysis of 8 major physical risk types</li>
+            <li>Application of hybrid scenario frameworks</li>
+            <li>Asset-specific vulnerability assessments</li>
+            <li>Real-time risk monitoring and early warning systems</li>
+          </ul>
+          <p>We will continue to deepen cooperation with industry partners and jointly promote innovative development of sustainable fintech.</p>
+        `
+      },
+      2: {
+        title: 'Hong Kong Science Park Pitch Event',
+        date: 'November 28, 2024',
+        content: `
+          <p>Our team was invited to participate in the international startup competition hosted by Hong Kong Science Park, showcasing our innovative technology on the international stage.</p>
+          <p>This pitch event gathered tech experts and investors from around the world, and we achieved excellent results in the competition.</p>
+          <p><strong>Achievement Highlights:</strong></p>
+          <ul>
+            <li>Won the "Best Technology Innovation Award"</li>
+            <li>Reached preliminary cooperation intentions with multiple international financial institutions</li>
+            <li>Received exclusive interviews from multiple media outlets</li>
+            <li>Established extensive international cooperation networks</li>
+          </ul>
+        `
+      },
+      3: {
+        title: 'ETF Exhibition Outstanding Results',
+        date: 'November 10, 2024',
+        content: `
+          <p>At Taiwan's largest ETF exhibition, we showcased sustainable investment solutions, providing professional climate risk assessment tools for investors.</p>
+          <p>Our booth attracted a large number of investors and asset management company representatives, with continued growing interest in ESG investing.</p>
+          <p><strong>Exhibition Highlights:</strong></p>
+          <ul>
+            <li>Live demonstrations of climate risk assessment tools</li>
+            <li>ESG portfolio optimization recommendations</li>
+            <li>Market trend analysis of sustainable financial products</li>
+            <li>Interactive investor education systems</li>
+          </ul>
+        `
+      },
+      4: {
+        title: '2025 Sustainable FinTech International Investment Forum',
+        date: 'January 15, 2025',
+        content: `
+          <p>We will host the 2025 Sustainable FinTech International Investment Forum, inviting top global experts to explore future trends together.</p>
+          <p>This forum aims to promote the development of sustainable fintech, establish international cooperation networks, and create a bright future for green finance.</p>
+          <p><strong>Forum Highlights:</strong></p>
+          <ul>
+            <li>Inviting 50+ international top experts to speak</li>
+            <li>Integration of AI and climate finance development</li>
+            <li>Future trends in sustainable investing</li>
+            <li>Financial solutions for global climate governance</li>
+            <li>Hands-on workshops and networking opportunities</li>
+          </ul>
+        `
+      }
+    };
+
+    // Current language
+    let currentLanguage = localStorage.getItem('language') || 'zh';
 
     // News modal functionality
     const newsData = {
@@ -2191,7 +3684,9 @@
         }, 600);
 
         const newsId = this.dataset.newsId;
-        const newsInfo = newsData[newsId];
+        // Use appropriate news data based on current language
+        const currentNewsData = currentLanguage === 'en' ? newsDataEn : newsData;
+        const newsInfo = currentNewsData[newsId];
 
         if (newsInfo) {
           showNewsModal(newsInfo);
@@ -2249,6 +3744,616 @@
       if (e.key === 'Escape') {
         closeNewsModal();
       }
+    });
+
+    // Custom Select functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const customSelect = document.getElementById('customSelect');
+      const customSelectTrigger = customSelect.querySelector('.custom-select-trigger');
+      const customSelectOptions = customSelect.querySelectorAll('.custom-option');
+      const hiddenInput = document.getElementById('interest');
+      const customInputField = customSelect.closest('.custom-input-field');
+
+      // Toggle dropdown
+      customSelectTrigger.addEventListener('click', function() {
+        customSelect.classList.toggle('active');
+        if (customSelect.classList.contains('active')) {
+          customInputField.classList.add('focused');
+        } else {
+          customInputField.classList.remove('focused');
+        }
+      });
+
+      // Handle option selection
+      customSelectOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const value = this.getAttribute('data-value');
+          const text = this.textContent.trim();
+
+          // Update trigger text
+          customSelectTrigger.querySelector('span').textContent = text;
+
+          // Update hidden input
+          hiddenInput.value = value;
+
+          // Update selected state
+          customSelectOptions.forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+
+          // Update input field state
+          customInputField.classList.add('has-value');
+          customInputField.classList.remove('focused');
+
+          // Close dropdown
+          customSelect.classList.remove('active');
+        });
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!customSelect.contains(e.target)) {
+          customSelect.classList.remove('active');
+          customInputField.classList.remove('focused');
+        }
+      });
+
+      // Close dropdown on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && customSelect.classList.contains('active')) {
+          customSelect.classList.remove('active');
+          customInputField.classList.remove('focused');
+        }
+      });
+    });
+
+    // Custom Input Fields functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const customInputFields = document.querySelectorAll('.custom-input-field');
+
+      customInputFields.forEach(field => {
+        const input = field.querySelector('.custom-input');
+
+        if (input) {
+          // Handle focus
+          input.addEventListener('focus', function() {
+            field.classList.add('focused');
+          });
+
+          // Handle blur
+          input.addEventListener('blur', function() {
+            field.classList.remove('focused');
+            if (this.value.trim() !== '') {
+              field.classList.add('has-value');
+            } else {
+              field.classList.remove('has-value');
+            }
+          });
+
+          // Handle input change
+          input.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+              field.classList.add('has-value');
+            } else {
+              field.classList.remove('has-value');
+            }
+
+            // Remove invalid state when typing
+            if (field.classList.contains('invalid')) {
+              field.classList.remove('invalid');
+            }
+          });
+
+          // Initialize has-value state
+          if (input.value.trim() !== '') {
+            field.classList.add('has-value');
+          }
+        }
+      });
+    });
+
+    // Contact form functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const contactForm = document.getElementById('contactForm');
+      const formMessage = document.getElementById('formMessage');
+      const formLoader = document.getElementById('formLoader');
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+
+          // Show loading state
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>送出中...';
+          formLoader.style.display = 'block';
+          formMessage.style.display = 'none';
+
+          try {
+            // Collect form data
+            const formData = new FormData(contactForm);
+            const data = {
+              fullName: formData.get('fullName'),
+              email: formData.get('email'),
+              phone: formData.get('phone'),
+              company: formData.get('company'),
+              interest: formData.get('interest'),
+              message: formData.get('message'),
+              newsletter: formData.get('newsletter') === 'yes',
+              timestamp: new Date().toISOString()
+            };
+
+            // Send email using EmailJS
+            await emailjs.send('service_aifinsys', 'template_contact', {
+              subject: `【中山永續金融科技】${data.interest} - ${data.fullName}`,
+              from_name: data.fullName,
+              from_email: data.email,
+              phone: data.phone || '未提供',
+              company: data.company || '未提供',
+              interest: data.interest,
+              message: data.message || '無詳細訊息',
+              newsletter: data.newsletter ? '是' : '否',
+              timestamp: data.timestamp,
+              to_email: 'aifinsysco@gmail.com'
+            });
+
+            console.log('表單數據已發送:', data);
+
+            // Show success message
+            showFormMessage('感謝您的訊息！我們將在 24 小時內與您聯繫。', 'success');
+
+            // Reset form
+            contactForm.reset();
+
+            // Reset custom select
+            const customSelectTrigger = document.querySelector('.custom-select-trigger span');
+            const customSelectOptions = document.querySelectorAll('.custom-option');
+            const interestInputField = document.querySelector('#interest').closest('.custom-input-field');
+            const hiddenInput = document.getElementById('interest');
+
+            if (customSelectTrigger && hiddenInput && interestInputField) {
+              customSelectTrigger.textContent = '';
+              hiddenInput.value = '';
+              customSelectOptions.forEach(opt => opt.classList.remove('selected'));
+              interestInputField.classList.remove('has-value');
+            }
+
+            // Reset all custom input fields
+            const allCustomInputFields = document.querySelectorAll('.custom-input-field');
+            allCustomInputFields.forEach(field => {
+              field.classList.remove('has-value', 'focused');
+            });
+
+            // Optional: Track submission for analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'form_submit', {
+                event_category: 'engagement',
+                event_label: 'contact_form'
+              });
+            }
+
+          } catch (error) {
+            console.error('表單送出錯誤:', error);
+            showFormMessage('送出失敗，請稍後再試或直接聯絡我們。', 'error');
+          } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            formLoader.style.display = 'none';
+          }
+        });
+      }
+
+      function showFormMessage(message, type) {
+        formMessage.textContent = message;
+        formMessage.className = type === 'success' ? 'mt-3 success' : 'mt-3 error';
+        formMessage.style.display = 'block';
+
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          formMessage.style.display = 'none';
+        }, 5000);
+      }
+
+      // Form validation enhancements
+      const inputs = contactForm.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          validateField(this);
+        });
+
+        input.addEventListener('input', function() {
+          if (this.classList.contains('is-invalid')) {
+            validateField(this);
+          }
+        });
+      });
+
+      function validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+
+        // Get the custom input field container
+        const customField = field.closest('.custom-input-field');
+        const customContainer = field.closest('.custom-input-container');
+
+        // Required field validation
+        if (field.hasAttribute('required') && !value) {
+          isValid = false;
+          errorMessage = '此欄位為必填';
+        }
+
+        // Email validation
+        if (field.type === 'email' && value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            isValid = false;
+            errorMessage = '請輸入正確的電子信箱格式';
+          }
+        }
+
+        // Phone validation (basic)
+        if (field.type === 'tel' && value) {
+          const phoneRegex = /^[\d\s\-\+\(\)]{8,}$/;
+          if (!phoneRegex.test(value)) {
+            isValid = false;
+            errorMessage = '請輸入正確的電話號碼';
+          }
+        }
+
+        // Update field appearance for custom fields
+        if (customField) {
+          if (isValid) {
+            customField.classList.remove('invalid');
+            removeErrorMessage(customContainer || field);
+          } else {
+            customField.classList.add('invalid');
+            showErrorMessage(customContainer || field, errorMessage);
+          }
+        } else {
+          // Original Bootstrap validation for non-custom fields
+          if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            removeErrorMessage(field);
+          } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+            showErrorMessage(field, errorMessage);
+          }
+        }
+
+        return isValid;
+      }
+
+      function showErrorMessage(container, message) {
+        removeErrorMessage(container);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.textContent = message;
+        container.appendChild(errorDiv);
+      }
+
+      function removeErrorMessage(container) {
+        const existingError = container.querySelector('.invalid-feedback');
+        if (existingError) {
+          existingError.remove();
+        }
+      }
+    });
+
+    // Language switching functionality
+    function switchLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('language', lang);
+
+      // Update page title
+      document.title = languageData[lang].title;
+
+      // Update current language button text
+      const currentLangSpan = document.getElementById('currentLang');
+      currentLangSpan.textContent = lang === 'zh' ? '中文' : 'English';
+
+      // Update navigation using more robust approach
+      const updateNavigation = () => {
+        const navigationMap = {
+          'home': ['首頁', 'Home'],
+          'news': ['最新消息', 'Latest News'],
+          'about': ['關於我們', 'About Us'],
+          'products': ['產品服務', 'Products & Services'],
+          'contact': ['聯絡我們', 'Contact Us']
+        };
+
+        // Get all nav links in the navbar
+        const navbarElement = document.querySelector('.navbar-nav');
+        if (navbarElement) {
+          const allNavLinks = navbarElement.querySelectorAll('a.nav-link');
+
+          allNavLinks.forEach((link, index) => {
+            const href = link.getAttribute('href');
+            const targetKey = href ? href.replace('#', '') : null;
+
+            if (targetKey && navigationMap[targetKey] && languageData[lang].navigation[targetKey]) {
+              link.textContent = languageData[lang].navigation[targetKey];
+            }
+          });
+        }
+
+        // Fallback: direct text-based replacement (more reliable)
+        const directTextUpdate = () => {
+          Object.keys(navigationMap).forEach(key => {
+            const [chineseText, englishText] = navigationMap[key];
+            const targetText = lang === 'zh' ? chineseText : englishText;
+
+            // Find link by current text content
+            const linkByText = Array.from(document.querySelectorAll('.navbar-nav a')).find(link =>
+              link.textContent.trim() === (lang === 'zh' ? englishText : chineseText)
+            );
+
+            if (linkByText) {
+              linkByText.textContent = targetText;
+            }
+
+            // Also try by href
+            const linkByHref = document.querySelector(`a[href="#${key}"]`);
+            if (linkByHref) {
+              linkByHref.textContent = targetText;
+            }
+          });
+        };
+
+        directTextUpdate();
+      };
+
+      updateNavigation();
+
+      // Update hero section
+      const heroTitle = document.querySelector('.hero h1');
+      const heroDescription = document.querySelector('.hero p');
+      const btnProduct = document.querySelector('.hero a[href="demo.html"]');
+      const btnAbout = document.querySelector('.hero a[href="#about"]');
+
+      if (heroTitle) heroTitle.textContent = languageData[lang].hero.title;
+      if (heroDescription) heroDescription.textContent = languageData[lang].hero.description;
+      if (btnProduct) btnProduct.textContent = languageData[lang].hero.btnProduct;
+      if (btnAbout) btnAbout.textContent = languageData[lang].hero.btnAbout;
+
+      // Update services section
+      const servicesTitle = document.querySelector('#products .section-title');
+      if (servicesTitle) servicesTitle.textContent = languageData[lang].services.title;
+
+      const serviceCards = document.querySelectorAll('#products .feature-card');
+      serviceCards.forEach((card, index) => {
+        const serviceKey = `service${index + 1}`;
+        const title = card.querySelector('h5');
+        const description = card.querySelector('p');
+
+        if (title && languageData[lang].services[serviceKey]) {
+          title.textContent = languageData[lang].services[serviceKey].title;
+        }
+        if (description && languageData[lang].services[serviceKey]) {
+          description.textContent = languageData[lang].services[serviceKey].description;
+        }
+      });
+
+      // Update about section
+      const aboutTitle = document.querySelector('#about .section-title');
+      const aboutSubtitle = document.querySelector('#about .lead');
+      if (aboutTitle) aboutTitle.textContent = languageData[lang].about.title;
+      if (aboutSubtitle) aboutSubtitle.textContent = languageData[lang].about.subtitle;
+
+      const aboutCards = document.querySelectorAll('#about .about-card');
+      aboutCards.forEach((card, index) => {
+        const title = card.querySelector('h4');
+        const paragraphs = card.querySelectorAll('p');
+
+        if (index === 0) { // Company info card
+          if (title) title.textContent = languageData[lang].about.companyTitle;
+          if (paragraphs[0]) paragraphs[0].innerHTML = languageData[lang].about.companyDesc;
+          if (paragraphs[1]) paragraphs[1].innerHTML = languageData[lang].about.companyDesc2;
+        } else if (index === 1) { // Mission card
+          if (title) title.textContent = languageData[lang].about.missionTitle;
+          if (paragraphs[0]) paragraphs[0].innerHTML = languageData[lang].about.missionDesc;
+        }
+      });
+
+      // Update contact info labels (first instance)
+      const contactInfoLabels = document.querySelectorAll('#contact h5');
+      contactInfoLabels.forEach(label => {
+        if (label.textContent === '地址' || label.textContent === 'Address') {
+          label.textContent = languageData[lang].contact.address;
+        } else if (label.textContent === '電話' || label.textContent === 'Phone') {
+          label.textContent = languageData[lang].contact.phone;
+        } else if (label.textContent === '營業時間' || label.textContent === 'Business Hours') {
+          label.textContent = languageData[lang].contact.businessHours;
+        }
+      });
+
+      // Update technology section
+      const techTitle = document.querySelector('#products h3');
+      const techSubtitle = document.querySelector('#products .lead');
+      if (techTitle) techTitle.textContent = languageData[lang].technology.title;
+      if (techSubtitle) techSubtitle.innerHTML = languageData[lang].technology.subtitle.replace('\n', '<br>');
+
+      // Update process steps
+      const processSteps = document.querySelectorAll('.process-step');
+      processSteps.forEach((step, index) => {
+        const stepKey = `step${index + 1}`;
+        const title = step.querySelector('h5');
+        const description = step.querySelector('p');
+
+        if (title && languageData[lang].technology[stepKey]) {
+          title.textContent = languageData[lang].technology[stepKey].title;
+        }
+        if (description && languageData[lang].technology[stepKey]) {
+          description.textContent = languageData[lang].technology[stepKey].description;
+        }
+      });
+
+      // Update statistics labels
+      const statLabels = document.querySelectorAll('.stat-label');
+      const statKeys = ['riskTypes', 'aiTech', 'years', 'clients'];
+      statLabels.forEach((label, index) => {
+        if (statKeys[index] && languageData[lang].stats[statKeys[index]]) {
+          label.textContent = languageData[lang].stats[statKeys[index]];
+        }
+      });
+
+      // Update partners section
+      const allSectionTitles = document.querySelectorAll('.section-title');
+      allSectionTitles.forEach(title => {
+        if (title.textContent.includes('合作夥伴') || title.textContent.includes('Partners')) {
+          title.textContent = languageData[lang].partners.title;
+        }
+      });
+
+      // Update News section
+      const newsTitle = document.querySelector('#news .section-title');
+      if (newsTitle) newsTitle.textContent = languageData[lang].news.title;
+
+      const newsItems = document.querySelectorAll('.news-clickable');
+      newsItems.forEach((item, index) => {
+        const newsKey = `news${index + 1}`;
+        const title = item.querySelector('h3');
+        const description = item.querySelector('p.lead');
+        const readMore = item.querySelector('.read-more-btn');
+
+        if (title && languageData[lang].news[newsKey]) {
+          const iconElement = title.querySelector('i');
+          const iconClass = iconElement ? iconElement.outerHTML : '';
+          title.innerHTML = `${iconClass}${languageData[lang].news[newsKey].title}`;
+        }
+        if (description && languageData[lang].news[newsKey]) {
+          description.textContent = languageData[lang].news[newsKey].description;
+        }
+        if (readMore) {
+          readMore.innerHTML = `${languageData[lang].news.readMore} <i class="fas fa-arrow-right ms-2"></i>`;
+        }
+      });
+
+      // Update Solutions Module
+      const solutionsTitle = document.querySelector('.solutions-section h3');
+      if (solutionsTitle) solutionsTitle.textContent = languageData[lang].solutions.title;
+
+      const platformTitle = document.querySelector('.solution-overview .solution-title');
+      if (platformTitle) platformTitle.textContent = languageData[lang].solutions.platform.title;
+
+      const coreFeatures = document.querySelector('.solution-features .feature-title');
+      if (coreFeatures) coreFeatures.textContent = languageData[lang].solutions.platform.coreFeatures;
+
+      const targetClients = document.querySelector('.solution-targets .feature-title');
+      if (targetClients) targetClients.textContent = languageData[lang].solutions.platform.targetClients;
+
+      const systemsTitle = document.querySelector('.solution-systems .solution-title');
+      if (systemsTitle) systemsTitle.textContent = languageData[lang].solutions.systems.title;
+
+      const systemTitles = document.querySelectorAll('.system-title');
+      systemTitles.forEach((title, index) => {
+        const systemKey = `system${index + 1}`;
+        if (languageData[lang].solutions.systems[systemKey]) {
+          title.textContent = languageData[lang].solutions.systems[systemKey].title;
+        }
+      });
+
+      const systemDescs = document.querySelectorAll('.system-desc');
+      systemDescs.forEach((desc, index) => {
+        const systemKey = `system${index + 1}`;
+        if (languageData[lang].solutions.systems[systemKey]) {
+          desc.textContent = languageData[lang].solutions.systems[systemKey].desc;
+        }
+      });
+
+      // Update feature lists
+      const featureItems = document.querySelectorAll('.solution-features .feature-list li');
+      const featureKeys = ['feature1', 'feature2', 'feature3'];
+      featureItems.forEach((item, index) => {
+        if (featureKeys[index] && languageData[lang].solutions.platform[featureKeys[index]]) {
+          const icon = item.querySelector('i');
+          const iconClass = icon ? icon.outerHTML : '';
+          item.innerHTML = `${iconClass}${languageData[lang].solutions.platform[featureKeys[index]]}`;
+        }
+      });
+
+      const clientItems = document.querySelectorAll('.solution-targets .feature-list li');
+      const clientKeys = ['client1', 'client2', 'client3'];
+      clientItems.forEach((item, index) => {
+        if (clientKeys[index] && languageData[lang].solutions.platform[clientKeys[index]]) {
+          const icon = item.querySelector('i');
+          const iconClass = icon ? icon.outerHTML : '';
+          item.innerHTML = `${iconClass}${languageData[lang].solutions.platform[clientKeys[index]]}`;
+        }
+      });
+
+      // Update Contact section
+      const contactTitle = document.querySelector('#contact .section-title');
+      const contactSubtitle = document.querySelector('#contact p.text-center');
+      const followUsTitle = document.querySelector('.text-center h5');
+      const formTitle = document.querySelector('.contact-form-section h2');
+      const formSubtitle = document.querySelector('.contact-form-section .lead');
+
+      if (contactTitle) contactTitle.textContent = languageData[lang].contact.title;
+      if (contactSubtitle) contactSubtitle.textContent = languageData[lang].contact.subtitle;
+      if (followUsTitle && followUsTitle.textContent.includes('追蹤我們')) {
+        followUsTitle.textContent = languageData[lang].contact.followUs;
+      }
+      if (formTitle) formTitle.textContent = languageData[lang].contact.formTitle;
+      if (formSubtitle) formSubtitle.innerHTML = languageData[lang].contact.formSubtitle.replace('\n', '<br>');
+
+      // Update form labels
+      const formLabels = document.querySelectorAll('.custom-input-label');
+      const labelMappings = ['fullName', 'email', 'phone', 'company', 'interest', 'message'];
+      formLabels.forEach((label, index) => {
+        if (labelMappings[index] && languageData[lang].contact.form[labelMappings[index]]) {
+          label.textContent = languageData[lang].contact.form[labelMappings[index]];
+        }
+      });
+
+      const submitButton = document.querySelector('#contactForm button[type="submit"]');
+      if (submitButton) {
+        submitButton.innerHTML = `<i class="fas fa-paper-plane me-2"></i>${languageData[lang].contact.form.submitButton}`;
+      }
+
+      // Update custom select options
+      const options = document.querySelectorAll('.custom-option');
+      const optionKeys = ['aiClimate', 'sustainable', 'tcfd', 'partnership', 'career', 'consultation', 'other'];
+      options.forEach((option, index) => {
+        if (optionKeys[index] && languageData[lang].contact.form.options[optionKeys[index]]) {
+          const icon = option.querySelector('i');
+          const iconClass = icon ? icon.outerHTML : '';
+          option.innerHTML = `${iconClass}${languageData[lang].contact.form.options[optionKeys[index]]}`;
+        }
+      });
+
+      // Update checkbox labels
+      const newsletterLabel = document.querySelector('label[for="newsletter"]');
+      const privacyLabel = document.querySelector('label[for="privacy"]');
+      const privacyLink = document.querySelector('label[for="privacy"] a');
+
+      if (newsletterLabel) newsletterLabel.textContent = languageData[lang].contact.form.newsletter;
+      if (privacyLabel && privacyLink) {
+        privacyLabel.innerHTML = `${languageData[lang].contact.form.privacy} <a href="#" class="text-primary">${languageData[lang].contact.form.privacyPolicy}</a>`;
+      }
+
+      // Update CTA section
+      const ctaTitle = document.querySelector('.cta-container h4');
+      const ctaButton = document.querySelector('.cta-container a[href="demo.html"]');
+      if (ctaTitle) ctaTitle.textContent = languageData[lang].cta.title;
+      if (ctaButton) ctaButton.innerHTML = `<i class="fas fa-rocket me-2"></i>${languageData[lang].cta.button}`;
+    }
+
+    // Language toggle button event
+    document.getElementById('langToggle').addEventListener('click', function() {
+      const newLang = currentLanguage === 'zh' ? 'en' : 'zh';
+      switchLanguage(newLang);
+    });
+
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Use a small delay to ensure all elements are fully rendered
+      setTimeout(() => {
+        switchLanguage(currentLanguage);
+      }, 100);
     });
   </script>
 </body>
