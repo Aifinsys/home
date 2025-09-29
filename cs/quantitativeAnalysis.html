@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量化分析 - TSMC 衝擊後走勢圖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-chart-line"></i> TSMC 衝擊後走勢圖</h1>
+        <h2><i class="fas fa-info-circle"></i> 量化分析報告</h2>
+        <p>追蹤台積電(TSMC)股價在重大事件影響下的市場表現與技術分析</p>
+
+        <div class="chart-container">
+            <canvas id="stockChart"></canvas>
+        </div>
+
+        <h3><i class="fas fa-table"></i> 詳細數據表</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>股價 <small>(TWD)</small></th>
+                    <th>漲跌</th>
+                    <th>成交量 <small>(千股)</small></th>
+                    <th>盤後備註</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025/01/20</td>
+                    <td>1120</td>
+                    <td class="neutral">0</td>
+                    <td>32,062</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2025/01/21</td>
+                    <td>1120</td>
+                    <td class="neutral">0</td>
+                    <td>24,369</td>
+                    <td>地震衝擊日</td>
+                </tr>
+                <tr>
+                    <td>2025/01/22</td>
+                    <td>1135</td>
+                    <td class="positive">+15</td>
+                    <td>45,997</td>
+                    <td>14,418</td>
+                </tr>
+                <tr>
+                    <td>2025/02/03</td>
+                    <td>1070</td>
+                    <td class="negative">-50</td>
+                    <td>113,032</td>
+                    <td>MSCI權重評估</td>
+                </tr>
+                <tr>
+                    <td>2025/02/10</td>
+                    <td>1105</td>
+                    <td class="negative">-15</td>
+                    <td>28,480</td>
+                    <td>MSCI權重調整</td>
+                </tr>
+                <tr>
+                    <td>2025/02/14</td>
+                    <td>1060</td>
+                    <td class="negative">-60</td>
+                    <td>64,364</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2025/02/27</td>
+                    <td>1040</td>
+                    <td class="negative">-80</td>
+                    <td>61,647</td>
+                    <td>29,637-MSCI</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <h4><i class="fas fa-lightbulb"></i> 分析重點</h4>
+            <p><strong>地震衝擊：</strong> 2025/01/21 發生地震事件，對股價造成短期影響</p>
+            <p><strong>MSCI權重調整：</strong> 2025/02/03 起連續MSCI權重評估與調整期間</p>
+            <p><strong>技術分析：</strong> 股價從高點1135下跌至低點1040，跌幅約8.4%</p>
+            <p><strong>成交量分析：</strong> 重大事件期間成交量明顯放大，反映市場關注度</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="back-button" onclick="window.location.href='../demo.html'">
+                <i class="fas fa-arrow-left"></i> 返回 DEMO
+            </button>
+        </div>
+
+        <div class="copyright">
+            2025 Copyright © Ai Fintech Corp.
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        
+        const data = {
+            labels: ['2025/01/20', '2025/01/21', '2025/01/22', '2025/02/03', '2025/02/10', '2025/02/14', '2025/02/27'],
+            datasets: [
+                {
+                    label: '股價',
+                    data: [1120, 1120, 1135, 1070, 1105, 1060, 1040],
+                    borderColor: '#4a90e2',
+                    backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#4a90e2',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                },
+                {
+                    label: '成交量',
+                    data: [32062, 24369, 45997, 113032, 28480, 64364, 61647],
+                    borderColor: '#34495e',
+                    backgroundColor: 'rgba(52, 73, 94, 0.2)',
+                    borderWidth: 1,
+                    fill: true,
+                    tension: 0,
+                    pointRadius: 0,
+                    yAxisID: 'y1',
+                    type: 'bar'
+                }
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                scales: {
+                    y: {
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: '股價'
+                        },
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    y1: {
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: '成交量'
+                        },
+                        grid: {
+                            drawBorder: false,
+                            display: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            drawBorder: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#333',
+                        bodyColor: '#666',
+                        borderColor: '#ddd',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString();
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: function(context) {
+                            return context.datasetIndex === 0; // 只顯示股價的標籤
+                        },
+                        align: 'top',
+                        offset: 10,
+                        color: '#2c3e50',
+                        font: {
+                            size: 11
+                        },
+                        formatter: function(value, context) {
+                            return context.chart.data.labels[context.dataIndex] + '\n' + value;
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                afterDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = '11px "Microsoft JhengHei"';
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.textAlign = 'center';
+                    
+                    // 為每個股價數據點添加標籤
+                    chart.data.datasets[0].data.forEach((value, index) => {
+                        const meta = chart.getDatasetMeta(0);
+                        const point = meta.data[index];
+                        if (point) {
+                            ctx.fillText(
+                                chart.data.labels[index],
+                                point.x,
+                                point.y - 15
+                            );
+                            ctx.fillText(
+                                value,
+                                point.x,
+                                point.y - 30
+                            );
+                        }
+                    });
+                    ctx.restore();
+                }
+            }]
+        };
+
+        new Chart(ctx, config);
+    </script>
+</body>
+</html> 

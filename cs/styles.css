@@ -1,0 +1,247 @@
+/* AiFintech 統一樣式 - 保持原始數據內容 */
+:root {
+    --primary-color: #2C5F73;
+    --secondary-color: #4A90A4;
+    --accent-color: #7FB069;
+    --text-dark: #2D3748;
+    --bg-light: #F7FAFC;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+/* 基本樣式 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #E2E8F0 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* 容器 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(44, 95, 115, 0.1);
+}
+
+/* 標題樣式 */
+h1 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+h2 {
+    color: var(--primary-color);
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+h3 {
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.8rem 0;
+}
+
+/* 表格樣式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+th {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    border: none;
+    font-size: 0.9rem;
+}
+
+td {
+    padding: 1rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 圖表容器 */
+.chart-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+}
+
+/* 數學公式樣式 */
+.math {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* 註釋樣式 */
+.note {
+    font-size: 0.9em;
+    color: #666;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem;
+    border-left: 4px solid var(--info-color);
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+}
+
+/* 按鈕樣式 */
+.footer button,
+.back-button {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #6ba055 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(127, 176, 105, 0.3);
+}
+
+.footer button:hover,
+.back-button:hover {
+    background: linear-gradient(135deg, #6ba055 0%, #5e8f4a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(127, 176, 105, 0.4);
+}
+
+/* 版權樣式 */
+.copyright {
+    text-align: center;
+    background: var(--text-dark);
+    color: white;
+    padding: 1rem;
+    margin: 2rem -2rem -2rem -2rem;
+    font-size: 0.9rem;
+}
+
+/* 狀態樣式 */
+.positive {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+.negative {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--danger-color);
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+.neutral {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 0.5rem 0.3rem;
+    }
+
+    .chart-container {
+        padding: 1rem;
+        height: 400px;
+    }
+}
+
+/* 特殊樣式 */
+.data-table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-left: 5px solid var(--secondary-color);
+    margin: 1rem 0;
+}
+
+.stats-card h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.stats-card p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.9rem;
+}

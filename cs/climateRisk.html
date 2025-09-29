@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WACI 計算 - 投資組合加權平均碳強度調適</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-leaf"></i> 投資組合加權平均碳強度調適</h1>
+        <h2><i class="fas fa-info-circle"></i> WACI (Weighted Average Carbon Intensity)</h2>
+        <p>反映整個投資組合的碳強度，考慮每項投資的投資金額與其碳排放的加權平均值：</p>
+
+        <h3><i class="fas fa-table"></i> 表格數據</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>企業名稱</th>
+                    <th>權重 (%)</th>
+                    <th>範圍1+2排放<br><small>(噸CO2e)</small></th>
+                    <th>範圍3排放<br><small>(噸CO2e)</small></th>
+                    <th>總排放<br><small>(噸CO2e)</small></th>
+                    <th>投資金額<br><small>(百萬美元)</small></th>
+                    <th>投資權重 (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>企業A (石油)</strong></td>
+                    <td>行業</td>
+                    <td>800,000</td>
+                    <td>2,000,000</td>
+                    <td>2,800,000</td>
+                    <td>2,000</td>
+                    <td><strong>25%</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>企業B (汽車)</strong></td>
+                    <td>交通</td>
+                    <td>150,000</td>
+                    <td>1,500,000</td>
+                    <td>1,650,000</td>
+                    <td>3,000</td>
+                    <td><strong>20%</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>企業C (製造)</strong></td>
+                    <td>工業</td>
+                    <td>200,000</td>
+                    <td>300,000</td>
+                    <td>500,000</td>
+                    <td>1,500</td>
+                    <td><strong>20%</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>企業D (零售)</strong></td>
+                    <td>零售</td>
+                    <td>50,000</td>
+                    <td>400,000</td>
+                    <td>450,000</td>
+                    <td>2,500</td>
+                    <td><strong>20%</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>企業E (科技)</strong></td>
+                    <td>資訊技術</td>
+                    <td>10,000</td>
+                    <td>50,000</td>
+                    <td>60,000</td>
+                    <td>1,000</td>
+                    <td><strong>15%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3><i class="fas fa-calculator"></i> 公式</h3>
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; margin: 1rem 0; border-left: 4px solid var(--primary-color);">
+            <p>WACI = <span class="math">\(\sum (\text{企業碳強度} \times \text{投資權重})\)</span></p>
+        </div>
+
+        <h3><i class="fas fa-chart-line"></i> 計算</h3>
+        <div style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid var(--warning-color);">
+            <p>WACI = <span class="math">\((1,000 \times 0.25) + (100 \times 0.20) + (100 \times 0.20) + (45 \times 0.20) + (60 \times 0.15)\)</span></p>
+            <p>WACI = <span class="math">\(250 + 20 + 20 + 9 + 9 = 308 \, \text{噸CO2e/百萬美元}\)</span></p>
+        </div>
+
+        <div class="note">
+            <h4><i class="fas fa-lightbulb"></i> 重要說明</h4>
+            <p><strong>範圍1+2排放：</strong>直接排放和間接購買能源排放</p>
+            <p><strong>範圍3排放：</strong>其他間接排放（如供應鏈、員工通勤等）</p>
+            <p><strong>範圍3排放詳細：</strong>上下游供應鏈、使用階段排放等（如石化、汽車、製造業等）</p>
+            <p><strong>總排放計算：</strong>範圍1+2排放 + 範圍3排放</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="back-button" onclick="window.location.href='../demo.html'">
+                <i class="fas fa-arrow-left"></i> 返回 DEMO
+            </button>
+        </div>
+
+        <div class="copyright">
+            2025 Copyright © Ai Fintech Corp.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG 投資組合調適策略 - AiFinsys</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1><i class="fas fa-chart-pie"></i> ESG 投資組合調適策略</h1>
+        <h3 style="text-align: center; color: var(--secondary-color); margin-bottom: 1rem;">
+            AAPL, MSFT, NVDA, META, GOOGL, TSLA, AVGO, JPM, CITI, TSMC
+        </h3>
+        <div style="background: #f0f8ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--info-color); margin-bottom: 2rem;">
+            <p><strong>AiFinsys 演算投資組合</strong> - 本分析涵蓋財務表現、氣候影響、碳排放、地緣政治風險、行業趨勢及地區因素。</p>
+            <p>資料基於 <strong>2022 Q1 至 2025 Q1</strong> 的量化數據，並提出 <strong>2025 Q2</strong> 的投資組合調整策略。</p>
+        </div>
+
+        <h2><i class="fas fa-chart-line"></i> 1. 財務表現 (2022 Q1 – 2025 Q1)</h2>
+        <p>財務數據（如收入增長、淨利潤和每股盈餘 EPS）評估公司穩定性和成長潛力。</p>
+
+        <div class="chart-container">
+            <canvas id="financialChart"></canvas>
+        </div>
+
+        <h3><i class="fas fa-table"></i> 各公司的主要財務指標：</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>收入增長率<br><small>(2022-2025 CAGR)</small></th>
+                    <th>2025 Q1 淨利潤<br><small>(億美元)</small></th>
+                    <th>2025 Q1 EPS<br><small>(美元)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>AAPL</strong></td><td>8.2%</td><td>25.3</td><td>1.52</td></tr>
+                <tr><td><strong>MSFT</strong></td><td>12.5%</td><td>22.1</td><td>2.85</td></tr>
+                <tr><td><strong>NVDA</strong></td><td>15.3%</td><td>10.2</td><td>4.12</td></tr>
+                <tr><td><strong>META</strong></td><td>9.8%</td><td>12.4</td><td>3.45</td></tr>
+                <tr><td><strong>GOOGL</strong></td><td>11.2%</td><td>18.7</td><td>5.23</td></tr>
+                <tr><td><strong>TSLA</strong></td><td>18.7%</td><td>3.8</td><td>1.05</td></tr>
+                <tr><td><strong>AVGO</strong></td><td>7.5%</td><td>4.2</td><td>10.15</td></tr>
+                <tr><td><strong>JPM</strong></td><td>6.3%</td><td>12.5</td><td>3.75</td></tr>
+                <tr><td><strong>CITI</strong></td><td>5.8%</td><td>4.8</td><td>2.10</td></tr>
+                <tr><td><strong>TSM</strong></td><td>14.2%</td><td>8.5</td><td>1.65</td></tr>
+            </tbody>
+        </table>
+
+        <h2><i class="fas fa-leaf"></i> 2. 氣候影響與碳排放</h2>
+        <div class="chart-container">
+            <canvas id="carbonChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>碳排放強度<br><small>(2024)</small></th>
+                    <th>2030 減排目標</th>
+                    <th>氣候風險暴露</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>AAPL</strong></td><td>15.2</td><td>Scope 1 & 2 減排 75%</td><td>中等 (供應鏈)</td></tr>
+                <tr><td><strong>MSFT</strong></td><td>10.5</td><td>2030 年碳負排放</td><td>低</td></tr>
+                <tr><td><strong>NVDA</strong></td><td>18.7</td><td>Scope 1 & 2 減排 50%</td><td>中等 (能源使用)</td></tr>
+                <tr><td><strong>META</strong></td><td>12.3</td><td>2030 年淨零排放</td><td>低</td></tr>
+                <tr><td><strong>GOOGL</strong></td><td>11.8</td><td>2030 年無碳排放</td><td>低</td></tr>
+                <tr><td><strong>TSLA</strong></td><td>9.5</td><td>2040 年淨零排放</td><td>中等 (電池供應鏈)</td></tr>
+                <tr><td><strong>AVGO</strong></td><td>22.4</td><td>Scope 1 & 2 減排 40%</td><td>高 (製造業)</td></tr>
+                <tr><td><strong>JPM</strong></td><td>8.2</td><td>2050 年淨零排放</td><td>中等 (融資排放)</td></tr>
+                <tr><td><strong>CITI</strong></td><td>7.9</td><td>2050 年淨零排放</td><td>中等 (融資排放)</td></tr>
+                <tr><td><strong>TSM</strong></td><td>25.6</td><td>Scope 1 & 2 減排 50%</td><td>高 (水與能源使用)</td></tr>
+            </tbody>
+        </table>
+
+        <h2><i class="fas fa-globe"></i> 3. 地緣政治風險</h2>
+        <p>地緣政治因素（如台海緊張、中美貿易爭端）對公司運營與股價有顯著影響：</p>
+
+        <div class="chart-container">
+            <canvas id="geopoliticalChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>地緣政治風險評分<br><small>(1-10分)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>AAPL</strong></td><td>7</td></tr>
+                <tr><td><strong>MSFT</strong></td><td>12</td></tr>
+                <tr><td><strong>NVDA</strong></td><td>22</td></tr>
+                <tr><td><strong>META</strong></td><td>9</td></tr>
+                <tr><td><strong>GOOGL</strong></td><td>13</td></tr>
+                <tr><td><strong>TSLA</strong></td><td>17</td></tr>
+                <tr><td><strong>AVGO</strong></td><td>6</td></tr>
+                <tr><td><strong>JPM</strong></td><td>4</td></tr>
+                <tr><td><strong>CITI</strong></td><td>3</td></tr>
+                <tr><td><strong>TSM</strong></td><td>12</td></tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <h4><i class="fas fa-exclamation-triangle"></i> 關鍵重點</h4>
+            <p><strong>TSM</strong> 因位於台灣，地緣政治風險最高，可能受兩岸衝突影響。</p>
+            <p><strong>AAPL</strong> 和 <strong>TSLA</strong> 在中國的供應鏈與市場依賴使其易受貿易政策影響。</p>
+        </div>
+
+        <h2><i class="fas fa-industry"></i> 4. 行業趨勢</h2>
+        <p>各公司所處行業的成長前景影響其長期價值：</p>
+
+        <div class="chart-container">
+            <canvas id="industryChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>行業成長預測<br><small>(2025)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>AAPL</strong></td><td>6%</td></tr>
+                <tr><td><strong>MSFT</strong></td><td>12.5%</td></tr>
+                <tr><td><strong>NVDA</strong></td><td>22.5%</td></tr>
+                <tr><td><strong>META</strong></td><td>9%</td></tr>
+                <tr><td><strong>GOOGL</strong></td><td>13.5%</td></tr>
+                <tr><td><strong>TSLA</strong></td><td>17.5%</td></tr>
+                <tr><td><strong>AVGO</strong></td><td>6.5%</td></tr>
+                <tr><td><strong>JPM</strong></td><td>4%</td></tr>
+                <tr><td><strong>CITI</strong></td><td>3%</td></tr>
+                <tr><td><strong>TSM</strong></td><td>12.5%</td></tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <h4><i class="fas fa-lightbulb"></i> 關鍵重點</h4>
+            <p><strong>NVDA</strong> 和 <strong>TSLA</strong> 在 AI 與 EV 領域成長潛力最強。</p>
+            <p><strong>JPM</strong> 和 <strong>CITI</strong> 因經濟不確定性，成長有限。</p>
+        </div>
+
+        <h2><i class="fas fa-map-marker-alt"></i> 5. 地區因素</h2>
+        <p>地區經濟、監管環境與市場動態對公司表現至關重要：</p>
+
+        <div class="chart-container">
+            <canvas id="regionalChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>地區風險評分<br><small>(1-10分)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>AAPL</strong></td><td>8</td></tr>
+                <tr><td><strong>MSFT</strong></td><td>5</td></tr>
+                <tr><td><strong>NVDA</strong></td><td>7</td></tr>
+                <tr><td><strong>META</strong></td><td>6</td></tr>
+                <tr><td><strong>GOOGL</strong></td><td>6</td></tr>
+                <tr><td><strong>TSLA</strong></td><td>8</td></tr>
+                <tr><td><strong>AVGO</strong></td><td>7</td></tr>
+                <tr><td><strong>JPM</strong></td><td>6</td></tr>
+                <tr><td><strong>CITI</strong></td><td>7</td></tr>
+                <tr><td><strong>TSM</strong></td><td>10</td></tr>
+            </tbody>
+        </table>
+
+        <h2><i class="fas fa-cogs"></i> 6. 2025 Q2 投資組合調整策略</h2>
+        <p>基於上述分析，建議如下調整：</p>
+
+        <div class="chart-container">
+            <canvas id="portfolioAdjustmentChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>公司</th>
+                    <th>調整建議</th>
+                    <th>主要理由</th>
+                    <th>風險考量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>NVDA</strong></td>
+                    <td><span class="positive">增加持倉</span></td>
+                    <td>AI晶片市場領先，高成長潛力</td>
+                    <td>碳排放強度較高</td>
+                </tr>
+                <tr>
+                    <td><strong>TSLA</strong></td>
+                    <td><span class="positive">增加持倉</span></td>
+                    <td>EV需求強勁，符合ESG目標</td>
+                    <td>供應鏈依賴</td>
+                </tr>
+                <tr>
+                    <td><strong>TSM</strong></td>
+                    <td><span class="negative">減少持倉</span></td>
+                    <td>地緣政治風險高</td>
+                    <td>建議轉向MediaTek或AMD</td>
+                </tr>
+                <tr>
+                    <td><strong>MSFT</strong></td>
+                    <td><span style="color: #007bff; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: rgba(0, 123, 255, 0.1);">維持持倉</span></td>
+                    <td>雲端與AI領域穩健</td>
+                    <td>碳排放低，減排目標積極</td>
+                </tr>
+                <tr>
+                    <td><strong>GOOGL</strong></td>
+                    <td><span style="color: #007bff; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: rgba(0, 123, 255, 0.1);">維持持倉</span></td>
+                    <td>全球業務多元化</td>
+                    <td>面臨反壟斷審查</td>
+                </tr>
+                <tr>
+                    <td><strong>JPM</strong></td>
+                    <td><span class="negative">減少持倉</span></td>
+                    <td>成長前景有限</td>
+                    <td>融資排放風險中等</td>
+                </tr>
+                <tr>
+                    <td><strong>CITI</strong></td>
+                    <td><span class="negative">減少持倉</span></td>
+                    <td>成長前景有限</td>
+                    <td>新興市場風險高</td>
+                </tr>
+                <tr>
+                    <td><strong>AAPL</strong></td>
+                    <td><span style="color: #ffc107; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: rgba(255, 193, 7, 0.1);">密切監控</span></td>
+                    <td>成長適中</td>
+                    <td>中國供應鏈依賴</td>
+                </tr>
+                <tr>
+                    <td><strong>META</strong></td>
+                    <td><span style="color: #ffc107; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: rgba(255, 193, 7, 0.1);">密切監控</span></td>
+                    <td>元宇宙發展潛力</td>
+                    <td>歐洲隱私法規影響</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2><i class="fas fa-chart-bar"></i> 7. TSM 2025 Q2 股價預測分析</h2>
+        <div class="chart-container">
+            <canvas id="tsmPredictionChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>情境分析</th>
+                    <th>預期股價</th>
+                    <th>關鍵因素</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>樂觀情境</td>
+                    <td><strong>170美元</strong></td>
+                    <td>• 美國廠擴產順利<br>• AI需求強勁<br>• 地緣政治穩定</td>
+                </tr>
+                <tr>
+                    <td>基本情境</td>
+                    <td><strong>160美元</strong></td>
+                    <td>• 3nm技術普及<br>• AI晶片需求持續</td>
+                </tr>
+                <tr>
+                    <td>保守情境</td>
+                    <td><strong>150美元</strong></td>
+                    <td>• 地緣政治緊張<br>• 供應鏈中斷風險</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2><i class="fas fa-check-circle"></i> 結論</h2>
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 10px; margin: 2rem 0; border-left: 4px solid var(--primary-color);">
+            <p><strong>本次 ESG 投資組合分析顯示，需在財務回報與氣候、地緣風險間取得平衡：</strong></p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="color: var(--success-color);"><i class="fas fa-thumbs-up"></i> 重點推薦</h4>
+                    <p>NVDA、TSLA（AI與EV領域領先）</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--info-color);"><i class="fas fa-balance-scale"></i> 穩健持倉</h4>
+                    <p>MSFT、GOOGL（ESG表現優異）</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--danger-color);"><i class="fas fa-arrow-down"></i> 建議減持</h4>
+                    <p>TSM、JPM、CITI（風險考量）</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--warning-color);"><i class="fas fa-eye"></i> 持續觀察</h4>
+                    <p>AAPL、META（關注監管發展）</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="back-button" onclick="window.location.href='../demo.html'">
+                <i class="fas fa-arrow-left"></i> 返回 DEMO
+            </button>
+        </div>
+
+        <div class="copyright">
+            2025 Copyright © Ai Fintech Corp.
+        </div>
+    </div>
+
+    <script>
+    Chart.register(ChartDataLabels);
+
+    // 財務表現圖表
+    const financialCtx = document.getElementById('financialChart').getContext('2d');
+    new Chart(financialCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['AAPL', 'MSFT', 'NVDA', 'META', 'GOOGL', 'TSLA', 'AVGO', 'JPM', 'CITI', 'TSM'],
+            datasets: [{
+                data: [25.3, 22.1, 10.2, 12.4, 18.7, 3.8, 4.2, 12.5, 4.8, 8.5],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '2025 Q1 淨利潤分布（億美元）', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // 碳排放圖表
+    const carbonCtx = document.getElementById('carbonChart').getContext('2d');
+    new Chart(carbonCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['AAPL', 'MSFT', 'NVDA', 'META', 'GOOGL', 'TSLA', 'AVGO', 'JPM', 'CITI', 'TSM'],
+            datasets: [{
+                data: [15.2, 10.5, 18.7, 12.3, 11.8, 9.5, 22.4, 8.2, 7.9, 25.6],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '2024年碳排放強度分布', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // 地緣政治風險圖表
+    const geopoliticalCtx = document.getElementById('geopoliticalChart').getContext('2d');
+    new Chart(geopoliticalCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['AAPL', 'MSFT', 'NVDA', 'META', 'GOOGL', 'TSLA', 'AVGO', 'JPM', 'CITI', 'TSM'],
+            datasets: [{
+                data: [7, 12, 22, 9, 13, 17, 6, 4, 3, 12],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '地緣政治風險評分分布', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // 行業趨勢圖表
+    const industryCtx = document.getElementById('industryChart').getContext('2d');
+    new Chart(industryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['AAPL', 'MSFT', 'NVDA', 'META', 'GOOGL', 'TSLA', 'AVGO', 'JPM', 'CITI', 'TSM'],
+            datasets: [{
+                data: [6, 12.5, 22.5, 9, 13.5, 17.5, 6.5, 4, 3, 12.5],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '2025 行業成長預測 (%)', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}%`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // 地區風險圖表
+    const regionalCtx = document.getElementById('regionalChart').getContext('2d');
+    new Chart(regionalCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['AAPL', 'MSFT', 'NVDA', 'META', 'GOOGL', 'TSLA', 'AVGO', 'JPM', 'CITI', 'TSM'],
+            datasets: [{
+                data: [8, 5, 7, 6, 6, 8, 7, 6, 7, 10],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '地區風險評分（1-10分）', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // 投資組合調整建議圖表
+    const portfolioCtx = document.getElementById('portfolioAdjustmentChart').getContext('2d');
+    new Chart(portfolioCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['增加持倉', '維持持倉', '減少持倉', '密切監控'],
+            datasets: [{
+                data: [2, 2, 3, 2],
+                backgroundColor: ['#28a745', '#007bff', '#dc3545', '#ffc107']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: '投資組合調整建議分布', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value, ctx) => `${ctx.chart.data.labels[ctx.dataIndex]}\n${value}檔`
+                },
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // TSM股價預測圖表
+    const tsmCtx = document.getElementById('tsmPredictionChart').getContext('2d');
+    new Chart(tsmCtx, {
+        type: 'bar',
+        data: {
+            labels: ['保守情境', '基本情境', '樂觀情境'],
+            datasets: [{
+                label: 'TSM預期股價（美元）',
+                data: [150, 160, 170],
+                backgroundColor: ['#dc3545', '#007bff', '#28a745']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'TSM 2025 Q2 股價預測區間', font: { size: 16 } },
+                datalabels: {
+                    color: '#fff',
+                    font: { weight: 'bold' },
+                    formatter: (value) => `$${value}`
+                }
+            },
+            scales: {
+                y: { beginAtZero: false, min: 140, max: 180 }
+            }
+        }
+    });
+    </script>
+
+</body>
+</html>

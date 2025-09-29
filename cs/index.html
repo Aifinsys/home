@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資產投資風險管理 - 首頁</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .option i {
+            margin-right: 10px;
+        }
+        .footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px; /* 增加空白距離 */
+        }
+        .footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: #fff;
+        }
+        .copyright {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            padding: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>資產投資風險管理</h1>
+        <input type="text" id="stockCode" placeholder="ESG_10US組合">
+        <div class="options">
+            <a href="climateRisk.html" class="option">
+                <i class="fas fa-cloud-showers-heavy"></i> 加權平均碳強度
+            </a>
+            <a href="portfolioStrategy.html" class="option">
+                <i class="fas fa-chart-line"></i> 投資組合調適策略
+            </a>
+            <a href="quantitativeAnalysis.html" class="option">
+                <i class="fas fa-chart-bar"></i> 高級版量化分析圖
+            </a>
+        </div>
+    <div class="footer">
+            <button onclick="window.location.href='https://aifinsys.com/'">回主頁</button>
+        </div>
+
+        <br>
+        <div class="copyright">2025 Copyright © Ai Fintech Crop.</div>
+    </div>
+</body>
+</html>
