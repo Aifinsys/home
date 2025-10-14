@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI模型的內生風險</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+        }
+        .risk-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .risk-card:hover {
+            transform: translateY(-5px);
+        }
+        .risk-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .risk-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .risk-desc {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-8">
+<h1 class="title font-bold mb-2">AI模型的內生風險</h1>
+<div class="w-24 h-1 bg-red-500"></div>
+</div>
+<!-- Introduction -->
+<div class="mb-6 bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+<p class="text-gray-700">
+<i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                隨著人工智慧在量化投資領域的深度應用，其內在風險也日益凸顯，對模型的可靠性、公平性及安全性構成挑戰。
+            </p>
+</div>
+<!-- Risk Cards Grid -->
+<div class="grid grid-cols-2 gap-6 flex-1">
+<!-- Risk 1: Model Bias -->
+<div class="risk-card p-5 flex">
+<div class="mr-4">
+<div class="risk-icon bg-red-100 text-red-600">
+<i class="fas fa-balance-scale-left text-3xl"></i>
+</div>
+</div>
+<div>
+<h3 class="risk-title text-red-600">模型偏見與公平性</h3>
+<p class="risk-desc text-gray-600">
+                        AI模型在訓練過程中可能繼承或放大訓練數據中的偏見，導致對特定族群的貸款申請或風險評估出現不公平待遇。若模型未妥善監控與校正，可能在信用評分、保險費率計算等環節造成系統性歧視。
+                    </p>
+</div>
+</div>
+<!-- Risk 2: Explainability -->
+<div class="risk-card p-5 flex">
+<div class="mr-4">
+<div class="risk-icon bg-purple-100 text-purple-600">
+<i class="fas fa-question-circle text-3xl"></i>
+</div>
+</div>
+<div>
+<h3 class="risk-title text-purple-600">可解釋性缺失（黑箱問題）</h3>
+<p class="risk-desc text-gray-600">
+                        生成式AI的深度網絡結構本質上屬於「黑箱」，用戶及內部審查單位難以理解輸出結果的內部推理邏輯。在信貸審核、投資建議等高風險決策場景中，缺乏可解釋性將對監理合規構成嚴重阻礙。
+                    </p>
+</div>
+</div>
+<!-- Risk 3: Adversarial Attacks -->
+<div class="risk-card p-5 flex">
+<div class="mr-4">
+<div class="risk-icon bg-yellow-100 text-yellow-600">
+<i class="fas fa-bug text-3xl"></i>
+</div>
+</div>
+<div>
+<h3 class="risk-title text-yellow-600">對抗性攻擊</h3>
+<p class="risk-desc text-gray-600">
+                        生成式AI易遭受對抗性攻擊，攻擊者可通過精心設計的輸入，如對客戶對話提示進行微小篡改，導致模型輸出錯誤或敏感資訊洩露。模型竊取等攻擊手段也可能讓有心者重建模型或辨識訓練集中的個別樣本。
+                    </p>
+</div>
+</div>
+<!-- Risk 4: Hallucination -->
+<div class="risk-card p-5 flex">
+<div class="mr-4">
+<div class="risk-icon bg-blue-100 text-blue-600">
+<i class="fas fa-brain text-3xl"></i>
+</div>
+</div>
+<div>
+<h3 class="risk-title text-blue-600">生成式AI的「幻覺」問題</h3>
+<p class="risk-desc text-gray-600">
+                        生成式AI因具自動生成文本的能力，幻覺現象易導致輸出錯誤或偽造資訊。若直接引用於法遵報告、合約審閱或投資建議，極易觸犯法令或引發監理爭議。
+                    </p>
+</div>
+</div>
+</div>
+<!-- Bottom Note -->
+<div class="mt-6 bg-gray-200 p-3 rounded-lg text-center">
+<p class="text-gray-700">
+<i class="fas fa-shield-alt text-gray-600 mr-2"></i>
+                駕馭AI模型風險需要技術、管理與監控層面的全面對策
+            </p>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            11 / 14
+        </div>
+</div>
+<script>
+        // Add any D3.js visualization if needed in the future
+    </script>
+
+</body></html>

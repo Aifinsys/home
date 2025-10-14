@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>市場與監管挑戰</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 744px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 744px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .challenge-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #2E8B57;
+            border-radius: 4px;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">市場與監管挑戰</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1 space-x-6">
+<!-- Left Column - Market Challenges -->
+<div class="w-1/2">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-chart-area text-red-500 mr-3"></i>
+                    市場與策略挑戰
+                </h2>
+<div class="space-y-4">
+<!-- Challenge 1 -->
+<div class="challenge-card p-4">
+<div class="flex items-start">
+<div class="bg-red-100 p-2 rounded-full mr-3">
+<i class="fas fa-users text-red-600"></i>
+</div>
+<div>
+<h3 class="font-bold text-lg mb-1">策略擁擠與Alpha衰減</h3>
+<p class="text-gray-600 mb-2">約七成機構感知到Alpha衰減壓力，多策略同質化導致價格衝擊與利潤降低</p>
+<div class="progress-bar">
+<div class="progress-fill" style="width: 70%"></div>
+</div>
+<div class="text-right text-xs text-gray-500 mt-1">機構感知Alpha衰減比例</div>
+</div>
+</div>
+</div>
+<!-- Challenge 2 -->
+<div class="challenge-card p-4">
+<div class="flex items-start">
+<div class="bg-orange-100 p-2 rounded-full mr-3">
+<i class="fas fa-tachometer-alt text-orange-600"></i>
+</div>
+<div>
+<h3 class="font-bold text-lg mb-1">市場效率提升</h3>
+<p class="text-gray-600">算法交易成本降低，市場信息傳播加速，導致傳統因子失效速度加快</p>
+</div>
+</div>
+</div>
+<!-- Challenge 3 -->
+<div class="challenge-card p-4">
+<div class="flex items-start">
+<div class="bg-yellow-100 p-2 rounded-full mr-3">
+<i class="fas fa-compress-arrows-alt text-yellow-600"></i>
+</div>
+<div>
+<h3 class="font-bold text-lg mb-1">策略頻率收縮</h3>
+<p class="text-gray-600">量化策略正經歷「降頻中頻加強、高頻收縮」的趨勢，中頻（日頻階段）成為策略主戰場</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column - Regulatory Challenges -->
+<div class="w-1/2">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-gavel text-blue-500 mr-3"></i>
+                    全球監管趨勢
+                </h2>
+<div class="challenge-card p-5 mb-4">
+<h3 class="font-bold text-lg mb-3 text-blue-700">中國市場監管壓力</h3>
+<p class="text-gray-600 mb-3">監管壓力與極端行情（如2月小微盤踩踏事件）並列為量化機構的首要挑戰</p>
+<div class="h-24 mb-3" id="regulation-chart"></div>
+<ul class="text-sm space-y-2">
+<li class="flex items-center">
+<i class="fas fa-file-contract text-blue-500 mr-2"></i>
+<span>轉融券政策調整</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-laptop-code text-blue-500 mr-2"></i>
+<span>程序化交易監管新規</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-ban text-blue-500 mr-2"></i>
+<span>高頻交易限制加嚴</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-money-bill-wave text-blue-500 mr-2"></i>
+<span>融資融券保證金比例升高等</span>
+</li>
+</ul>
+</div>
+<div class="challenge-card p-4">
+<div class="flex items-start">
+<div class="bg-purple-100 p-2 rounded-full mr-3">
+<i class="fas fa-globe text-purple-600"></i>
+</div>
+<div>
+<h3 class="font-bold text-lg mb-1">全球監管趨勢</h3>
+<p class="text-gray-600">針對程序化交易與高頻交易的監管日益收緊，增加營運成本與策略調整複雜性</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Summary -->
+<div class="mt-6 bg-gray-200 p-3 rounded-lg shadow-sm">
+<p class="text-center text-gray-700">
+<i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                監管政策收緊與市場效率提升，對依賴資金端與政策面穩定性的策略產生較大衝擊
+            </p>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            12 / 14
+        </div>
+</div>
+<script>
+        // Simple D3.js visualization for regulatory impact
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartData = [
+                {category: "交易成本", value: 0.8},
+                {category: "策略調整", value: 0.7},
+                {category: "營運複雜度", value: 0.9},
+                {category: "政策不確定性", value: 0.85}
+            ];
+            
+            const width = document.getElementById('regulation-chart').clientWidth;
+            const height = document.getElementById('regulation-chart').clientHeight;
+            const margin = {top: 10, right: 10, bottom: 20, left: 40};
+            
+            const svg = d3.select("#regulation-chart")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+                
+            const x = d3.scaleBand()
+                .domain(chartData.map(d => d.category))
+                .range([margin.left, width - margin.right])
+                .padding(0.3);
+                
+            const y = d3.scaleLinear()
+                .domain([0, 1])
+                .range([height - margin.bottom, margin.top]);
+                
+            // Add bars
+            svg.selectAll("rect")
+                .data(chartData)
+                .enter()
+                .append("rect")
+                .attr("x", d => x(d.category))
+                .attr("y", d => y(d.value))
+                .attr("width", x.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.value))
+                .attr("fill", "#90CDF4");
+                
+            // Add x-axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(x))
+                .selectAll("text")
+                .style("font-size", "10px");
+                
+            // Add title
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", margin.top)
+                .attr("text-anchor", "middle")
+                .style("font-size", "12px")
+                .style("font-weight", "bold")
+                .text("監管收緊對量化機構的多維度影響");
+        });
+    </script>
+
+</body></html>

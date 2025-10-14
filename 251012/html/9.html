@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>實戰藍圖：AI在量化投研的應用</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .integration-point {
+            transition: all 0.3s ease;
+        }
+        .integration-point:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">實戰藍圖：AI在量化投研的應用</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1">
+<!-- Left Column - Integration Points -->
+<div class="w-1/2 pr-6">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-puzzle-piece text-blue-600 mr-3"></i>
+                    AI整合關鍵環節
+                </h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="integration-point bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-500">
+<div class="flex items-center mb-2">
+<i class="fas fa-database text-blue-500 mr-2"></i>
+<h3 class="font-bold text-lg">因子挖掘</h3>
+</div>
+<p class="text-sm">生成式大模型自動探索多模態數據，構建高效因子庫</p>
+</div>
+<div class="integration-point bg-white p-4 rounded-lg shadow-md border-t-4 border-green-500">
+<div class="flex items-center mb-2">
+<i class="fas fa-cogs text-green-500 mr-2"></i>
+<h3 class="font-bold text-lg">模型訓練</h3>
+</div>
+<p class="text-sm">強化學習與深度Q網路優化決策流程，提升組合效率</p>
+</div>
+<div class="integration-point bg-white p-4 rounded-lg shadow-md border-t-4 border-purple-500">
+<div class="flex items-center mb-2">
+<i class="fas fa-chart-pie text-purple-500 mr-2"></i>
+<h3 class="font-bold text-lg">組合優化</h3>
+</div>
+<p class="text-sm">智能代理決策，動態調整資產配置，追求更高Sharpe比率</p>
+</div>
+<div class="integration-point bg-white p-4 rounded-lg shadow-md border-t-4 border-orange-500">
+<div class="flex items-center mb-2">
+<i class="fas fa-shield-alt text-orange-500 mr-2"></i>
+<h3 class="font-bold text-lg">風險控制</h3>
+</div>
+<p class="text-sm">圖神經網路捕捉複雜風險關係，預測市場波動與溢出效應</p>
+</div>
+</div>
+</div>
+<!-- Right Column - Implementation &amp; Benefits -->
+<div class="w-1/2 pl-6">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-lightbulb text-yellow-500 mr-3"></i>
+                    策略升級與效率提升
+                </h2>
+<div class="content-box p-4 mb-5 rounded-r-lg shadow-md">
+<h3 class="font-bold text-lg mb-2 text-green-700">策略生態演進</h3>
+<ul class="space-y-2">
+<li class="flex items-start">
+<i class="fas fa-arrow-trend-down text-blue-600 mt-1 mr-2"></i>
+<span>量化策略正經歷「降頻中頻加強、高頻收縮」的趨勢</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-line text-blue-600 mt-1 mr-2"></i>
+<span>中頻（日頻階段）成為策略主戰場，超三成機構加碼投入</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-robot text-blue-600 mt-1 mr-2"></i>
+<span>生成式大模型和強化學習貫穿因子挖掘到實盤執行的全流程</span>
+</li>
+</ul>
+</div>
+<div class="content-box p-4 rounded-r-lg shadow-md">
+<h3 class="font-bold text-lg mb-2 text-green-700">實戰案例特點</h3>
+<ul class="space-y-2">
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-600 mt-1 mr-2"></i>
+<span>國內外頂尖機構普遍將AI納入投研體系核心</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-600 mt-1 mr-2"></i>
+<span>端到端優化取代傳統多因子模型，提升Alpha捕獲能力</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-600 mt-1 mr-2"></i>
+<span>超低頻策略趨於邊緣化，機構加速布局中頻與高頻融合策略</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Bottom Summary -->
+<div class="mt-6 bg-gray-200 p-3 rounded-lg shadow-sm">
+<div class="flex items-center justify-center">
+<i class="fas fa-quote-left text-gray-400 mr-2"></i>
+<p class="text-center text-gray-700">AI技術深度整合，實現投研流程全面升級，提升決策效率與投資回報</p>
+<i class="fas fa-quote-right text-gray-400 ml-2"></i>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            9 / 14
+        </div>
+</div>
+
+</body></html>

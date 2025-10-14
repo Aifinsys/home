@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>圖神經網路(GNN)的關係挖掘</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .network-node {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .network-line {
+            stroke: #2E8B57;
+            stroke-width: 2px;
+            stroke-opacity: 0.5;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">圖神經網路(GNN)的關係挖掘</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1">
+<!-- Left Column - Advantages -->
+<div class="w-1/2 pr-6">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-project-diagram text-blue-600 mr-3"></i>
+                    擷捉資產間複雜關係的獨特優勢
+                </h2>
+<div class="content-box p-4 mb-6 rounded-r-lg shadow-md">
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-network-wired text-purple-600 mt-1 mr-3"></i>
+<span>將資產間相互作用建模為圖結構，超越傳統獨立資產假設</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-exchange-alt text-purple-600 mt-1 mr-3"></i>
+<span>捕捉公司間複雜非線性關係，同時分析公司特徵與網絡結構</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-shield-alt text-purple-600 mt-1 mr-3"></i>
+<span>預測市場波動與系統性風險，將溢出效應納入模型</span>
+</li>
+</ul>
+</div>
+<!-- Applications -->
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-cogs text-blue-600 mr-3"></i>
+                    在量化投資中的應用
+                </h2>
+<div class="content-box p-4 rounded-r-lg shadow-md">
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-chart-line text-green-600 mt-1 mr-3"></i>
+<span>預測多元已實現波動率，顯著提升預測精度</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-robot text-green-600 mt-1 mr-3"></i>
+<span>制定靈活自適應交易策略，根據網絡結構調整投資組合</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Right Column - Network Visualization -->
+<div class="w-1/2 pl-6">
+<div class="bg-white rounded-lg shadow-md p-4 h-full relative">
+<h3 class="text-xl font-semibold text-center mb-4 text-gray-700">波動率傳導網絡結構示意</h3>
+<!-- Network Visualization Container -->
+<div class="w-full h-5/6 relative" id="network-container">
+<!-- This will be filled by D3.js -->
+</div>
+<!-- Example Caption -->
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg shadow-sm w-4/5 text-center">
+<p class="text-blue-800">
+<i class="fas fa-info-circle mr-2"></i>
+                            IBM波動率通過直接與間接連接向其他股票擴散，GNN能有效捕捉這種多級傳播效應
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            6 / 14
+        </div>
+</div>
+<script>
+        // D3.js Network Visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = d3.select("#network-container");
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+            
+            // Create SVG
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            // Define nodes - based on the document's IBM example
+            const nodes = [
+                { id: "IBM", x: width/2, y: height/3, group: 1, size: 25 },
+                { id: "直接鄰居", x: width/2 - width/4, y: height/2, group: 2, size: 18 },
+                { id: "間接鄰居", x: width/2 + width/4, y: height/2, group: 2, size: 15 },
+                { id: "更遠鄰居", x: width/2, y: height*2/3, group: 3, size: 12 }
+            ];
+            
+            // Define links
+            const links = [
+                { source: "IBM", target: "直接鄰居", value: 3 },
+                { source: "IBM", target: "間接鄰居", value: 2 },
+                { source: "IBM", target: "更遠鄰居", value: 1 },
+                { source: "直接鄰居", target: "更遠鄰居", value: 1 },
+                { source: "間接鄰居", target: "更遠鄰居", value: 1 }
+            ];
+            
+            // Create links
+            svg.selectAll("line")
+                .data(links)
+                .enter()
+                .append("line")
+                .attr("class", "network-line")
+                .attr("x1", d => nodes.find(n => n.id === d.source).x)
+                .attr("y1", d => nodes.find(n => n.id === d.source).y)
+                .attr("x2", d => nodes.find(n => n.id === d.target).x)
+                .attr("y2", d => nodes.find(n => n.id === d.target).y)
+                .style("stroke-dasharray", d => d.value < 3 ? "5,5" : "none")
+                .style("opacity", d => 0.3 + d.value/10);
+            
+            // Create node groups
+            const nodeGroups = svg.selectAll("g")
+                .data(nodes)
+                .enter()
+                .append("g")
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+            
+            // Add circles to nodes
+            nodeGroups.append("circle")
+                .attr("class", d => d.id === "IBM" ? "network-node pulse-animation" : "network-node")
+                .attr("r", d => d.size/2)
+                .style("background-color", d => d.group === 1 ? "#2E8B57" : d.group === 2 ? "#98FB98" : "#FFA07A")
+                .style("color", "white")
+                .style("font-size", d => d.size/3 + "px");
+            
+            // Add text labels
+            nodeGroups.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dy", d => d.size/2 + 15)
+                .text(d => d.id)
+                .style("font-size", "12px")
+                .style("fill", "#4A4A4A");
+        });
+    </script>
+
+</body></html>

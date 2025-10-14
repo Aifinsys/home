@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>技術前沿：驅動超額收益的新引擎</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .tech-card {
+            background-color: white;
+            border-left: 4px solid #2E8B57;
+            transition: all 0.3s ease;
+        }
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .process-step {
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .process-step::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            height: 3px;
+            width: 50px;
+            background: #2E8B57;
+            transform: translateX(-50%);
+        }
+        .process-step:last-child::after {
+            display: none;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">技術前沿：驅動超額收益的新引擎</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Introduction -->
+<div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+<p class="text-gray-700">
+                理論的創新為量化投資指明了方向，而這些前瞻性理論的實現，則離不開尖端技術的突破與應用。以下前沿AI技術全面驅動超額收益的獲取，貫穿從因子生成到組合優化的各個環節。
+            </p>
+</div>
+<!-- Investment Process Flow -->
+<div class="flex justify-between mb-8">
+<div class="process-step text-center w-1/5">
+<div class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-2">
+<i class="fas fa-search text-blue-600 text-2xl"></i>
+</div>
+<p class="font-semibold text-blue-700">因子生成</p>
+</div>
+<div class="process-step text-center w-1/5">
+<div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
+<i class="fas fa-chart-line text-green-600 text-2xl"></i>
+</div>
+<p class="font-semibold text-green-700">時序建模</p>
+</div>
+<div class="process-step text-center w-1/5">
+<div class="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-2">
+<i class="fas fa-cogs text-purple-600 text-2xl"></i>
+</div>
+<p class="font-semibold text-purple-700">組合優化</p>
+</div>
+<div class="process-step text-center w-1/5">
+<div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-2">
+<i class="fas fa-shield-alt text-orange-600 text-2xl"></i>
+</div>
+<p class="font-semibold text-orange-700">風險控制</p>
+</div>
+<div class="process-step text-center w-1/5">
+<div class="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-2">
+<i class="fas fa-rocket text-red-600 text-2xl"></i>
+</div>
+<p class="font-semibold text-red-700">實盤執行</p>
+</div>
+</div>
+<!-- Key Technologies -->
+<div class="grid grid-cols-2 gap-6">
+<!-- Technology 1 -->
+<div class="tech-card p-4 rounded-r-lg shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+<i class="fas fa-robot text-green-600"></i>
+</div>
+<h3 class="subtitle font-semibold">生成式AI</h3>
+</div>
+<p class="text-gray-700 mb-2">自動生成、驗證並迭代新的投資因子，實現端到端的因子挖掘流程。</p>
+<p class="text-sm text-gray-500">應用：多模態數據中自動探索最具預測能力的因子</p>
+</div>
+<!-- Technology 2 -->
+<div class="tech-card p-4 rounded-r-lg shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+<i class="fas fa-clock text-blue-600"></i>
+</div>
+<h3 class="subtitle font-semibold">先進時序模型</h3>
+</div>
+<p class="text-gray-700 mb-2">捕捉市場動態與非線性關係，超越傳統線性模型的限制。</p>
+<p class="text-sm text-gray-500">應用：多時間頻率分析與多變量預測</p>
+</div>
+<!-- Technology 3 -->
+<div class="tech-card p-4 rounded-r-lg shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+<i class="fas fa-project-diagram text-purple-600"></i>
+</div>
+<h3 class="subtitle font-semibold">端到端優化</h3>
+</div>
+<p class="text-gray-700 mb-2">跨越傳統投資組合優化中的多個環節，實現全局最優。</p>
+<p class="text-sm text-gray-500">應用：直接優化投資決策而非依賴多個獨立模型</p>
+</div>
+<!-- Technology 4 -->
+<div class="tech-card p-4 rounded-r-lg shadow-sm">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+<i class="fas fa-compress-arrows-alt text-orange-600"></i>
+</div>
+<h3 class="subtitle font-semibold">模型壓縮</h3>
+</div>
+<p class="text-gray-700 mb-2">將複雜模型精簡為實用工具，平衡精度與效率。</p>
+<p class="text-sm text-gray-500">應用：將高性能算法轉化為實際投資策略</p>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            7 / 14
+        </div>
+</div>
+
+</body></html>

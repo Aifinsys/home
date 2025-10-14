@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>大型語言模型(LLM)的崛起</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .process-flow {
+            position: relative;
+            height: 120px;
+        }
+        .process-step {
+            position: absolute;
+            width: 180px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .process-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .process-arrow {
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #2E8B57;
+        }
+        .highlight-text {
+            color: #2E8B57;
+            font-weight: 600;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">大型語言模型(LLM)的崛起</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-col flex-1">
+<!-- Top Section - Introduction -->
+<div class="mb-6">
+<p class="text-lg leading-relaxed">
+                    大型語言模型（LLM）在金融領域的應用日益廣泛，其強大的自然語言處理能力使其能夠從海量的非結構化數據中提取深層語義和市場情緒。
+                </p>
+</div>
+<!-- Middle Section - Process Flow -->
+<div class="process-flow mb-6">
+<div class="process-step" style="left: 50px; top: 20px;">
+<i class="fas fa-file-alt text-2xl text-blue-600 mb-2"></i>
+<span class="text-sm font-medium">財報/新聞/報告</span>
+</div>
+<div class="process-arrow" style="left: 230px; top: 40px; width: 100px;"></div>
+<div class="process-step" style="left: 330px; top: 20px;">
+<i class="fas fa-brain text-2xl text-purple-600 mb-2"></i>
+<span class="text-sm font-medium">LLM語義理解</span>
+</div>
+<div class="process-arrow" style="left: 510px; top: 40px; width: 100px;"></div>
+<div class="process-step" style="left: 610px; top: 20px;">
+<i class="fas fa-chart-pie text-2xl text-green-600 mb-2"></i>
+<span class="text-sm font-medium">結構化數據</span>
+</div>
+<div class="process-arrow" style="left: 790px; top: 40px; width: 100px;"></div>
+<div class="process-step" style="left: 890px; top: 20px;">
+<i class="fas fa-lightbulb text-2xl text-yellow-500 mb-2"></i>
+<span class="text-sm font-medium">投資洞察</span>
+</div>
+</div>
+<!-- Bottom Section - Applications -->
+<div class="grid grid-cols-2 gap-6">
+<div class="content-box p-5 rounded-r-lg shadow-md">
+<h3 class="subtitle mb-3 flex items-center">
+<i class="fas fa-building text-blue-600 mr-3"></i>
+                        預測企業盈利能力
+                    </h3>
+<ul class="space-y-2">
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span>分析10-K披露文件，<span class="highlight-text">識別關鍵信息與情緒傾向</span></span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span>使用「序列式」提示，<span class="highlight-text">生成的核心盈利指標預測能力優於GAAP淨收益</span></span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span>與未來市場估值<span class="highlight-text">強相關</span>，降低信息分析成本</span>
+</li>
+</ul>
+</div>
+<div class="content-box p-5 rounded-r-lg shadow-md">
+<h3 class="subtitle mb-3 flex items-center">
+<i class="fas fa-chart-line text-purple-600 mr-3"></i>
+                        獲取經濟洞察
+                    </h3>
+<ul class="space-y-2">
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span>利用生成式AI，<span class="highlight-text">計算AI經濟指數(AIES)</span></span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span><span class="highlight-text">預測GDP增長、產出和就業</span>等經濟指標</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+<span>在長期預測與微觀層面分析上<span class="highlight-text">優於現有測度</span></span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            4 / 14
+        </div>
+</div>
+
+</body></html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>理論革新：從因子到智慧體</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 744px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 744px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .evolution-arrow {
+            position: relative;
+            height: 3px;
+            background: linear-gradient(to right, #2E8B57, #98FB98);
+            margin: 20px 0;
+        }
+        .evolution-arrow:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 15px solid #98FB98;
+            right: 0;
+            top: -8px;
+        }
+        .theory-card {
+            transition: all 0.3s ease;
+        }
+        .theory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">理論革新：從因子到智慧體</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Evolution Timeline -->
+<div class="flex justify-between items-center mb-4">
+<div class="w-5/12 bg-blue-100 p-4 rounded-lg shadow-md text-center">
+<i class="fas fa-chart-bar text-4xl text-blue-600 mb-2"></i>
+<h3 class="text-xl font-bold text-blue-700">傳統因子模型</h3>
+</div>
+<div class="w-1/6 flex justify-center">
+<div class="evolution-arrow w-full"></div>
+</div>
+<div class="w-5/12 bg-green-100 p-4 rounded-lg shadow-md text-center">
+<i class="fas fa-robot text-4xl text-green-600 mb-2"></i>
+<h3 class="text-xl font-bold text-green-700">智慧代理決策</h3>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1 space-x-8">
+<!-- Left Column - Traditional Factors -->
+<div class="w-1/2">
+<div class="content-box p-5 rounded-r-lg shadow-md mb-4 theory-card">
+<h3 class="subtitle mb-3 flex items-center text-blue-700">
+<i class="fas fa-search-minus mr-3"></i>
+                        從因子挖掘到關係建模
+                    </h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-filter text-blue-600 mt-1 mr-3"></i>
+<span>傳統方法依賴於人工經驗與統計分析</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-project-diagram text-blue-600 mt-1 mr-3"></i>
+<span>靜態多因子模型限制於線性關係捕捉</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-database text-blue-600 mt-1 mr-3"></i>
+<span>依賴結構化數據，難以處理非結構化信息</span>
+</li>
+</ul>
+</div>
+<div class="content-box p-5 rounded-r-lg shadow-md theory-card">
+<h3 class="subtitle mb-3 flex items-center text-blue-700">
+<i class="fas fa-cogs mr-3"></i>
+                        底層邏輯的制約
+                    </h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+<span>難以適應市場結構變化與非線性關係</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-line text-red-500 mt-1 mr-3"></i>
+<span>單一因子或線性組合面臨Alpha衰減</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Right Column - AI Agents -->
+<div class="w-1/2">
+<div class="content-box p-5 rounded-r-lg shadow-md mb-4 theory-card">
+<h3 class="subtitle mb-3 flex items-center text-green-700">
+<i class="fas fa-brain mr-3"></i>
+                        從線性到智能決策
+                    </h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-microchip text-green-600 mt-1 mr-3"></i>
+<span>深度學習能自動探索並構建預測能力因子</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-network-wired text-green-600 mt-1 mr-3"></i>
+<span>圖神經網路捕捉資產間複雜非線性關係</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-comment-dots text-green-600 mt-1 mr-3"></i>
+<span>大型語言模型從文本中提取深層語義與市場情緒</span>
+</li>
+</ul>
+</div>
+<div class="content-box p-5 rounded-r-lg shadow-md theory-card">
+<h3 class="subtitle mb-3 flex items-center text-green-700">
+<i class="fas fa-lightbulb mr-3"></i>
+                        智慧體決策優勢
+                    </h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+<span>更精準理解市場動態與機制</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-pie text-green-500 mt-1 mr-3"></i>
+<span>深度Q網路在投資組合選擇中表現優於傳統方法</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-shield-alt text-green-500 mt-1 mr-3"></i>
+<span>智能代理能適應變化環境並持續學習優化</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Bottom Summary -->
+<div class="mt-6 bg-gray-200 p-3 rounded-lg shadow-sm">
+<p class="text-center text-gray-700">
+<i class="fas fa-quote-left text-gray-400 mr-2"></i>
+                AI不僅是工具層面的升級，它正從根本上重塑量化投資的理論框架
+                <i class="fas fa-quote-right text-gray-400 ml-2"></i>
+</p>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            3 / 14
+        </div>
+</div>
+
+</body></html>

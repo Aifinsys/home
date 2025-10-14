@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>生成式AI與因子工程</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .process-step {
+            position: relative;
+            z-index: 10;
+        }
+        .process-connector {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(to right, #2E8B57, #98FB98);
+            z-index: 5;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">生成式AI與因子工程</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col">
+<!-- Process Flow Visualization -->
+<div class="relative h-64 flex items-center justify-center mb-6">
+<!-- Process Steps -->
+<div class="flex w-full justify-between px-10">
+<!-- Step 1: Data Input -->
+<div class="process-step bg-blue-100 p-4 rounded-lg shadow-md w-56 text-center border border-blue-200">
+<i class="fas fa-database text-blue-600 text-3xl mb-2"></i>
+<h3 class="font-semibold text-blue-700">多模態數據輸入</h3>
+<p class="text-sm mt-1">文本、圖像、時間序列</p>
+</div>
+<!-- Step 2: AI Processing -->
+<div class="process-step bg-purple-100 p-4 rounded-lg shadow-md w-56 text-center border border-purple-200">
+<i class="fas fa-brain text-purple-600 text-3xl mb-2"></i>
+<h3 class="font-semibold text-purple-700">生成式AI處理</h3>
+<p class="text-sm mt-1">深度學習與模式探索</p>
+</div>
+<!-- Step 3: Factor Generation -->
+<div class="process-step bg-green-100 p-4 rounded-lg shadow-md w-56 text-center border border-green-200">
+<i class="fas fa-lightbulb text-green-600 text-3xl mb-2"></i>
+<h3 class="font-semibold text-green-700">因子自動生成</h3>
+<p class="text-sm mt-1">隱性因子發現</p>
+</div>
+<!-- Step 4: Factor Validation -->
+<div class="process-step bg-yellow-100 p-4 rounded-lg shadow-md w-56 text-center border border-yellow-200">
+<i class="fas fa-check-circle text-yellow-600 text-3xl mb-2"></i>
+<h3 class="font-semibold text-yellow-700">因子驗證迭代</h3>
+<p class="text-sm mt-1">持續優化與驗證</p>
+</div>
+</div>
+<!-- Connecting Arrows -->
+<div class="process-connector" style="width: 180px; left: 220px; top: 50%; transform: translateY(-50%);"></div>
+<div class="process-connector" style="width: 180px; left: 450px; top: 50%; transform: translateY(-50%);"></div>
+<div class="process-connector" style="width: 180px; left: 680px; top: 50%; transform: translateY(-50%);"></div>
+<!-- Arrow Heads -->
+<div class="absolute" style="right: 220px; top: 50%; transform: translateY(-50%);">
+<i class="fas fa-chevron-right text-green-500 text-xl"></i>
+</div>
+<div class="absolute" style="right: 450px; top: 50%; transform: translateY(-50%);">
+<i class="fas fa-chevron-right text-green-500 text-xl"></i>
+</div>
+<div class="absolute" style="right: 680px; top: 50%; transform: translateY(-50%);">
+<i class="fas fa-chevron-right text-green-500 text-xl"></i>
+</div>
+</div>
+<!-- Key Benefits -->
+<div class="grid grid-cols-2 gap-6 mb-6">
+<div class="content-box p-4 rounded-r-lg shadow-md">
+<h3 class="font-semibold text-green-700 mb-2 flex items-center">
+<i class="fas fa-robot mr-2"></i>
+                        端到端因子挖掘流程
+                    </h3>
+<p class="text-gray-700">生成式大模型能夠自動探索並構建更具預測能力的因子，實現從數據到因子的全流程自動化。</p>
+</div>
+<div class="content-box p-4 rounded-r-lg shadow-md">
+<h3 class="font-semibold text-green-700 mb-2 flex items-center">
+<i class="fas fa-chart-line mr-2"></i>
+                        多模態因子提取
+                    </h3>
+<p class="text-gray-700">能從文本數據中提煉市場情緒、產業趨勢等隱性因子；結合圖像數據，提取供應鏈或消費行為信號。</p>
+</div>
+</div>
+<!-- Applications -->
+<div class="bg-white p-4 rounded-lg shadow-md">
+<h3 class="font-semibold text-gray-800 mb-2 flex items-center">
+<i class="fas fa-book-open text-blue-600 mr-2"></i>
+                    機構應用實況
+                </h3>
+<p class="text-gray-700">
+                    根據《2024/25年度中國量化投資白皮書》，生成式大模型在量化投研中日益廣泛應用，涵蓋因子挖掘、策略生成、投資組合優化及智能風控等環節。
+                </p>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            8 / 14
+        </div>
+</div>
+
+</body></html>

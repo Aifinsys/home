@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Q&amp;A互動環節</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .contact-box {
+            background-color: rgba(46, 139, 87, 0.1);
+            border-left: 4px solid #2E8B57;
+        }
+        .question-bubble {
+            position: relative;
+            background-color: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .question-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent;
+        }
+        .pulse-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(46, 139, 87, 0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 139, 87, 0.5);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(46, 139, 87, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 139, 87, 0);
+            }
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-8 text-center">
+<h1 class="title font-bold mb-2">Q&amp;A互動環節</h1>
+<div class="w-32 h-1 bg-green-700 mx-auto"></div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col items-center justify-center">
+<!-- Interactive Visual -->
+<div class="relative w-full flex justify-center mb-8">
+<div class="pulse-circle w-32 h-32"></div>
+<div class="pulse-circle w-48 h-48" style="animation-delay: 0.5s"></div>
+<div class="absolute flex items-center justify-center bg-green-700 text-white rounded-full w-24 h-24 z-10">
+<i class="fas fa-comments text-4xl"></i>
+</div>
+</div>
+<!-- Discussion Topics -->
+<div class="grid grid-cols-3 gap-6 w-full mb-8">
+<div class="card p-5">
+<div class="flex items-center mb-3">
+<i class="fas fa-robot text-2xl text-green-600 mr-3"></i>
+<h3 class="text-xl font-semibold text-green-700">AI模型選擇</h3>
+</div>
+<p class="text-gray-600">如何為特定投資問題選擇合適的AI模型？大型語言模型與強化學習在不同場景下的最佳實踐。</p>
+</div>
+<div class="card p-5">
+<div class="flex items-center mb-3">
+<i class="fas fa-shield-alt text-2xl text-green-600 mr-3"></i>
+<h3 class="text-xl font-semibold text-green-700">風險管理</h3>
+</div>
+<p class="text-gray-600">如何平衡AI模型的創新能力與傳統投研方法？如何有效管控AI投資策略的尾部風險？</p>
+</div>
+<div class="card p-5">
+<div class="flex items-center mb-3">
+<i class="fas fa-chart-line text-2xl text-green-600 mr-3"></i>
+<h3 class="text-xl font-semibold text-green-700">實踐案例</h3>
+</div>
+<p class="text-gray-600">國內外機構如何實際應用AI於量化投資？有哪些成功與失敗的教訓可以分享？</p>
+</div>
+</div>
+<!-- Contact Information -->
+<div class="contact-box w-full p-5 rounded-lg">
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="fas fa-envelope text-xl text-green-600 mr-3"></i>
+<span class="text-gray-700">電子郵件：contact@aifinsys.com</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-globe text-xl text-green-600 mr-3"></i>
+<span class="text-gray-700">網站：www.aifinsys.com</span>
+</div>
+<div class="flex items-center">
+<i class="fab fa-linkedin text-xl text-green-600 mr-3"></i>
+<span class="text-gray-700">LinkedIn：linkedin.com/quant-invest</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Thank You Message -->
+<div class="mt-6 text-center">
+<p class="text-xl text-green-700 font-medium">感謝您的聆聽！期待與您深入交流</p>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            14 / 14
+        </div>
+</div>
+
+</body></html>

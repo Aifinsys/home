@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>強化學習(RL)的決策優化</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #4A4A4A;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            color: #2E8B57;
+        }
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            color: #2E8B57;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid #2E8B57;
+        }
+        .advantage-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .advantage-card:hover {
+            transform: translateY(-5px);
+        }
+        .performance-bar {
+            height: 24px;
+            border-radius: 12px;
+            position: relative;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10 flex flex-col" style=" overflow: hidden;">
+<!-- Title -->
+<div class="mb-6">
+<h1 class="title font-bold mb-2">強化學習(RL)的決策優化</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Introduction -->
+<div class="mb-6 content-box p-4 rounded-r-lg shadow-md">
+<p class="text-lg">
+<i class="fas fa-robot text-purple-600 mr-2"></i>
+                強化學習（RL）在量化投資中展現出巨大的潛力，尤其是在動態投資組合優化和高頻交易執行方面。深度Q網路（DQN）等強化學習策略能夠在複雜的市場環境中學習並優化決策，以實現更高的收益和更低的風險。
+            </p>
+</div>
+<!-- Main Content -->
+<div class="flex flex-1 space-x-6">
+<!-- Left Column - DQN Advantages -->
+<div class="w-1/2">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-chart-line text-blue-600 mr-3"></i>
+                    DQN策略的優勢
+                </h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="advantage-card p-4">
+<div class="flex items-center mb-2">
+<i class="fas fa-brain text-blue-500 text-2xl mr-3"></i>
+<h3 class="font-semibold text-lg">智能決策</h3>
+</div>
+<p class="text-sm">DQN能根據市場狀態做出更優秀的投資決策，適應複雜多變的市場環境</p>
+</div>
+<div class="advantage-card p-4">
+<div class="flex items-center mb-2">
+<i class="fas fa-shield-alt text-blue-500 text-2xl mr-3"></i>
+<h3 class="font-semibold text-lg">風險控制</h3>
+</div>
+<p class="text-sm">相較於傳統策略，DQN在夏普比率、最大回撤等風險控制指標上表現更佳</p>
+</div>
+<div class="advantage-card p-4">
+<div class="flex items-center mb-2">
+<i class="fas fa-coins text-blue-500 text-2xl mr-3"></i>
+<h3 class="font-semibold text-lg">收益優勢</h3>
+</div>
+<p class="text-sm">研究顯示，DQN策略比10種傳統組合管理策略高出30%的利潤</p>
+</div>
+<div class="advantage-card p-4">
+<div class="flex items-center mb-2">
+<i class="fas fa-sync-alt text-blue-500 text-2xl mr-3"></i>
+<h3 class="font-semibold text-lg">動態適應</h3>
+</div>
+<p class="text-sm">能夠在多資產組合中顯著優於傳統方法，實現更高收益和更低風險</p>
+</div>
+</div>
+</div>
+<!-- Right Column - Performance Comparison -->
+<div class="w-1/2">
+<h2 class="subtitle mb-4 flex items-center">
+<i class="fas fa-trophy text-yellow-500 mr-3"></i>
+                    策略性能對比
+                </h2>
+<div class="content-box p-5 rounded-lg shadow-md">
+<!-- Performance Comparison Chart -->
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-semibold">DQN策略</span>
+<span class="font-semibold text-green-700">比傳統策略高30%</span>
+</div>
+<div class="performance-bar bg-gray-200 mb-4">
+<div class="h-full bg-gradient-to-r from-green-500 to-green-700" id="dqn-bar"></div>
+</div>
+</div>
+<!-- Key Metrics -->
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+<div class="flex items-center justify-center">
+<i class="fas fa-chart-pie text-blue-600 mr-2"></i>
+<span class="font-semibold">夏普比率</span>
+</div>
+<p class="text-center text-sm mt-1">DQN策略表現更佳</p>
+</div>
+<div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+<div class="flex items-center justify-center">
+<i class="fas fa-chart-line text-blue-600 mr-2"></i>
+<span class="font-semibold">最大回撤</span>
+</div>
+<p class="text-center text-sm mt-1">DQN策略風險更低</p>
+</div>
+</div>
+<!-- Study Reference -->
+<div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm">
+<p class="flex items-start">
+<i class="fas fa-quote-left text-gray-400 mt-1 mr-2"></i>
+<span>研究將機器學習納入Markowitz投資組合選擇範式，利用深度Q網路（DQN）策略在多資產組合中顯著優於傳統方法。</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="absolute bottom-4 right-4 text-gray-500" style="visibility: hidden;">
+            5 / 14
+        </div>
+</div>
+<script>
+        // Simple D3 animation for the performance bar
+        document.addEventListener('DOMContentLoaded', function() {
+            d3.select("#dqn-bar")
+                .style("width", "0%")
+                .transition()
+                .duration(1000)
+                .style("width", "80%");
+        });
+    </script>
+
+</body></html>
