@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown 文件編輯器 (轉印 PDF)</title>
+    <style>
+        /* --- 全局樣式 --- */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* --- 主佈局 --- */
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .pane {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            height: calc(100vh - 50px);
+        }
+
+        /* --- 編輯區樣式 --- */
+        #editor {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            resize: none;
+            background-color: #fff;
+            color: #24292e;
+        }
+
+        #editor:focus {
+            outline: none;
+            border-color: #0366d6;
+            box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
+        }
+
+        /* --- 預覽區樣式 (GitHub 風格) --- */
+        #preview {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px 30px;
+        }
+
+        #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: .3em;
+        }
+
+        #preview h1 { font-size: 2em; }
+        #preview h2 { font-size: 1.5em; }
+        #preview h3 { font-size: 1.25em; }
+        #preview p { line-height: 1.7; margin-top: 0; margin-bottom: 16px; }
+        #preview ul, #preview ol { padding-left: 2em; margin-bottom: 16px; }
+        #preview blockquote {
+            margin: 0 0 16px 0;
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: .25em solid #dfe2e5;
+        }
+        #preview code {
+            padding: .2em .4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27,31,35,.05);
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        #preview pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            margin-bottom: 16px;
+        }
+        #preview pre code {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border: 0;
+        }
+        #preview table {
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        #preview th, #preview td {
+            border: 1px solid #dfe2e5;
+            padding: 8px 12px;
+        }
+        #preview th {
+            font-weight: 600;
+            background-color: #f6f8fa;
+        }
+        #preview img {
+            max-width: 100%;
+        }
+
+        /* --- 列印專用樣式 --- */
+        @media print {
+            /* 隱藏編輯區和任何不需要的元素 */
+            .editor-pane {
+                display: none;
+            }
+            /* 讓預覽區佔滿整個頁面 */
+            .preview-pane {
+                width: 100%;
+                height: auto;
+                flex: none;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                overflow: visible;
+            }
+            body {
+                background-color: #fff; /* PDF 背景設為白色 */
+            }
+            @page {
+                margin: 2cm; /* 設定 PDF 的頁邊距 */
+            }
+            /* 避免圖片或程式碼區塊被切斷 */
+            pre, blockquote, table, img {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="pane editor-pane">
+            <h2>Markdown 輸入區</h2>
+            <p style="font-size: 14px; color: #555;">將您的 Markdown 內容貼到此處。</p>
+            <textarea id="editor"></textarea>
+        </div>
+        <div class="pane preview-pane">
+            <h2>即時預覽 (列印此區域)</h2>
+            <p style="font-size: 14px; color: #555;">使用 <b>Ctrl + P</b> 或 <b>Cmd + P</b> 選擇「另存為 PDF」。</p>
+            <div id="preview"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editor = document.getElementById('editor');
+            const preview = document.getElementById('preview');
+
+            // 預設的 Markdown 範例內容
+            const defaultMarkdown = `# 歡迎使用 Markdown 轉 PDF 編輯器
+
+這是一個 HTML 版本的線上編輯器。您可以在左側的文字框內輸入或貼上 **Markdown** 格式的內容，右側會即時顯示渲染後的結果。
+
+## 如何使用
+1.  在左側的 **輸入區** 編輯您的 Markdown 文件。
+2.  在右側的 **預覽區** 查看格式是否正確。
+3.  按下 \`Ctrl+P\` (Windows/Linux) 或 \`Cmd+P\` (Mac)。
+4.  在列印對話框中，選擇目標為 **「另存為 PDF」**。
+5.  點擊儲存，即可生成乾淨的 PDF 文件。
+
+## 功能展示
+
+### 清單
+- 項目一
+- 項目二
+    - 子項目 A
+    - 子項目 B
+
+### 程式碼區塊
+\`\`\`javascript
+function greet() {
+    console.log("Hello, World!");
+}
+greet();
+\`\`\`
+
+### 引用
+> "Stay hungry, stay foolish." - Steve Jobs
+
+### 表格
+| 標題 1 | 標題 2 | 標題 3 |
+| :--- | :----: | ---: |
+| 左對齊 | 置中 | 右對齊 |
+| data 1 | data 2 | data 3 |
+`;
+
+            // 初始化編輯器內容
+            editor.value = defaultMarkdown;
+
+            // 定義渲染函式
+            function renderMarkdown() {
+                const markdownText = editor.value;
+                preview.innerHTML = marked.parse(markdownText);
+            }
+
+            // 監聽輸入事件，即時更新預覽
+            editor.addEventListener('input', renderMarkdown);
+
+            // 初始載入時渲染一次
+            renderMarkdown();
+        });
+    </script>
+
+</body>
+</html>
