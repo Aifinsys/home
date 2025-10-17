@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>機器學習因子在量化交易中的核心演算法</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+        img {
+            max-width: 100%;
+        }
+        .conclusion {
+            background-color: #f6f8fa;
+            border-left: 3px solid #316dca;
+            padding: 1em;
+            margin: 1em 0;
+        }
+        .algorithm-section {
+            margin-bottom: 2em;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: rgba(27,31,35,0.05);
+            padding: .2em .4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: 3px;
+        }
+        hr {
+            height: .25em;
+            padding: 0;
+            margin: 24px 0;
+            background-color: #e1e4e8;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="./NSLogo.png" style="height:64px;margin-right:32px" alt="Logo">
+
+    <h1>機器學習因子在量化交易中的核心演算法</h1>
+
+    <div class="conclusion">
+        <p><strong>摘要：</strong><br>
+        機器學習演算法透過捕捉非線性關係、自動化因子選擇與動態調整，已顯著提升量化投資的Sharpe比率與超額報酬。以下分別對十種代表性方法，提供其數學描述與實際案例，並闡明各法的優勢與應用場景。</p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>1. 線性回歸與正則化 (Ridge / Lasso Regression)</h2>
+        <p><strong>演算方程式：</strong><br>
+        $$ \min_{\beta} \; \frac{1}{2N}\sum_{i=1}^N (y_i - X_i^\top \beta)^2 + \lambda \|\beta\|_p^p $$
+        其中 \(p=2\) 為 Ridge， \(p=1\) 為 Lasso， \(\lambda\) 為正則化參數。</p>
+        <p><strong>應用案例：</strong><br>
+        利用Lasso篩選價值(Value)、動量(Momentum)、品質(Quality)等高預測力因子，構建多因子權重，於美股中月度再平衡，Sharpe比率提升15％。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>2. 決策樹與隨機森林 (Decision Trees &amp; Random Forests)</h2>
+        <p><strong>演算方程式：</strong><br>
+        每棵樹以最大化信息增益（或最小化基尼不純度）進行分割：
+        $$ \Delta i = i(\text{parent}) - \frac{N_L}{N}i(\text{left}) - \frac{N_R}{N}i(\text{right}) $$
+        隨機森林取多棵樹之平均預測以降噪。</p>
+        <p><strong>應用案例：</strong><br>
+        在歐洲股市使用隨機森林捕捉動量與品質因子的閾值效應，預測日度回報，對沖基金組合年度Alpha增加120個基點。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>3. 梯度提升機 (Gradient Boosting Machines, GBM)</h2>
+        <p><strong>演算方程式：</strong><br>
+        依序學習殘差：
+        $$ F_{m}(x) = F_{m-1}(x) + \nu \, h_m(x) $$
+        其中 \(h_m\) 為第m棵樹，\(\nu\)為學習速率。</p>
+        <p><strong>應用案例：</strong><br>
+        利用XGBoost在高頻數據中萃取市場與資訊因子，構建日內交易策略，年化Sharpe比率由0.8提升至1.2。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>4. 多層感知器神經網絡 (Neural Networks)</h2>
+        <p><strong>演算方程式：</strong><br>
+        前向傳播：
+        $$ a^{(l)} = \sigma(W^{(l)}a^{(l-1)} + b^{(l)}) $$
+        反向傳播權重更新：
+        $$ W^{(l)} \leftarrow W^{(l)} - \eta \,\delta^{(l)}(a^{(l-1)})^\top $$</p>
+        <p><strong>應用案例：</strong><br>
+        在新興市場結合價值、動量、規模等因子，使用深度網絡預測月度超額報酬，預測準確度提高20％。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>5. 強化學習 (Reinforcement Learning, Q-Learning)</h2>
+        <p><strong>演算方程式：</strong><br>
+        $$ Q(s,a) \leftarrow Q(s,a) + \alpha\bigl(r + \gamma \max_{a'}Q(s',a') - Q(s,a)\bigr) $$</p>
+        <p><strong>應用案例：</strong><br>
+        對沖基金應用Q-Learning動態調整因子暴露，經濟衰退期間自動降低波動因子權重，最大化累積報酬與風險調整後績效。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>6. 無監督學習 (Clustering)</h2>
+        <p><strong>演算方程式 (K-means)：</strong><br>
+        $$ \min_{\{C_j\}}\sum_{j=1}^K \sum_{x_i\in C_j}\|x_i - \mu_j\|^2 $$</p>
+        <p><strong>應用案例：</strong><br>
+        對全球股票按因子特徵聚類，識別情緒與供應鏈風險等新因子群組，用於多資產配置，降低投組回撤10％。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>7. 半監督學習 (Semi-Supervised Learning)</h2>
+        <p><strong>演算方程式 (Label Propagation)：</strong><br>
+        $$ f_u = (I - \alpha S_{uu})^{-1} \alpha S_{ul} y_l $$
+        其中 \(S\) 為相似度矩陣， \(y_l\) 為有標籤資料。</p>
+        <p><strong>應用案例：</strong><br>
+        於新興市場因資料稀缺，結合少量標記回報與大量無標記行情，提升回報預測穩健性，Sharpe比率提升8％。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>8. 卷積神經網絡 (Convolutional Neural Networks, CNN)</h2>
+        <p><strong>演算方程式：</strong><br>
+        卷積層輸出：
+        $$ (I * K)(i,j) = \sum_m \sum_n I(i+m, j+n)\,K(m,n) $$</p>
+        <p><strong>應用案例：</strong><br>
+        將衛星影像衛星影像轉換為農產品供應因子，與傳統因子整合，成功預測大宗商品走勢，戰勝基準策略5％。<sup></sup></p>
+    </div>
+    
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>9. 集成學習 (Ensemble Learning)</h2>
+        <p><strong>演算方程式 (投票法)：</strong><br>
+        $$ \hat{y} = \text{mode}\bigl\{h_1(x),h_2(x),\dots,h_M(x)\bigr\} $$</p>
+        <p><strong>應用案例：</strong><br>
+        融合線性模型、隨機森林與梯度提升預測結果，於跨資產定價模型中提升預測穩定度與Sharpe比率。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <div class="algorithm-section">
+        <h2>10. 高頻數據模型 (High-Frequency ML Models)</h2>
+        <p><strong>演算方程式 (時序Fama-French)：</strong><br>
+        $$ r_{t+\Delta t} = \alpha + \beta_m r_{m,t} + \beta_f f_t + \epsilon_t $$
+        改進：將 \(\beta_f\) 透過ML動態估計。</p>
+        <p><strong>應用案例：</strong><br>
+        在指數期貨市場提取交易、金融及資訊三因子，修正後的HF模型Sharpe比率與外測表現均優於傳統模型。<sup></sup></p>
+    </div>
+
+    <hr>
+
+    <h3>優勢與挑戰</h3>
+
+    <p><strong>優勢：</strong></p>
+    <ul>
+        <li>捕捉非線性與高階互動，<strong>提升預測準確度</strong></li>
+        <li>動態調整因子，<strong>適應市場變化</strong></li>
+        <li>處理異質大數據，<strong>發掘新因子</strong></li>
+    </ul>
+
+    <p><strong>挑戰：</strong></p>
+    <ul>
+        <li>模型可解釋性不足，需XAI技術(Explainable AI)</li>
+        <li>高維資料易過擬合，需嚴格驗證與正則化(Regularization）</li>
+        <li>依賴高品質數據，資料噪音／偏差風險</li>
+        <li>計算資源需求大</li>
+    </ul>
+
+    <p>機器學習因子模型代表量化金融的<strong>未來趨勢</strong>，隨著深度學習與另類數據進步，將持續驅動投資策略創新。</p>
+
+    <div style="text-align: center;">&#10045;</div>
+
+    <hr>
+    <p><small>Ai Fintecg Corp. 2025 Copyright</small></p>
+
+</body>
+</html>
