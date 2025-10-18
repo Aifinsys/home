@@ -2414,46 +2414,6 @@
         </div>
       </div>
 
-      <!-- Statistics/Features Row -->
-      <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="stat-card animate-on-scroll">
-            <div class="stat-icon">
-              <i class="fas fa-database"></i>
-            </div>
-            <h3 class="stat-number">8+</h3>
-            <p class="stat-label">氣候風險類型</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="stat-card animate-on-scroll">
-            <div class="stat-icon">
-              <i class="fas fa-brain"></i>
-            </div>
-            <h3 class="stat-number">AI</h3>
-            <p class="stat-label">智能演算技術</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="stat-card animate-on-scroll">
-            <div class="stat-icon">
-              <i class="fas fa-shield-alt"></i>
-            </div>
-            <h3 class="stat-number">TCFD</h3>
-            <p class="stat-label">框架應用</p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="stat-card animate-on-scroll">
-            <div class="stat-icon">
-              <i class="fas fa-chart-line"></i>
-            </div>
-            <h3 class="stat-number">100%</h3>
-            <p class="stat-label">精準分析</p>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -2659,6 +2619,15 @@
             </div>
             <h5>營業時間</h5>
             <p>9:00 - 18:00</p>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mb-4">
+          <div class="contact-info animate-on-scroll">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h5>電子信箱</h5>
+            <p><a href="mailto:nsysr8@gmail.com" style="color: #2c5282; text-decoration: none;">nsysr8@gmail.com</a></p>
           </div>
         </div>
       </div>
@@ -3274,6 +3243,7 @@
           address: "地址",
           phone: "電話",
           businessHours: "營業時間",
+          email: "電子信箱",
           followUs: "追蹤我們",
           formTitle: "立即聯絡我們",
           formSubtitle: "想了解更多關於 AI 氣候風險評估的資訊，或是有興趣加入我們的團隊？\n留下您的聯絡方式，我們將盡快與您聯繫。",
@@ -3424,6 +3394,7 @@
           address: "Address",
           phone: "Phone",
           businessHours: "Business Hours",
+          email: "Email",
           followUs: "Follow Us",
           formTitle: "Contact Us Now",
           formSubtitle: "Want to learn more about AI climate risk assessment, or interested in joining our team?\nLeave your contact information and we will get back to you as soon as possible.",
@@ -4167,6 +4138,8 @@
           label.textContent = languageData[lang].contact.phone;
         } else if (label.textContent === '營業時間' || label.textContent === 'Business Hours') {
           label.textContent = languageData[lang].contact.businessHours;
+        } else if (label.textContent === '電子信箱' || label.textContent === 'Email') {
+          label.textContent = languageData[lang].contact.email;
         }
       });
 
