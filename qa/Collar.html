@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小型台指期貨 2:1 盈虧比 (Collar) 策略產生器</title>
+    
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        .panel {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        h1, h2, h3 {
+            color: #1a3b5d;
+            border-bottom: 2px solid #e0e6ec;
+            padding-bottom: 10px;
+        }
+        h1 {
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        /* Style for Buy/Sell labels */
+        .buy-label { color: #28a745; font-weight: 700; }
+        .sell-label { color: #dc3545; font-weight: 700; }
+        
+        .input-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .input-group-static {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        .output-group {
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .output-group .label {
+            font-weight: 600;
+            color: #1a3b5d;
+        }
+        .output-group .value {
+            font-weight: 700;
+            font-family: "Courier New", Courier, monospace;
+        }
+        .output-group .value.gain { color: #28a745; }
+        .output-group .value.loss { color: #dc3545; }
+        
+        .suggestion-box {
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .suggestion-box h3 {
+            margin-top: 0;
+            color: #0056b3;
+            border-bottom-color: #b3e0ff;
+        }
+        .suggestion-box p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #004085;
+            line-height: 1.6;
+        }
+        .suggestion-box .target-value {
+            font-size: 1.5rem;
+            color: #007bff;
+            font-weight: 700;
+        }
+        
+        .chart-container {
+            min-height: 450px;
+        }
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>小型台指期貨 2:1 盈虧比 (Collar) 策略產生器</h1>
+
+        <div class="panel">
+            <h2>步驟 1：定義風險/報酬範圍</h2>
+            <div class="input-panel">
+                <div class="input-group">
+                    <label for="futuresPrice">期貨進場點數 (F₀) <span class="buy-label">(Long)</span></label>
+                    <input type="number" id="futuresPrice" value="17500" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="distancePoints">風險/報酬 距離 (點數)</label>
+                    <input type="number" id="distancePoints" value="500" step="50">
+                </div>
+                <div class="input-group-static">
+                    (您願意承受的最大損失 / 期望的最大收益，距離 F₀ 的點數)
+                </div>
+                 <div class="input-group">
+                    <label for="contracts">契約口數 (N)</label>
+                    <input type="number" id="contracts" value="1" step="1">
+                </div>
+            </div>
+            
+            <div class="suggestion-box">
+                <h3>💡 自動生成 2:1 策略</h3>
+                <p>
+                    1. 建議 <span class="buy-label">買入 (Buy)</span> Put 履約價 (Kₚ): <span id="sugPutStrike" class="target-value">17000</span><br>
+                    2. 建議 <span class="sell-label">賣出 (Sell)</span> Call 履約價 (Kᴄ): <span id="sugCallStrike" class="target-value">18000</span>
+                </p>
+                <p>
+                    為達到 2:1 盈虧比，<br>
+                    您必須尋找一個能**淨收入 (Credit)**<br>
+                    <span id="targetNetPremium" class="target-value">166.67</span> 點的選擇權組合。
+                </p>
+                 <p style="font-size: 0.9rem; color: #555;">
+                    (請至交易軟體，尋找 Kₚ 與 Kᴄ 組合，使 `Pᴄ - Pₚ` 盡可能接近此目標點數)
+                 </p>
+            </div>
+
+            <h2 style="margin-top: 20px;">步驟 2：填入實際交易權利金</h2>
+            <div class="input-group">
+                <label for="putPremium">1. 填入 <span class="buy-label">買入 (Buy)</span> Put (Kₚ) 的實際權利金 (Pₚ)</label>
+                <input type="number" id="putPremium" value="100">
+                <span>+</span>
+            <span>實際期權點位：</span>
+            <input type="number" placeholder="輸入點數" min="0" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="callPremium">2. 填入 <span class="sell-label">賣出 (Sell)</span> Call (Kᴄ) 的實際權利金 (Pᴄ)</label>
+                <input type="number" id="callPremium" value="265">
+                <span>+</span>
+            <span>實際期權點位：</span>
+            <input type="number" placeholder="輸入點數" min="0" step="0.1">
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>最終策略分析 (TWD) [保證金另計]</h2>
+            <div class="output-panel">
+                <div class="output-group">
+                    <span class="label">實際淨權利金 (總和)</span>
+                    <span class="value" id="netPremium">NT$0</span>
+                </div>
+                <div class="output-group">
+                    <span class="label">實際最大收益 (Max Gain)</span>
+                    <span class="value gain" id="maxGain">NT$0</span>
+                </div>
+                <div class="output-group">
+                    <span class="label">實際最大損失 (Max Loss)</span>
+                    <span class="value loss" id="maxLoss">NT$0</span>
+                </div>
+                <div class="output-group">
+                    <span class="label">**實際盈虧比 (R/R)**</span>
+                    <span class="value" id="actualRR" style="font-size: 1.3rem; color: #007bff;">1.00</span>
+                </div>
+                <div class="output-group">
+                    <span class="label">損益兩平點 (點數)</span>
+                    <span class="value" id="breakEven">0</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="pnlChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 獲取所有輸入元件
+            const inputs = {
+                futuresPrice: document.getElementById('futuresPrice'),
+                distancePoints: document.getElementById('distancePoints'),
+                contracts: document.getElementById('contracts'),
+                putPremium: document.getElementById('putPremium'),
+                callPremium: document.getElementById('callPremium'),
+            };
+
+            // 獲取所有分析結果元件
+            const outputs = {
+                netPremium: document.getElementById('netPremium'),
+                maxGain: document.getElementById('maxGain'),
+                maxLoss: document.getElementById('maxLoss'),
+                actualRR: document.getElementById('actualRR'),
+                breakEven: document.getElementById('breakEven'),
+            };
+            
+            // 獲取建議元件
+            const suggestions = {
+                putStrike: document.getElementById('sugPutStrike'),
+                callStrike: document.getElementById('sugCallStrike'),
+                targetNetPremium: document.getElementById('targetNetPremium'),
+            };
+
+            const ctx = document.getElementById('pnlChart').getContext('2d');
+            let pnlChart = null; // 初始化圖表變數
+
+            // 輔助函式：格式化為新台幣
+            const currencyFormatter = new Intl.NumberFormat('zh-TW', {
+                style: 'currency',
+                currency: 'TWD',
+                maximumFractionDigits: 0
+            });
+
+            function formatCurrency(value) {
+                return currencyFormatter.format(value);
+            }
+            
+            function formatPoints(value) {
+                return value.toLocaleString('en-US', { maximumFractionDigits: 2 });
+            }
+
+            // 初始化圖表
+            function initializeChart() {
+                if (pnlChart) pnlChart.destroy(); 
+                pnlChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [/* ... */] },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: '台指結算點數 (Sᴛ)' } },
+                            y: {
+                                title: { display: true, text: '總損益 (TWD)' },
+                                ticks: { callback: (value) => formatCurrency(value) }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    title: (items) => `結算點S: ${formatPoints(items[0].label)}`,
+                                    label: (item) => `總損益: ${formatCurrency(item.raw)}`
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 主要的計算與更新函式
+            function updateModel() {
+                // 1. 從輸入欄位讀取數值
+                const F0 = parseFloat(inputs.futuresPrice.value) || 0; 
+                const D = parseFloat(inputs.distancePoints.value) || 0; // 距離
+                const N = parseFloat(inputs.contracts.value) || 0;    
+                const M = 50; // 契約乘數 (固定)
+                
+                // 2. *** 自動生成策略 (步驟 1) ***
+                const Kp = F0 - D; // 建議的 Put 履約價
+                const Kc = F0 + D; // 建議的 Call 履約價
+                
+                // NP_Target = (3*F₀ - 2*Kₚ - Kᴄ) / 3
+                const NpTarget = (3*F0 - 2*Kp - Kc) / 3;
+
+                // 3. 更新「策略建議」面板
+                suggestions.putStrike.textContent = formatPoints(Kp);
+                suggestions.callStrike.textContent = formatPoints(Kc);
+                suggestions.targetNetPremium.textContent = formatPoints(NpTarget);
+
+                // 4. 讀取「實際」權利金 (步驟 2)
+                const Pp = parseFloat(inputs.putPremium.value) || 0;    
+                const Pc = parseFloat(inputs.callPremium.value) || 0;   
+
+                // 5. 計算「實際」分析結果
+                // 實際淨權利金 (點數)
+                const netPremiumPoints = Pc - Pp;
+                // 實際淨權利金 (TWD)
+                const netPremiumTWD = netPremiumPoints * M * N ;
+
+                // 實際最大收益 (TWD)
+                // G = ((Kᴄ - F₀) + NP) * M * N
+                const maxGainTWD = ((Kc - F0) + netPremiumPoints) * M * N;
+
+                // 邊際案例：如果 (F0-Kp) - NP 為負（即您的淨收入大於您的風險緩衝）
+                // 這意味著您的「最大損失」實際上是「正的」（即鎖定利潤）
+                // 您的損失「絕對值」L_abs 應該是 負的最大收益（即鎖定利潤）
+                
+                // 實際最大損失 (TWD)
+                // L_abs = ((F₀ - Kₚ) - NP) * M * N
+                const maxLossBasePoints = (F0 - Kp) - netPremiumPoints;
+                const maxLossAbsTWD = maxLossBasePoints * M * N;
+                
+                // 損益兩平點 (點數) = F₀ - NP
+                const breakEvenPoints = F0 - netPremiumPoints;
+                
+                // 實際盈虧比
+                let actualRR = 0;
+                if (maxLossAbsTWD > 0) { // 正常情況：最大損失為正
+                    actualRR = maxGainTWD / maxLossAbsTWD;
+                } else if (maxGainTWD > 0 && maxLossAbsTWD <= 0) {
+                    // 特殊情況：最大損失為 0 或負 (即鎖定利潤)
+                    actualRR = Infinity; // 風險為 0 或負
+                } else {
+                    actualRR = 0; // 其他情況（例如兩者都為負）
+                }
+
+                // 6. 更新分析面板
+                outputs.netPremium.textContent = formatCurrency(netPremiumTWD);
+                outputs.maxGain.textContent = formatCurrency(maxGainTWD);
+                // 顯示負數的最大損失
+                outputs.maxLoss.textContent = formatCurrency(-maxLossAbsTWD);
+                
+                if (actualRR === Infinity) {
+                    outputs.actualRR.textContent = "無限 (鎖定利潤)";
+                } else {
+                    outputs.actualRR.textContent = `${formatPoints(actualRR)} : 1`;
+                }
+
+                outputs.breakEven.textContent = formatPoints(breakEvenPoints);
+                
+                // 根據淨成本是收入還是支出，改變顏色
+                if (netPremiumTWD > 0) {
+                    outputs.netPremium.className = "value gain";
+                } else if (netPremiumTWD < 0) {
+                    outputs.netPremium.className = "value loss";
+                } else {
+                    outputs.netPremium.className = "value";
+                }
+
+                // 7. 產生圖表數據
+                const labels = [];
+                const data = [];
+                
+                const rangeMin = Kp - (D * 0.5); // 圖表 X 軸範圍
+                const rangeMax = Kc + (D * 0.5);
+                const step = (rangeMax - rangeMin) / 200; 
+
+                for (let St = rangeMin; St <= rangeMax; St += step) {
+                    labels.push(St); 
+
+                    // 計算三部份的損益 (TWD)
+                    const futuresPnl = (St - F0) * M * N;
+                    const putPnl = (Math.max(Kp - St, 0) - Pp) * M * N;
+                    const callPnl = (-Math.max(St - Kc, 0) + Pc) * M * N;
+                    
+                    const totalPnl = futuresPnl + putPnl + callPnl;
+                    data.push(totalPnl);
+                }
+
+                // 8. 更新圖表
+                pnlChart.data = {
+                    labels: labels,
+                    datasets: [{
+                        label: '總損益 (TWD)',
+                        data: data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        fill: true,
+                        tension: 0.1,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }]
+                };
+                pnlChart.update();
+            }
+
+            // 9. 綁定事件監聽
+            Object.values(inputs).forEach(input => {
+                input.addEventListener('input', updateModel);
+            });
+
+            // 10. 頁面載入時，立即初始化圖表並執行一次計算
+            initializeChart();
+            updateModel();
+
+        });
+    </script>
+
+</body>
+</html>
