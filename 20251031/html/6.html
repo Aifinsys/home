@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>量化交易的七大核心階段</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .stage-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .stage-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .stage-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        #flow-chart {
+            width: 100%;
+            height: 180px;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">量化交易的七大核心階段</h1>
+<div class="accent-line mb-6"></div>
+</div>
+<!-- Flow Chart Visualization -->
+<div class="px-16 mb-4">
+<div id="flow-chart"></div>
+</div>
+<!-- Stages Description -->
+<div class="px-16 grid grid-cols-7 gap-3">
+<!-- Stage 1 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-purple-100 mr-2">
+<i class="fas fa-lightbulb text-purple-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">1. 策略構思</h3>
+</div>
+<p class="text-sm text-gray-600">根據市場現象或假設，提出具體的投資想法與邏輯。</p>
+</div>
+<!-- Stage 2 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-blue-100 mr-2">
+<i class="fas fa-database text-blue-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">2. 資料取得</h3>
+</div>
+<p class="text-sm text-gray-600">收集歷史股價、財報、新聞等相關數據，為後續分析提供基礎。</p>
+</div>
+<!-- Stage 3 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-indigo-100 mr-2">
+<i class="fas fa-cogs text-indigo-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">3. 因子工程</h3>
+</div>
+<p class="text-sm text-gray-600">建立可量化的特徵，例如波動率、成交量变化等，作為模型輸入。</p>
+</div>
+<!-- Stage 4 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-purple-100 mr-2">
+<i class="fas fa-brain text-purple-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">4. 模型訓練</h3>
+</div>
+<p class="text-sm text-gray-600">使用統計或AI模型，基於歷史數據預測未來趨勢或交易信號。</p>
+</div>
+<!-- Stage 5 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-green-100 mr-2">
+<i class="fas fa-sync-alt text-green-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">5. 回測驗證</h3>
+</div>
+<p class="text-sm text-gray-600">在歷史資料上測試策略表現，評估其有效性與風險。</p>
+</div>
+<!-- Stage 6 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-teal-100 mr-2">
+<i class="fas fa-paper-plane text-teal-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">6. 實盤執行</h3>
+</div>
+<p class="text-sm text-gray-600">透過券商API或模擬交易，將驗證後的策略實際投入市場。</p>
+</div>
+<!-- Stage 7 -->
+<div class="stage-box p-3">
+<div class="flex items-center mb-2">
+<div class="stage-icon bg-orange-100 mr-2">
+<i class="fas fa-chart-line text-orange-600 text-xl"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-700">7. 監控優化</h3>
+</div>
+<p class="text-sm text-gray-600">根據策略的實盤績效與風險變化，持續調整與改進模型。</p>
+</div>
+</div>
+<!-- Bottom Description -->
+<div class="px-16 mt-6">
+<div class="bg-white bg-opacity-80 rounded-lg p-4 shadow-sm">
+<p class="text-gray-700 text-center">
+<i class="fas fa-sync text-purple-600 mr-2"></i>
+                    量化交易是一個循環過程，七個階段緊密相扣，共同構成完整的策略生命週期。
+                </p>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">6 / 18</div>
+</div>
+<script>
+        // D3.js Flow Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const width = document.getElementById('flow-chart').clientWidth;
+            const height = document.getElementById('flow-chart').clientHeight;
+            
+            const svg = d3.select('#flow-chart')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Define arrow marker
+            svg.append('defs').append('marker')
+                .attr('id', 'arrowhead')
+                .attr('viewBox', '0 -5 10 10')
+                .attr('refX', 8)
+                .attr('refY', 0)
+                .attr('orient', 'auto')
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('xoverflow', 'visible')
+                .append('svg:path')
+                .attr('d', 'M 0,-5 L 10,0 L 0,5')
+                .attr('fill', '#6d28d9')
+                .attr('stroke', 'none');
+            
+            // Create stage circles
+            const stageCount = 7;
+            const stageWidth = width / (stageCount + 1);
+            const circleRadius = 30;
+            const yOffset = height / 2;
+            
+            // Create stage nodes
+            const stages = [];
+            for (let i = 0; i < stageCount; i++) {
+                stages.push({
+                    id: i + 1,
+                    x: (i + 1) * stageWidth,
+                    y: yOffset,
+                    label: `階段 ${i + 1}`
+                });
+            }
+            
+            // Create path connecting stages
+            let pathData = '';
+            stages.forEach((stage, i) => {
+                if (i === 0) {
+                    pathData += `M ${stage.x - circleRadius},${stage.y} `;
+                } else {
+                    const prevStage = stages[i - 1];
+                    pathData += `L ${stage.x - circleRadius},${stage.y} `;
+                }
+                
+                if (i === stageCount - 1) {
+                    pathData += `L ${stage.x + circleRadius},${stage.y} `;
+                }
+            });
+            
+            // Add path
+            svg.append('path')
+                .attr('d', pathData)
+                .attr('fill', 'none')
+                .attr('stroke', '#6d28d9')
+                .attr('stroke-width', 2)
+                .attr('marker-end', 'url(#arrowhead)');
+            
+            // Add circles for each stage
+            svg.selectAll('circle')
+                .data(stages)
+                .enter()
+                .append('circle')
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', circleRadius)
+                .attr('fill', (d, i) => {
+                    const colors = ['#e9d5ff', '#bfdbfe', '#ddd6fe', '#e9d5ff', '#d1fae5', '#d5f5e3', '#fdba74'];
+                    return colors[i];
+                })
+                .attr('stroke', '#6d28d9')
+                .attr('stroke-width', 2);
+            
+            // Add stage numbers
+            svg.selectAll('text')
+                .data(stages)
+                .enter()
+                .append('text')
+                .attr('x', d => d.x)
+                .attr('y', d => d.y + 5)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '16px')
+                .attr('font-weight', 'bold')
+                .attr('fill', '#4c1d95')
+                .text(d => d.id);
+            
+            // Add curved arrow from last to first stage
+            const lastStage = stages[stageCount - 1];
+            const firstStage = stages[0];
+            
+            svg.append('path')
+                .attr('d', `M ${lastStage.x + circleRadius},${lastStage.y} 
+                           C ${lastStage.x + circleRadius + 50},${lastStage.y - 80} 
+                             ${firstStage.x - circleRadius - 50},${firstStage.y - 80} 
+                             ${firstStage.x - circleRadius},${firstStage.y}`)
+                .attr('fill', 'none')
+                .attr('stroke', '#10b981')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '5,5')
+                .attr('marker-end', 'url(#arrowhead)');
+        });
+    </script>
+
+</body></html>

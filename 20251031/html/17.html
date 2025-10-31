@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>人機協作：最佳投資決策模式</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .content-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-left: 4px solid #10b981;
+        }
+        .collaboration-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .human-section {
+            border-right: 2px dashed #6d28d9;
+        }
+        .ai-section {
+            border-left: 2px dashed #10b981;
+        }
+        .strength-item {
+            transition: all 0.3s ease;
+        }
+        .strength-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        #collaboration-diagram {
+            width: 100%;
+            height: 180px;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">人機協作：最佳投資決策模式</h1>
+<div class="accent-line mb-8"></div>
+</div>
+<!-- Main Content -->
+<div class="px-16">
+<!-- Collaboration Model Visualization -->
+<div class="collaboration-box mb-6 overflow-hidden">
+<div class="flex">
+<div class="w-1/2 human-section p-5 bg-blue-50">
+<div class="flex items-center mb-3">
+<i class="fas fa-user text-purple-600 text-2xl mr-3"></i>
+<h2 class="text-2xl font-semibold text-gray-700">人類優勢</h2>
+</div>
+<ul class="space-y-2">
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+<span class="text-gray-600">創造力與直覺判斷</span>
+</li>
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-brain text-purple-500 mr-2"></i>
+<span class="text-gray-600">經驗智慧與情境分析</span>
+</li>
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-balance-scale text-blue-500 mr-2"></i>
+<span class="text-gray-600">道德判斷與風險評估</span>
+</li>
+</ul>
+</div>
+<div class="w-1/2 ai-section p-5 bg-green-50">
+<div class="flex items-center mb-3">
+<i class="fas fa-robot text-green-600 text-2xl mr-3"></i>
+<h2 class="text-2xl font-semibold text-gray-700">AI優勢</h2>
+</div>
+<ul class="space-y-2">
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-tachometer-alt text-red-500 mr-2"></i>
+<span class="text-gray-600">超快數據處理能力</span>
+</li>
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-chart-line text-green-500 mr-2"></i>
+<span class="text-gray-600">模式識別與預測分析</span>
+</li>
+<li class="flex items-center strength-item bg-white p-2 rounded-lg">
+<i class="fas fa-calculator text-blue-500 mr-2"></i>
+<span class="text-gray-600">消除情緒干擾與偏誤</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Collaboration Diagram -->
+<div class="mb-6" id="collaboration-diagram"></div>
+<!-- Key Insights -->
+<div class="grid grid-cols-2 gap-6">
+<div class="content-box p-5 rounded-lg shadow-md">
+<h2 class="text-xl font-semibold text-gray-700 mb-3">未來市場趨勢</h2>
+<p class="text-gray-600">
+                        未來的金融市場將是一個由人機智慧共同驅動的嶄新時代，其中人類的創造力與AI的效率將完美結合，共同開創投資的新篇章。
+                    </p>
+</div>
+<div class="content-box p-5 rounded-lg shadow-md">
+<h2 class="text-xl font-semibold text-gray-700 mb-3">人機協作模式</h2>
+<p class="text-gray-600">
+                        最佳的協作模式是人類提供戰略方向與最終決策，AI負責數據分析與執行層面的優化，兩者相互補充，發揮最大效能。
+                    </p>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">17 / 18</div>
+</div>
+<script>
+        // Collaboration Diagram using D3.js
+        const svg = d3.select("#collaboration-diagram")
+            .append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%");
+            
+        // Define the data for the collaboration flow
+        const nodes = [
+            { id: "human", label: "人類投資者", x: 200, y: 90, color: "#6d28d9" },
+            { id: "ai", label: "AI系統", x: 1080, y: 90, color: "#10b981" },
+            { id: "collab", label: "人機協作", x: 640, y: 90, color: "#8b5cf6" }
+        ];
+        
+        const links = [
+            { source: "human", target: "collab", label: "戰略方向" },
+            { source: "ai", target: "collab", label: "數據分析" },
+            { source: "collab", target: "ai", label: "優化執行" },
+            { source: "collab", target: "human", label: "最終決策" }
+        ];
+        
+        // Draw the nodes
+        svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("circle")
+            .attr("class", "node")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("r", 40)
+            .attr("fill", d => d.color)
+            .attr("opacity", 0.8);
+            
+        // Add node labels
+        svg.selectAll(".node-label")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .attr("class", "node-label")
+            .attr("x", d => d.x)
+            .attr("y", d => d.y)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-size", "14px")
+            .attr("font-weight", "bold")
+            .text(d => d.label);
+            
+        // Draw the links
+        svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("path")
+            .attr("class", "link")
+            .attr("d", d => {
+                const source = nodes.find(n => n.id === d.source);
+                const target = nodes.find(n => n.id === d.target);
+                const midX = (source.x + target.x) / 2;
+                const midY = d.source === "collab" ? 50 : 130;
+                
+                return `M${source.x},${source.y} Q${midX},${midY} ${target.x},${target.y}`;
+            })
+            .attr("fill", "none")
+            .attr("stroke", d => d.source === "collab" ? "#10b981" : "#6d28d9")
+            .attr("stroke-width", 2)
+            .attr("marker-end", "url(#arrowhead)");
+            
+        // Add arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#6b7280");
+            
+        // Add link labels
+        svg.selectAll(".link-label")
+            .data(links)
+            .enter()
+            .append("text")
+            .attr("class", "link-label")
+            .attr("x", d => {
+                const source = nodes.find(n => n.id === d.source);
+                const target = nodes.find(n => n.id === d.target);
+                return (source.x + target.x) / 2;
+            })
+            .attr("y", d => {
+                return d.source === "collab" ? 60 : 120;
+            })
+            .attr("text-anchor", "middle")
+            .attr("fill", "#4b5563")
+            .attr("font-size", "12px")
+            .text(d => d.label);
+    </script>
+
+</body></html>

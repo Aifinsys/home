@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI量化交易的市場應用現況</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .content-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-left: 4px solid #10b981;
+        }
+        .market-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .market-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">AI量化交易的市場應用現況</h1>
+<div class="accent-line mb-8"></div>
+</div>
+<!-- Main Content -->
+<div class="px-16">
+<!-- Introduction -->
+<div class="content-box p-5 rounded-lg shadow-md mb-6">
+<p class="text-gray-600">
+                    人工智慧（AI），特別是大型語言模型（LLM），正以前所未有的方式改變金融市場。AI的普及使得非程式背景的投資者也能參與量化思維，大幅降低了量化交易的技術門檻。
+                </p>
+</div>
+<!-- Market Applications Grid -->
+<div class="grid grid-cols-3 gap-6 mb-6">
+<!-- Market Participant Section -->
+<div class="market-card p-5">
+<div class="icon-circle bg-purple-100 mb-4">
+<i class="fas fa-users text-purple-600 text-2xl"></i>
+</div>
+<h2 class="text-xl font-semibold text-gray-700 text-center mb-3">主要參與機構</h2>
+<ul class="space-y-2">
+<li class="flex items-center">
+<i class="fas fa-building text-purple-500 mr-3"></i>
+<span class="text-gray-600">大型金融機構</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-rocket text-purple-500 mr-3"></i>
+<span class="text-gray-600">AI科技公司</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-user-tie text-purple-500 mr-3"></i>
+<span class="text-gray-600">獨立量化交易者</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-laptop-code text-purple-500 mr-3"></i>
+<span class="text-gray-600">程式交易開發者</span>
+</li>
+</ul>
+</div>
+<!-- Strategy Types Section -->
+<div class="market-card p-5">
+<div class="icon-circle bg-green-100 mb-4">
+<i class="fas fa-chart-pie text-green-600 text-2xl"></i>
+</div>
+<h2 class="text-xl font-semibold text-gray-700 text-center mb-3">常見策略類型</h2>
+<ul class="space-y-2">
+<li class="flex items-center">
+<i class="fas fa-robot text-green-500 mr-3"></i>
+<span class="text-gray-600">AI驅動的技術分析策略</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-newspaper text-green-500 mr-3"></i>
+<span class="text-gray-600">情緒分析量化策略</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-project-diagram text-green-500 mr-3"></i>
+<span class="text-gray-600">多因子統計 Arbitrage 策略</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-clock text-green-500 mr-3"></i>
+<span class="text-gray-600">多時間框架混合策略</span>
+</li>
+</ul>
+</div>
+<!-- Performance Section -->
+<div class="market-card p-5">
+<div class="icon-circle bg-blue-100 mb-4">
+<i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+</div>
+<h2 class="text-xl font-semibold text-gray-700 text-center mb-3">表現特點</h2>
+<ul class="space-y-2">
+<li class="flex items-center">
+<i class="fas fa-tachometer-alt text-blue-500 mr-3"></i>
+<span class="text-gray-600">提高決策效率與反應速度</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-balance-scale text-blue-500 mr-3"></i>
+<span class="text-gray-600">降低情緒干擾，增強紀律性</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-shield-alt text-blue-500 mr-3"></i>
+<span class="text-gray-600">改善風險管理與控制</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-search-plus text-blue-500 mr-3"></i>
+<span class="text-gray-600">挖掘市場中被忽略的訊息</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Key Insights -->
+<div class="content-box p-5 rounded-lg shadow-md">
+<h2 class="text-xl font-semibold text-gray-700 mb-3">市場趨勢洞察</h2>
+<div class="flex items-start space-x-6">
+<div class="flex-1 flex items-center">
+<i class="fas fa-lightbulb text-yellow-500 text-xl mr-3"></i>
+<p class="text-gray-600">
+                            ChatGPT等工具具備文字理解、歸納與自動化分析能力，可以協助使用者生成策略邏輯、回測思路與風險報告。
+                        </p>
+</div>
+<div class="flex-1 flex items-center">
+<i class="fas fa-tools text-yellow-500 text-xl mr-3"></i>
+<p class="text-gray-600">
+                            當使用者輸入「請幫我設計一個追蹤台積電股價波動的短線策略」時，ChatGPT便能自動生成技術分析邏輯，並附上決策規則。
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">14 / 18</div>
+</div>
+
+</body></html>
