@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>趨勢評分演算法：10項技術訊號</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Noto Sans TC', sans-serif;}
+        .indicator-card {
+            transition: all 0.3s ease;
+        }
+        .indicator-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="w-[1280px] h-[720px] bg-[#F5F5F5] flex flex-col p-10 relative" style=" overflow: hidden;">
+<!-- Background pattern -->
+<div class="absolute inset-0 opacity-5">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<pattern height="100" id="grid" patternUnits="userSpaceOnUse" width="100">
+<path d="M10,10 L90,10 M10,50 L90,50 M10,90 L90,90" fill="none" stroke="#4CAF50" stroke-width="1"></path>
+<path d="M10,10 L10,90 M50,10 L50,90 M90,10 L90,90" fill="none" stroke="#4CAF50" stroke-width="1"></path>
+</pattern>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<!-- Header -->
+<div class="z-10">
+<h1 class="text-4xl font-bold text-[#616161] mb-2">趨勢評分演算法：10項技術訊號</h1>
+<div class="w-32 h-1 bg-[#4CAF50] mb-6"></div>
+<p class="text-[#616161] text-lg mb-8">融合多種技術指標，評估TW:0050與TW:0051成分股的價格趨勢強度與動能</p>
+</div>
+<!-- Main Content: Technical Indicators -->
+<div class="grid grid-cols-5 gap-4 z-10">
+<!-- Indicator 1: Moving Average -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center mr-3">
+<i class="fas fa-chart-line text-xl text-[#4CAF50]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">移動平均線 (MA)</h3>
+</div>
+<p class="text-sm text-[#616161]">透過不同週期的均線（5日、10日、20日、60日等）的排列與交叉，判斷股價的短期、中期、長期趨勢。黃金交叉為買入訊號，死亡交叉為賣出訊號。</p>
+</div>
+<!-- Indicator 2: KD Indicator -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#FFE0B2] flex items-center justify-center mr-3">
+<i class="fas fa-wave-square text-xl text-[#E65100]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">KD指標 (隨機指標)</h3>
+</div>
+<p class="text-sm text-[#616161]">由K值（快線）和D值（慢線）組成，用於判斷股價的超買超賣區間及趨勢反轉訊號。D值低於20為超賣區，高於80為超買區。</p>
+</div>
+<!-- Indicator 3: MACD -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center mr-3">
+<i class="fas fa-window-maximize text-xl text-[#4CAF50]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">MACD指標</h3>
+</div>
+<p class="text-sm text-[#616161]">透過快線（DIF）与慢线（MACD）的交錯情況，判斷股價的動量和趨勢轉变。當柱狀圖由綠翻紅，快線向上穿越慢線為買進訊號。</p>
+</div>
+<!-- Indicator 4: Bollinger Bands -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#FFE0B2] flex items-center justify-center mr-3">
+<i class="fas fa-border-style text-xl text-[#E65100]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">布林通道</h3>
+</div>
+<p class="text-sm text-[#616161]">由20日移動平均線及上下兩條標準差線組成，用於衡量市場波動性，並識別可能的超買或超賣區域。股價向上穿越中線可能預示上漲趨勢。</p>
+</div>
+<!-- Indicator 5: RSI -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center mr-3">
+<i class="fas fa-percentage text-xl text-[#4CAF50]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">RSI (相對強弱指數)</h3>
+</div>
+<p class="text-sm text-[#616161]">評估買賣雙方力道強弱的指標，範圍介於0到100。RSI高於70通常表示超買，低於30則表示超賣。</p>
+</div>
+<!-- Indicator 6: Volume -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#FFE0B2] flex items-center justify-center mr-3">
+<i class="fas fa-chart-bar text-xl text-[#E65100]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">成交量</h3>
+</div>
+<p class="text-sm text-[#616161]">反映市場交易的活躍程度，成交量放大通常伴隨股價波動，可作為趨勢確認的輔助指標。</p>
+</div>
+<!-- Indicator 7: Candlestick Patterns -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center mr-3">
+<i class="fas fa-square text-xl text-[#4CAF50]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">K線型態</h3>
+</div>
+<p class="text-sm text-[#616161]">透過單根K線或K线組合的型態，判斷市場情緒和潛在的價格反轉或延續。</p>
+</div>
+<!-- Indicator 8: Trend Lines -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#FFE0B2] flex items-center justify-center mr-3">
+<i class="fas fa-ruler-combined text-xl text-[#E65100]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">趨勢线</h3>
+</div>
+<p class="text-sm text-[#616161]">連接股價高點或低點形成的直線，用於判斷股價的支撐與壓力位。</p>
+</div>
+<!-- Indicator 9: BIAS -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center mr-3">
+<i class="fas fa-arrows-alt-h text-xl text-[#4CAF50]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">乖離率 (BIAS)</h3>
+</div>
+<p class="text-sm text-[#616161]">衡量股價偏離移動平均線的程度，判斷股價是否過度上漲或下跌。</p>
+</div>
+<!-- Indicator 10: Volume-Price Relationship -->
+<div class="indicator-card bg-white rounded-lg shadow p-4 flex flex-col">
+<div class="flex items-center mb-2">
+<div class="w-10 h-10 rounded-full bg-[#FFE0B2] flex items-center justify-center mr-3">
+<i class="fas fa-link text-xl text-[#E65100]"></i>
+</div>
+<h3 class="text-lg font-bold text-[#616161]">量價關係</h3>
+</div>
+<p class="text-sm text-[#616161]">分析成交量與股價變動之間的關係，以確認趨勢的可靠性。</p>
+</div>
+</div>
+<!-- Algorithm Summary -->
+<div class="mt-6 bg-[#E8F5E9] p-4 rounded-lg shadow z-10">
+<p class="text-[#616161]"><span class="font-bold">演算法核心：</span>趨勢評分演算法融合以上10項關鍵技術訊號，對TW:0050與TW:0051成分股進行系統性評分，以識別具備強勁上升趨勢或潛在反轉動能的股票。</p>
+</div>
+<!-- Footer -->
+<div class="mt-auto flex justify-between items-center z-10">
+<div class="text-[#616161] opacity-70">AI驅動的智慧選股流程</div>
+<div class="text-[#616161] opacity-70" style="visibility: hidden;">5/12</div>
+</div>
+</div>
+
+</body></html>

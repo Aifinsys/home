@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI驅動的智慧選股流程</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; height: 720px; overflow: hidden; font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #F5F5F5 0%, #E8F5E9 100%);
+            
+        }
+        .circuit-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.07;
+            background-image: 
+                radial-gradient(#4CAF50 2px, transparent 2px),
+                linear-gradient(to right, #4CAF50 1px, transparent 1px),
+                linear-gradient(to bottom, #4CAF50 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .data-line {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0), rgba(76, 175, 80, 0.7), rgba(76, 175, 80, 0));
+            height: 2px;
+            animation: flow 8s linear infinite;
+        }
+        @keyframes flow {
+            0% { width: 0; opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { width: 100%; opacity: 0; }
+        }
+        .chart-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            animation: pulse 3s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide flex flex-col justify-center items-center" style=" overflow: hidden;">
+<!-- Background pattern -->
+<div class="circuit-pattern"></div>
+<!-- Animated data lines -->
+<div class="data-line" style="top: 15%; left: 0; animation-delay: 0s;"></div>
+<div class="data-line" style="top: 25%; left: 0; animation-delay: 1s;"></div>
+<div class="data-line" style="top: 35%; left: 0; animation-delay: 2s;"></div>
+<div class="data-line" style="top: 65%; left: 0; animation-delay: 3s;"></div>
+<div class="data-line" style="top: 75%; left: 0; animation-delay: 4s;"></div>
+<div class="data-line" style="top: 85%; left: 0; animation-delay: 5s;"></div>
+<!-- Animated chart dots -->
+<div class="chart-dot" style="top: 20%; left: 20%; animation-delay: 0s;"></div>
+<div class="chart-dot" style="top: 30%; left: 35%; animation-delay: 0.5s;"></div>
+<div class="chart-dot" style="top: 25%; left: 50%; animation-delay: 1s;"></div>
+<div class="chart-dot" style="top: 40%; left: 65%; animation-delay: 1.5s;"></div>
+<div class="chart-dot" style="top: 35%; left: 80%; animation-delay: 2s;"></div>
+<!-- Content container -->
+<div class="z-10 text-center px-16 py-10 bg-white bg-opacity-80 rounded-lg shadow-xl">
+<h1 class="text-5xl font-bold text-gray-800 mb-6">AI驅動的智慧選股流程</h1>
+<p class="text-2xl text-gray-700 mb-8">數據驅動 · 深度研判 · 動態優化</p>
+<div class="flex justify-center items-center space-x-4 text-lg text-gray-600">
+<div class="flex items-center">
+<i class="fas fa-chart-line mr-2 text-green-600"></i>
+<span>量化分析</span>
+</div>
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<div class="flex items-center">
+<i class="fas fa-brain mr-2 text-green-600"></i>
+<span>人工智能</span>
+</div>
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<div class="flex items-center">
+<i class="fas fa-balance-scale mr-2 text-green-600"></i>
+<span>風險管理</span>
+</div>
+</div>
+</div>
+<!-- Date -->
+<div class="absolute bottom-10 right-10 text-gray-600">
+<p class="text-xl">Ai FinTech Corp.: 2025Q4</p>
+</div>
+</div>
+
+</body></html>
