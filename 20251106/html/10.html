@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新手四步學習路徑</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Calibri', 'Arial', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2E8B57;
+        }
+        .step-box {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .step-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .step-1 {
+            border-left: 5px solid #2E8B57;
+        }
+        .step-2 {
+            border-left: 5px solid #FFA500;
+        }
+        .step-3 {
+            border-left: 5px solid #4682B4;
+        }
+        .step-4 {
+            border-left: 5px solid #8B4513;
+        }
+        .connector {
+            position: absolute;
+            width: 30px;
+            height: 2px;
+            background-color: #666;
+            transform: rotate(45deg);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10" style=" overflow: hidden;">
+<!-- Slide Header -->
+<div class="mb-6">
+<h1 class="title text-4xl font-bold mb-2">新手四步學習路徑</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Introduction Text -->
+<p class="text-lg mb-6">為30-50歲投資者設計的量化投資入門學習路徑，從基礎工具到實戰應用的漸進式學習過程</p>
+<!-- Four Step Learning Path -->
+<div class="grid grid-cols-4 gap-4 relative">
+<!-- Step 1 -->
+<div class="step-box step-1 bg-white p-5">
+<div class="flex items-center mb-3">
+<div class="step-number bg-green-600 text-white mr-3">1</div>
+<h2 class="text-xl font-semibold">學習基礎工具</h2>
+</div>
+<ul class="space-y-2 ml-2">
+<li class="flex items-start">
+<i class="fas fa-code text-green-600 mt-1 mr-2"></i>
+<span>Python程式語言：數據處理與分析</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-line text-green-600 mt-1 mr-2"></i>
+<span>TradingView Pine腳本：易學的策略開發</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-plug text-green-600 mt-1 mr-2"></i>
+<span>交易API：策略與市場連接橋樑</span>
+</li>
+</ul>
+</div>
+<!-- Step 2 -->
+<div class="step-box step-2 bg-white p-5">
+<div class="flex items-center mb-3">
+<div class="step-number bg-yellow-500 text-white mr-3">2</div>
+<h2 class="text-xl font-semibold">公開數據集練習</h2>
+</div>
+<ul class="space-y-2 ml-2">
+<li class="flex items-start">
+<i class="fas fa-history text-yellow-600 mt-1 mr-2"></i>
+<span>下載公開股票或加密貨幣數據集</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-cogs text-yellow-600 mt-1 mr-2"></i>
+<span>實現簡單策略（如移動平均交叉）</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-sync-alt text-yellow-600 mt-1 mr-2"></i>
+<span>回測優化策略參數</span>
+</li>
+</ul>
+</div>
+<!-- Step 3 -->
+<div class="step-box step-3 bg-white p-5">
+<div class="flex items-center mb-3">
+<div class="step-number bg-blue-600 text-white mr-3">3</div>
+<h2 class="text-xl font-semibold">嘗試低頻策略</h2>
+</div>
+<ul class="space-y-2 ml-2">
+<li class="flex items-start">
+<i class="fas fa-coins text-blue-600 mt-1 mr-2"></i>
+<span>定期定額ETF：基礎量化交易策略</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-bar text-blue-600 mt-1 mr-2"></i>
+<span>移動平均交叉策略：簡單易懂</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-balance-scale text-blue-600 mt-1 mr-2"></i>
+<span>RSI+布林帶結合策略：提升信號準確性</span>
+</li>
+</ul>
+</div>
+<!-- Step 4 -->
+<div class="step-box step-4 bg-white p-5">
+<div class="flex items-center mb-3">
+<div class="step-number bg-yellow-800 text-white mr-3">4</div>
+<h2 class="text-xl font-semibold">建立交易系統</h2>
+</div>
+<ul class="space-y-2 ml-2">
+<li class="flex items-start">
+<i class="fas fa-book text-yellow-800 mt-1 mr-2"></i>
+<span>交易日誌：記錄進出場點、理由、盈虧</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-pie text-yellow-800 mt-1 mr-2"></i>
+<span>績效評估指標：CAGR、最大回撤、夏普比率</span>
+</li>
+<li class="flex items-start">
+<i class="fas fa-tasks text-yellow-800 mt-1 mr-2"></i>
+<span>持續優化策略並培養交易紀律</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Learning Path Visualization -->
+<div class="mt-8 bg-white rounded-lg p-5 shadow-md">
+<h3 class="text-xl font-semibold mb-4 text-blue-800">學習路徑特點</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex items-center p-3 bg-gray-50 rounded-md">
+<i class="fas fa-puzzle-piece text-2xl text-green-600 mr-3"></i>
+<span class="text-lg">循序漸進，由易到難</span>
+</div>
+<div class="flex items-center p-3 bg-gray-50 rounded-md">
+<i class="fas fa-hands-helping text-2xl text-green-600 mr-3"></i>
+<span class="text-lg">理論與實作平衡</span>
+</div>
+<div class="flex items-center p-3 bg-gray-50 rounded-md">
+<i class="fas fa-user-graduate text-2xl text-green-600 mr-3"></i>
+<span class="text-lg">針對30-50歲學員設計</span>
+</div>
+</div>
+</div>
+<!-- Slide Footer -->
+<div class="absolute bottom-4 right-10 text-sm text-gray-500">
+<p>量化投資：從經驗到數據的投資革命 | 第10頁</p>
+</div>
+</div>
+
+</body></html>

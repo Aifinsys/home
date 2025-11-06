@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>技術分析演進史：古典至統計時代</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Calibri', 'Arial', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2E8B57;
+        }
+        .era-box {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .era-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .timeline-line {
+            height: 4px;
+            background: linear-gradient(90deg, #FFA500, #4682B4);
+            position: relative;
+        }
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            top: -6px;
+            transform: translateX(-50%);
+        }
+        .table-header {
+            background-color: rgba(46, 139, 87, 0.2);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10" style=" overflow: hidden;">
+<!-- Slide Header -->
+<div class="mb-6">
+<h1 class="title text-4xl font-bold mb-2">技術分析演進史：古典至統計時代</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Timeline -->
+<div class="relative mb-8">
+<div class="timeline-line"></div>
+<div class="timeline-dot bg-orange-500" style="left: 16.7%"></div>
+<div class="timeline-dot bg-yellow-500" style="left: 50%"></div>
+<div class="timeline-dot bg-blue-600" style="left: 83.3%"></div>
+<div class="flex justify-between text-sm text-gray-600 mt-2">
+<div class="w-1/3 text-center">19世紀末～20世紀初</div>
+<div class="w-1/3 text-center">1930～1960年代</div>
+<div class="w-1/3 text-center">1960～1980年代</div>
+</div>
+</div>
+<!-- Main Content: Three Generations -->
+<div class="grid grid-cols-3 gap-6">
+<!-- First Generation -->
+<div class="era-box bg-white p-5 border-t-4 border-orange-500">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+<i class="fas fa-shapes text-orange-500"></i>
+</div>
+<h2 class="text-xl font-semibold">第一代：古典形態學派</h2>
+</div>
+<div class="space-y-2 text-sm">
+<div class="flex items-start">
+<i class="fas fa-lightbulb text-orange-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">核心思想：</span>價格反映一切，市場行為可視為圖形語言</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-book text-orange-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">代表理論：</span>道氏理論、酒田戰法、形態理論（頭肩頂、雙底等）</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-chart-line text-orange-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">操作特徵：</span>觀察圖形結構與趨勢</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-road text-orange-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">量化鋪路：</span>奠定價格行為可分析的基礎</p>
+</div>
+</div>
+</div>
+<!-- Second Generation -->
+<div class="era-box bg-white p-5 border-t-4 border-yellow-500">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+<i class="fas fa-wave-square text-yellow-500"></i>
+</div>
+<h2 class="text-xl font-semibold">第二代：結構波動學派</h2>
+</div>
+<div class="space-y-2 text-sm">
+<div class="flex items-start">
+<i class="fas fa-lightbulb text-yellow-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">核心思想：</span>市場有循環性與比例和諧性，從心理與自然規律分析波動節奏</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-book text-yellow-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">代表理論：</span>波浪理論（Elliott Wave）、江恩理論（Gann Theory）</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-chart-line text-yellow-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">操作特徵：</span>趨勢週期預測、波段操作</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-road text-yellow-500 mt-1 mr-2"></i>
+<p><span class="font-semibold">量化鋪路：</span>引入時間與空間的量化概念</p>
+</div>
+</div>
+</div>
+<!-- Third Generation -->
+<div class="era-box bg-white p-5 border-t-4 border-blue-600">
+<div class="flex items-center mb-3">
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+<i class="fas fa-calculator text-blue-600"></i>
+</div>
+<h2 class="text-xl font-semibold">第三代：數理統計學派</h2>
+</div>
+<div class="space-y-2 text-sm">
+<div class="flex items-start">
+<i class="fas fa-lightbulb text-blue-600 mt-1 mr-2"></i>
+<p><span class="font-semibold">核心思想：</span>價格行為可量化、指標化</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-book text-blue-600 mt-1 mr-2"></i>
+<p><span class="font-semibold">代表理論：</span>移動平均理論（MA, MACD）、RSI/KD/OBV指標</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-chart-line text-blue-600 mt-1 mr-2"></i>
+<p><span class="font-semibold">操作特徵：</span>數據化信號、客觀判斷</p>
+</div>
+<div class="flex items-start">
+<i class="fas fa-road text-blue-600 mt-1 mr-2"></i>
+<p><span class="font-semibold">量化鋪路：</span>發展出可程式化的交易指標</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Summary -->
+<div class="mt-6 bg-white rounded-lg p-4 shadow-md">
+<div class="flex items-center">
+<i class="fas fa-arrow-trend-up text-2xl text-green-700 mr-3"></i>
+<p class="text-lg">
+<span class="font-semibold">技術分析的演進趨勢：</span>
+                    從最初的「藝術」判斷，逐步走向「科學」驗證，為現代量化投資奠定了堅實的基礎。
+                </p>
+</div>
+</div>
+<!-- Slide Footer -->
+<div class="absolute bottom-4 right-10 text-sm text-gray-500">
+<p>量化投資：從經驗到數據的投資革命 | 第3頁</p>
+</div>
+</div>
+
+</body></html>

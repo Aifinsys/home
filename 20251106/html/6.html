@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>主流量化策略類型解析</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Calibri', 'Arial', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2E8B57;
+        }
+        .strategy-card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .trend {
+            border-top: 4px solid #2E8B57;
+        }
+        .momentum {
+            border-top: 4px solid #FFA500;
+        }
+        .channel {
+            border-top: 4px solid #4682B4;
+        }
+        .mean-reversion {
+            border-top: 4px solid #8B4513;
+        }
+        .arbitrage {
+            border-top: 4px solid #2E8B57;
+        }
+        .event-driven {
+            border-top: 4px solid #FFA500;
+        }
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-8" style=" overflow: hidden;">
+<!-- Slide Header -->
+<div class="mb-6">
+<h1 class="title text-4xl font-bold mb-2">主流量化策略類型解析</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content: Strategy Cards -->
+<div class="grid grid-cols-3 gap-4 min-h-[560px]">
+<!-- Trend Following Strategy -->
+<div class="strategy-card trend bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg-green-100 mr-3">
+<i class="fas fa-chart-line text-xl text-green-700"></i>
+</div>
+<h2 class="text-xl font-semibold">趨勢策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基礎：</span>「順勢而為」，市場趨勢具有延續性</p>
+<p><span class="font-semibold">適用市場：</span>牛市、熊市等單邊趨勢明顯的市場（如原油、黃金、指數期貨）</p>
+<p><span class="font-semibold">風險點：</span>不適合橫盤震蕩市場，易頻繁出現假信號</p>
+<p><span class="font-semibold">案例：</span>當短期均線向上穿越長期均線時自動買入，反之賣出</p>
+</div>
+</div>
+<!-- Momentum Strategy -->
+<div class="strategy-card momentum bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg-yellow-100 mr-3">
+<i class="fas fa-bolt text-xl text-yellow-600"></i>
+</div>
+<h2 class="text-xl font-semibold">動能策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基礎：</span>「強者恆強」，表現強的資產未來仍將保持強勢</p>
+<p><span class="font-semibold">適用市場：</span>波動性強、趨勢快速形成的市場（如加密貨幣、成長股）</p>
+<p><span class="font-semibold">風險點：</span>假突破風險，在低波動或震蕩行情中易失效</p>
+<p><span class="font-semibold">案例：</span>利用RSI判斷股價動能，RSI &gt; 70 考慮賣出，RSI &lt; 30 考慮買入</p>
+</div>
+</div>
+<!-- Channel Strategy -->
+<div class="strategy-card channel bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg-blue-100 mr-3">
+<i class="fas fa-border-style text-xl text-blue-700"></i>
+</div>
+<h2 class="text-xl font-semibold">通道策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基礎：</span>價格在一定範圍內波動，觸及邊界時反向操作</p>
+<p><span class="font-semibold">適用市場：</span>橫盤震蕩市場（如區間波動的貨幣對）</p>
+<p><span class="font-semibold">風險點：</span>在強趨勢行情下，通道信號容易連續失效</p>
+<p><span class="font-semibold">案例：</span>利用布林帶上軌、下軌判斷反轉區間，觸及上軌賣出，觸及下軌買入</p>
+</div>
+</div>
+<!-- Mean Reversion Strategy -->
+<div class="strategy-card mean-reversion bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg brown-100 mr-3">
+<i class="fas fa-exchange-alt text-xl text brown-700"></i>
+</div>
+<h2 class="text-xl font-semibold">均值回歸策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基礎：</span>價格雖會波動，但最終會回歸長期平均水平</p>
+<p><span class="font-semibold">適用市場：</span>區間波動明顯的市場（如成熟藍籌股、利率產品）</p>
+<p><span class="font-semibold">風險點：</span>不適合趨勢強烈市場，易被「均值漂移」影響</p>
+<p><span class="font-semibold">案例：</span>當資產價格偏離歷史均值過低時買入，過高時賣出</p>
+</div>
+</div>
+<!-- Arbitrage Strategy -->
+<div class="strategy-card arbitrage bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg-green-100 mr-3">
+<i class="fas fa-balance-scale text-xl text-green-700"></i>
+</div>
+<h2 class="text-xl font-semibold">套利策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基礎：</span>捕捉同一資產在不同市場或相關資產之間的價格差異</p>
+<p><span class="font-semibold">適用市場：</span>高頻交易（HFT）、雙市場定價差異（如港股 vs 美股ADR）</p>
+<p><span class="font-semibold">風險點：</span>技術門檻高，要求極高的執行速度與系統延遲控制</p>
+<p><span class="font-semibold">案例：</span>交易Mastercard(MA)和 Visa(V)兩個高度相關股票的價差，當價差偏離均值時進行買賣操作</p>
+</div>
+</div>
+<!-- Event-driven Strategy -->
+<div class="strategy-card event-driven bg-white p-4">
+<div class="flex items-center mb-3">
+<div class="icon-circle bg-yellow-100 mr-3">
+<i class="fas fa-calendar-check text-xl text-yellow-600"></i>
+</div>
+<h2 class="text-xl font-semibold">事件驅動策略</h2>
+</div>
+<div class="space-y-2 text-sm">
+<p><span class="font-semibold">邏輯基础：</span>圍繞重大事件或公告（如財報、併購）展開交易</p>
+<p><span class="font-semibold">適用市場：</span>信息密集型市場（如美股、港股）</p>
+<p><span class="font-semibold">風險點：</span>對信息處理速度与团队研究能力要求极高，时效依赖强</p>
+<p><span class="font-semibold">案例：</span>预期公司A将发布优于市场预期的财报时提前布局买入，财报发布后股价达到目标价位时卖出</p>
+</div>
+</div>
+</div>
+<!-- Slide Footer -->
+<div class="absolute bottom-4 right-8 text-sm text-gray-500">
+<p>量化投资：从经验到数据的投资革命 | 第6页</p>
+</div>
+</div>
+
+</body></html>

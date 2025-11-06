@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>常見陷阱與規避策略</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Calibri', 'Arial', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2E8B57;
+        }
+        .pitfall-card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .pitfall-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .solution-item {
+            transition: all 0.2s ease;
+        }
+        .solution-item:hover {
+            background-color: rgba(46, 139, 87, 0.1);
+        }
+        .red-flag {
+            background-color: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid #FFA500;
+        }
+        .green-solution {
+            background-color: rgba(46, 139, 87, 0.1);
+            border-left: 4px solid #2E8B57;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10" style=" overflow: hidden;">
+<!-- Slide Header -->
+<div class="mb-6">
+<h1 class="title text-4xl font-bold mb-2">常見陷阱與規避策略</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Main Content -->
+<div class="grid grid-cols-2 gap-6">
+<!-- Model Overfitting Section -->
+<div class="pitfall-card bg-white p-5">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+<i class="fas fa-chart-line text-2xl text-orange-500"></i>
+</div>
+<h2 class="text-2xl font-semibold">模型過度擬合 (Overfitting)</h2>
+</div>
+<div class="red-flag p-3 mb-4">
+<p class="font-medium">陷阱描述：</p>
+<p>模型在歷史數據上表現完美，但在實際市場中卻失效。這是因為模型過於依賴歷史數據的特定模式，而忽略了市場的隨機性和動態變化。</p>
+</div>
+<p class="font-medium mb-2">規避方法：</p>
+<div class="space-y-2">
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-sync-alt text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">交叉驗證 (Cross-validation)</span>
+<p class="text-sm text-gray-600">將數據分成訓練集、驗證集和測試集，確保模型在未見過的數據上也能表現良好。</p>
+</div>
+</div>
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-compress-alt text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">簡化模型結構</span>
+<p class="text-sm text-gray-600">避免過於複雜的模型，減少參數數量，提升模型的泛化能力。</p>
+</div>
+</div>
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-expand-arrows-alt text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">提升泛化能力</span>
+<p class="text-sm text-gray-600">在模型訓練时加入正則化（Regularization）等技術，防止模型過度學習訓練數據的噪音。</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Look-ahead Bias Section -->
+<div class="pitfall-card bg-white p-5">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+<i class="fas fa-search-dollar text-2xl text-blue-600"></i>
+</div>
+<h2 class="text-2xl font-semibold">未來函數數據陷阱 (Look-ahead Bias)</h2>
+</div>
+<div class="red-flag p-3 mb-4">
+<p class="font-medium">陷阱描述：</p>
+<p>在回測中錯誤地使用了在實際交易時無法獲取的未來信息，導致回測結果過於樂觀，實盤表現卻大相徑庭。</p>
+</div>
+<p class="font-medium mb-2">規避方法：</p>
+<div class="space-y-2">
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-clock text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">使用下一時段開盤價或實時價格</span>
+<p class="text-sm text-gray-600">如果策略在收盤時產生交易信號，應使用下一交易日的開盤价執行交易，而非當日收盤價。</p>
+</div>
+</div>
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-database text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">僅使用歷史可得數據構建指標</span>
+<p class="text-sm text-gray-600">避免使用需要未來數據才能計算的指標（如某些ZIGZAG指標）。</p>
+</div>
+</div>
+<div class="solution-item flex items-start p-2 rounded-md">
+<i class="fas fa-check-double text-green-600 mt-1 mr-2"></i>
+<div>
+<span class="font-medium">仔細校驗數據狀態</span>
+<p class="text-sm text-gray-600">確保訓練數據與實際交易時可獲取的數據一致，例如處理除權、除息等事件調整。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Tip Section -->
+<div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+<div class="flex items-center">
+<i class="fas fa-lightbulb text-2xl text-yellow-500 mr-3"></i>
+<p class="text-lg"><span class="font-semibold">關鍵提示：</span>回測應包含交易成本、滑點和實際市場條件模擬，確保回測結果更接近真實交易情況。</p>
+</div>
+</div>
+<!-- Slide Footer -->
+<div class="absolute bottom-4 right-10 text-sm text-gray-500">
+<p>量化投資：從經驗到數據的投資革命 | 第11頁</p>
+</div>
+</div>
+
+</body></html>

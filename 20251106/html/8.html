@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>實戰工具与平台选择</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; font-family: 'Calibri', 'Arial', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            
+            position: relative;
+        }
+        .title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2E8B57;
+        }
+        .tool-card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .tool-header {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .feature-item {
+            transition: all 0.2s ease;
+        }
+        .feature-item:hover {
+            background-color: rgba(46, 139, 87, 0.1);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100 p-10" style=" overflow: hidden;">
+<!-- Slide Header -->
+<div class="mb-6">
+<h1 class="title text-4xl font-bold mb-2">實戰工具與平台選擇</h1>
+<div class="w-24 h-1 bg-green-700"></div>
+</div>
+<!-- Tool Spectrum Visualization -->
+<div class="mb-6 h-16" id="tool-spectrum" data-sk-source-id="1986421177719721984" data-sk-source-type="web_search" data-sk-source-container="chart">
+<script>
+                // D3.js visualization for tool spectrum
+                document.addEventListener('DOMContentLoaded', function() {
+                    const width = 1180;
+                    const height = 60;
+                    
+                    const svg = d3.select("#tool-spectrum")
+                        .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+                    
+                    // Define gradient
+                    const defs = svg.append("defs");
+                    const gradient = defs.append("linearGradient")
+                        .attr("id", "spectrum-gradient")
+                        .attr("x1", "0%")
+                        .attr("y1", "0%")
+                        .attr("x2", "100%")
+                        .attr("y2", "0%");
+                    
+                    gradient.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", "#FFA500");
+                    
+                    gradient.append("stop")
+                        .attr("offset", "50%")
+                        .attr("stop-color", "#2E8B57");
+                    
+                    gradient.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", "#4682B4");
+                    
+                    // Draw spectrum bar
+                    svg.append("rect")
+                        .attr("x", 0)
+                        .attr("y", 10)
+                        .attr("width", width)
+                        .attr("height", 20)
+                        .attr("rx", 10)
+                        .attr("ry", 10)
+                        .style("fill", "url(#spectrum-gradient)");
+                    
+                    // Add labels
+                    svg.append("text")
+                        .attr("x", 10)
+                        .attr("y", 50)
+                        .text("行情分析類")
+                        .attr("font-family", "Arial, sans-serif")
+                        .attr("font-size", "16px")
+                        .attr("fill", "#666");
+                    
+                    svg.append("text")
+                        .attr("x", width/2 - 60)
+                        .attr("y", 50)
+                        .text("數據分析與量化平台")
+                        .attr("font-family", "Arial, sans-serif")
+                        .attr("font-size", "16px")
+                        .attr("fill", "#666");
+                    
+                    svg.append("text")
+                        .attr("x", width - 150)
+                        .attr("y", 50)
+                        .text("智能BI平台")
+                        .attr("font-family", "Arial, sans-serif")
+                        .attr("font-size", "16px")
+                        .attr("fill", "#666");
+                });
+            </script>
+</div>
+<!-- Tool Cards -->
+<div class="grid grid-cols-3 gap-6">
+<!-- Market Analysis Tools -->
+<div class="tool-card bg-white">
+<div class="tool-header bg-orange-100 p-4 flex items-center">
+<i class="fas fa-chart-line text-2xl text-orange-500 mr-3"></i>
+<h2 class="text-xl font-semibold">行情分析類工具</h2>
+</div>
+<div class="p-4">
+<div class="mb-3">
+<span class="font-semibold">代表工具：</span>
+<span>同花順、富途牛牛</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">核心功用：</span>
+<span>即時行情、基礎技術指標、新聞資訊</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">適用對象：</span>
+<span>日常盯盤、快速掌握市場動態和捕捉短線交易機會的投資者</span>
+</div>
+<div class="mt-4">
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>數據更新速度快</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>資訊覆蓋廣</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-minus-circle text-red-500 mr-2"></i>
+<span>缺乏深入的數據處理能力</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Analysis Platforms -->
+<div class="tool-card bg-white">
+<div class="tool-header bg-green-100 p-4 flex items-center">
+<i class="fas fa-code text-2xl text-green-700 mr-3"></i>
+<h2 class="text-xl font-semibold">數據分析與量化平台</h2>
+</div>
+<div class="p-4">
+<div class="mb-3">
+<span class="font-semibold">代表工具：</span>
+<span>TradingView、MultiCharts、Python</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">核心功用：</span>
+<span>策略開發、回測分析、自動化交易</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">適用對象：</span>
+<span>有一定技術背景，希望系統化學習量化投資的投資者</span>
+</div>
+<div class="mt-4">
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>豐富的歷史行情和財務數據</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>支援程式語言進行策略開發</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>可進行策略回測與優化</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Intelligent BI Platforms -->
+<div class="tool-card bg-white">
+<div class="tool-header bg-blue-100 p-4 flex items-center">
+<i class="fas fa-chart-pie text-2xl text-blue-700 mr-3"></i>
+<h2 class="text-xl font-semibold">智能BI平台</h2>
+</div>
+<div class="p-4">
+<div class="mb-3">
+<span class="font-semibold">代表工具：</span>
+<span>FineBI</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">核心功用：</span>
+<span>多源數據整合、智能建模、可視化分析、團隊協作</span>
+</div>
+<div class="mb-3">
+<span class="font-semibold">適用對象：</span>
+<span>需要團隊協作、跨部門分析的機構投資者和高淨值個人用戶</span>
+</div>
+<div class="mt-4">
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>數據自動採集</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>智能建模與可視化分析</span>
+</div>
+<div class="feature-item flex items-center p-1 rounded">
+<i class="fas fa-plus-circle text-green-600 mr-2"></i>
+<span>提升決策效率和科學性</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Slide Footer -->
+<div class="absolute bottom-4 right-10 text-sm text-gray-500">
+<p>量化投資：從經驗到數據的投資革命 | 第8頁</p>
+</div>
+</div>
+
+</body></html>
