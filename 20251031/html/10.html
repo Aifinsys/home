@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI策略實作：提示詞範例</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .content-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+        }
+        .user-box {
+            border-left: 4px solid #6d28d9;
+        }
+        .ai-box {
+            border-left: 4px solid #10b981;
+        }
+        .strategy-item {
+            transition: all 0.3s ease;
+        }
+        .strategy-item:hover {
+            transform: translateX(5px);
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .chat-bubble {
+            position: relative;
+        }
+        .chat-bubble:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+        .user-bubble:after {
+            left: -20px;
+            top: 20px;
+            border-right-color: #e5e7eb;
+        }
+        .ai-bubble:after {
+            right: -20px;
+            top: 20px;
+            border-left-color: #e5e7eb;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">AI策略實作：提示詞範例</h1>
+<div class="accent-line mb-6"></div>
+</div>
+<!-- Main Content -->
+<div class="px-16">
+<!-- Introduction -->
+<div class="content-box user-box rounded-lg shadow-md p-5 mb-6">
+<h2 class="text-2xl font-semibold text-gray-700 mb-2">透過大型語言模型（LLM）實現AI量化交易</h2>
+<p class="text-gray-600">
+                    即使沒有程式背景，也能透過自然語言指令快速構思交易策略。以下是一個實際範例，展示如何利用ChatGPT生成台積電短線交易策略。
+                </p>
+</div>
+<!-- Chat Interaction Example -->
+<div class="flex space-x-6">
+<!-- User Prompt -->
+<div class="w-1/2">
+<div class="content-box user-box rounded-lg shadow-md p-5">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center mr-3">
+<i class="fas fa-user text-white"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-700">用戶提示詞</h3>
+</div>
+<div class="bg-gray-100 p-4 rounded-lg chat-bubble user-bubble">
+<p class="text-gray-700 font-medium">
+                                請用自然語言幫我生成一個3天短線交易策略，以台積電為例。
+                            </p>
+</div>
+<div class="mt-4 text-gray-600">
+<p><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> 用戶只需描述想要的交易策略類型與標的，無需專業程式知識</p>
+</div>
+</div>
+</div>
+<!-- AI Response -->
+<div class="w-1/2">
+<div class="content-box ai-box rounded-lg shadow-md p-5">
+<div class="flex items-center mb-4">
+<div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center mr-3">
+<i class="fas fa-robot text-white"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-700">AI生成策略</h3>
+</div>
+<div class="bg-gray-100 p-4 rounded-lg chat-bubble ai-bubble">
+<div class="grid grid-cols-1 gap-3">
+<div class="strategy-item flex items-start">
+<i class="fas fa-sign-in-alt text-green-600 mt-1 mr-3"></i>
+<div>
+<span class="font-semibold">入場條件：</span>
+<span class="text-gray-700">3日均線上穿10日均線</span>
+</div>
+</div>
+<div class="strategy-item flex items-start">
+<i class="fas fa-sign-out-alt text-red-600 mt-1 mr-3"></i>
+<div>
+<span class="font-semibold">出場條件：</span>
+<span class="text-gray-700">RSI 超過 70</span>
+</div>
+</div>
+<div class="strategy-item flex items-start">
+<i class="fas fa-shield-alt text-blue-600 mt-1 mr-3"></i>
+<div>
+<span class="font-semibold">風控：</span>
+<span class="text-gray-700">停損 3%、停利 5%</span>
+</div>
+</div>
+<div class="strategy-item flex items-start">
+<i class="fas fa-sync-alt text-purple-600 mt-1 mr-3"></i>
+<div>
+<span class="font-semibold">檢視頻率：</span>
+<span class="text-gray-700">每日收盤後更新</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Strategy Explanation -->
+<div class="content-box rounded-lg shadow-md p-5 mt-6">
+<h3 class="text-xl font-semibold text-gray-700 mb-3">策略說明</h3>
+<div class="flex items-center">
+<div class="w-1/2 flex items-center">
+<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+<i class="fas fa-chart-line text-purple-600"></i>
+</div>
+<div>
+<p class="text-gray-600">AI將抽象的投資想法轉化為具體的交易邏輯</p>
+</div>
+</div>
+<div class="w-1/2 flex items-center">
+<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-3">
+<i class="fas fa-check-circle text-green-600"></i>
+</div>
+<div>
+<p class="text-gray-600">儘管AI不能直接執行交易，但能極大地協助策略的構思與模擬</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">10 / 18</div>
+</div>
+
+</body></html>

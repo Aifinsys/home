@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>案例分析：AI驅動的情緒分析策略</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .content-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-left: 4px solid #10b981;
+        }
+        .process-box {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .process-box:hover {
+            transform: translateY(-5px);
+        }
+        .process-arrow {
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
+            color: #6d28d9;
+            font-size: 24px;
+        }
+        .sentiment-positive {
+            color: #10b981;
+        }
+        .sentiment-negative {
+            color: #ef4444;
+        }
+        .sentiment-neutral {
+            color: #6b7280;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">案例分析：AI驅動的情緒分析策略</h1>
+<div class="accent-line mb-8"></div>
+</div>
+<!-- Main Content -->
+<div class="px-16">
+<!-- Introduction -->
+<div class="content-box p-6 rounded-lg shadow-md mb-6">
+<p class="text-gray-600">
+                    AI能夠分析市場情緒，從新聞、社交媒體等非結構化數據中提取交易信號，為投資決策提供額外視角。以ChatGPT為例，它能理解文字、歸納與自動化分析能力，協助使用者生成策略邏輯與風險報告。
+                </p>
+</div>
+<!-- Process Flow -->
+<div class="flex justify-between mb-6">
+<!-- Data Source -->
+<div class="w-1/4 bg-white rounded-lg shadow-md p-5 process-box">
+<div class="flex items-center mb-3">
+<i class="fas fa-database text-purple-600 text-2xl mr-3"></i>
+<h3 class="text-xl font-semibold text-gray-700">數據來源</h3>
+</div>
+<ul class="text-gray-600 space-y-2">
+<li class="flex items-center">
+<i class="fas fa-newspaper text-blue-500 mr-2"></i>
+<span>金融新聞與報導</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-comment-alt text-blue-500 mr-2"></i>
+<span>社交媒體討論</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-file-alt text-blue-500 mr-2"></i>
+<span>財報與官方聲明</span>
+</li>
+</ul>
+<div class="process-arrow">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- AI Processing -->
+<div class="w-1/4 bg-white rounded-lg shadow-md p-5 process-box">
+<div class="flex items-center mb-3">
+<i class="fas fa-brain text-purple-600 text-2xl mr-3"></i>
+<h3 class="text-xl font-semibold text-gray-700">AI分析處理</h3>
+</div>
+<ul class="text-gray-600 space-y-2">
+<li class="flex items-center">
+<i class="fas fa-language text-green-500 mr-2"></i>
+<span>自然語言處理</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-chart-pie text-green-500 mr-2"></i>
+<span>情緒歸因分析</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-filter text-green-500 mr-2"></i>
+<span>關鍵信息提取</span>
+</li>
+</ul>
+<div class="process-arrow">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- Trading Signals -->
+<div class="w-1/4 bg-white rounded-lg shadow-md p-5 process-box">
+<div class="flex items-center mb-3">
+<i class="fas fa-bolt text-purple-600 text-2xl mr-3"></i>
+<h3 class="text-xl font-semibold text-gray-700">交易信號</h3>
+</div>
+<ul class="text-gray-600 space-y-2">
+<li class="flex items-center">
+<i class="fas fa-plus-circle sentiment-positive mr-2"></i>
+<span>買入信號生成</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-minus-circle sentiment-negative mr-2"></i>
+<span>賣出信號生成</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-chart-line sentiment-neutral mr-2"></i>
+<span>趨勢預測</span>
+</li>
+</ul>
+<div class="process-arrow">
+<i class="fas fa-chevron-right"></i>
+</div>
+</div>
+<!-- Investment Decision -->
+<div class="w-1/4 bg-white rounded-lg shadow-md p-5">
+<div class="flex items-center mb-3">
+<i class="fas fa-chart-line text-green-600 text-2xl mr-3"></i>
+<h3 class="text-xl font-semibold text-gray-700">投資決策</h3>
+</div>
+<ul class="text-gray-600 space-y-2">
+<li class="flex items-center">
+<i class="fas fa-check-circle text-green-500 mr-2"></i>
+<span>多一個分析維度</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-balance-scale text-green-500 mr-2"></i>
+<span>情緒指標融合</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-shield-alt text-green-500 mr-2"></i>
+<span>風險管理優化</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Example -->
+<div class="flex space-x-6">
+<!-- Left Example -->
+<div class="w-1/2 bg-white rounded-lg shadow-md p-5">
+<h3 class="text-xl font-semibold text-gray-700 mb-3">實例：財報情緒分析</h3>
+<div class="border-l-4 border-purple-500 pl-4 mb-4">
+<p class="text-gray-600 italic">
+                            &#34;請分析台積電最新財報情緒，並提取關鍵詞作為買賣信號。&#34;
+                        </p>
+</div>
+<div class="flex justify-between items-center">
+<div class="w-1/2">
+<h4 class="text-lg font-medium text-gray-700 mb-2">AI分析結果</h4>
+<ul class="text-gray-600 space-y-1">
+<li class="flex items-center">
+<i class="fas fa-check text-green-500 mr-2"></i>
+<span>營收成長優於預期</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-check text-green-500 mr-2"></i>
+<span>毛利率提升，利潤率改善</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-check text-green-500 mr-2"></i>
+<span>未來展望樂觀</span>
+</li>
+</ul>
+</div>
+<div class="w-1/2">
+<h4 class="text-lg font-medium text-gray-700 mb-2">交易信號</h4>
+<div class="bg-green-100 p-3 rounded-lg">
+<p class="text-green-700 font-medium">
+<i class="fas fa-plus-circle mr-2"></i>
+                                情緒指標：正面
+                            </p>
+<p class="text-green-700 font-medium mt-2">
+<i class="fas fa-bullseye mr-2"></i>
+                                建議：考慮增加多單倉位
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Benefits -->
+<div class="w-1/2 bg-white rounded-lg shadow-md p-5">
+<h3 class="text-xl font-semibold text-gray-700 mb-3">AI情緒分析的優勢</h3>
+<div class="space-y-3">
+<div class="flex items-start">
+<div class="rounded-full bg-purple-100 p-2 mr-3 mt-1">
+<i class="fas fa-tachometer-alt text-purple-600"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-700">高效處理大量數據</h4>
+<p class="text-gray-600 text-sm">AI能快速分析大量新聞、社交媒體貼文，遠超人為分析能力</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="rounded-full bg-purple-100 p-2 mr-3 mt-1">
+<i class="fas fa-clock text-purple-600"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-700">即時情緒監測</h4>
+<p class="text-gray-600 text-sm">即時捕捉市場情緒變化，提供即時交易信號</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="rounded-full bg-purple-100 p-2 mr-3 mt-1">
+<i class="fas fa-cogs text-purple-600"></i>
+</div>
+<div>
+<h4 class="font-medium text-gray-700">個人化情緒指標</h4>
+<p class="text-gray-600 text-sm">根據個別股票特性，調整情緒分析模型，提高準確性</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">13 / 18</div>
+</div>
+
+</body></html>

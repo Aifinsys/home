@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>量化交易的完整架構</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; min-height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+        .content-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-left: 4px solid #10b981;
+        }
+        .stage-box {
+            transition: all 0.3s ease;
+        }
+        .stage-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        #cycle-container {
+            width: 500px;
+            height: 500px;
+            position: relative;
+        }
+        .cycle-stage {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .cycle-stage:hover {
+            transform: scale(1.1);
+        }
+        .stage-1 { background-color: #6d28d9; top: 200px; left: 0; }
+        .stage-2 { background-color: #8b5cf6; top: 50px; left: 100px; }
+        .stage-3 { background-color: #a78bfa; top: 50px; right: 100px; }
+        .stage-4 { background-color: #c084fc; top: 200px; right: 0; }
+        .stage-5 { background-color: #e879f9; bottom: 50px; right: 100px; }
+        .stage-6 { background-color: #f472b6; bottom: 50px; left: 100px; }
+        .stage-7 { background-color: #10b981; top: 125px; left: 200px; }
+        .center-circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6d28d9, #10b981);
+            top: 190px;
+            left: 190px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .connection-line {
+            position: absolute;
+            background: #d1d5db;
+            z-index: -1;
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Header Section -->
+<div class="pt-10 px-16">
+<h1 class="text-4xl font-bold text-gray-800 mb-2">量化交易的完整架構</h1>
+<div class="accent-line mb-8"></div>
+</div>
+<!-- Main Content -->
+<div class="px-16 flex">
+<!-- Left Column - Cycle Visualization -->
+<div class="w-1/2 flex justify-center items-center">
+<div class="relative" id="cycle-container">
+<!-- Center Circle -->
+<div class="center-circle">
+<i class="fas fa-sync-alt text-xl mb-1"></i>
+<div class="text-sm">策略循環</div>
+</div>
+<!-- Stage 1 -->
+<div class="cycle-stage stage-1">
+<i class="fas fa-lightbulb text-xl mb-1"></i>
+<div class="text-sm">策略構思</div>
+</div>
+<!-- Stage 2 -->
+<div class="cycle-stage stage-2">
+<i class="fas fa-database text-xl mb-1"></i>
+<div class="text-sm">資料取得</div>
+</div>
+<!-- Stage 3 -->
+<div class="cycle-stage stage-3">
+<i class="fas fa-cogs text-xl mb-1"></i>
+<div class="text-sm">因子工程</div>
+</div>
+<!-- Stage 4 -->
+<div class="cycle-stage stage-4">
+<i class="fas fa-brain text-xl mb-1"></i>
+<div class="text-sm">模型訓練</div>
+</div>
+<!-- Stage 5 -->
+<div class="cycle-stage stage-5">
+<i class="fas fa-vial text-xl mb-1"></i>
+<div class="text-sm">回測驗證</div>
+</div>
+<!-- Stage 6 -->
+<div class="cycle-stage stage-6">
+<i class="fas fa-paper-plane text-xl mb-1"></i>
+<div class="text-sm">實盤執行</div>
+</div>
+<!-- Stage 7 -->
+<div class="cycle-stage stage-7">
+<i class="fas fa-chart-line text-xl mb-1"></i>
+<div class="text-sm">監控優化</div>
+</div>
+<!-- Connection Lines -->
+<div class="connection-line" style="width: 120px; height: 2px; top: 200px; left: 100px; transform: rotate(0deg);"></div>
+<div class="connection-line" style="width: 120px; height: 2px; top: 125px; left: 190px; transform: rotate(60deg);"></div>
+<div class="connection-line" style="width: 120px; height: 2px; top: 125px; right: 190px; transform: rotate(120deg);"></div>
+<div class="connection-line" style="width: 120px; height: 2px; top: 200px; right: 100px; transform: rotate(180deg);"></div>
+<div class="connection-line" style="width: 120px; height: 2px; bottom: 125px; right: 190px; transform: rotate(240deg);"></div>
+<div class="connection-line" style="width: 120px; height: 2px; bottom: 125px; left: 190px; transform: rotate(300deg);"></div>
+</div>
+</div>
+<!-- Right Column - Description -->
+<div class="w-1/2 pl-8">
+<div class="content-box p-6 rounded-lg shadow-md mb-6">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">量化交易的系統化流程</h2>
+<p class="text-gray-600 mb-4">
+                        量化交易並非單一的行為，而是一個由多個環節緊密相扣、相互影響的系統化流程。理解這個完整的生命週期，是成功運用量化策略的基石。
+                    </p>
+</div>
+<div class="content-box p-6 rounded-lg shadow-md">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">七大核心階段</h2>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-start">
+<div class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">1</div>
+<div>
+<span class="font-semibold text-gray-700">策略構思</span>
+<span class="text-gray-600 text-sm ml-2">根據市場現象或假設，提出具體的投資想法与邏輯</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">2</div>
+<div>
+<span class="font-semibold text-gray-700">資料取得</span>
+<span class="text-gray-600 text-sm ml-2">收集歷史股價、財報、新聞等相關數據，為後續分析提供基礎</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-purple-400 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">3</div>
+<div>
+<span class="font-semibold text-gray-700">因子工程</span>
+<span class="text-gray-600 text-sm ml-2">建立可量化的特徵，例如波動率、成交量变化等，作為模型輸入</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-purple-300 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">4</div>
+<div>
+<span class="font-semibold text-gray-700">模型訓練</span>
+<span class="text-gray-600 text-sm ml-2">使用統計或AI模型，基於歷史數據預測未來趨勢或交易信號</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-purple-200 text-gray-700 rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">5</div>
+<div>
+<span class="font-semibold text-gray-700">回測驗證</span>
+<span class="text-gray-600 text-sm ml-2">在歷史資料上測試策略表現，評估其有效性與風險</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-purple-100 text-gray-700 rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">6</div>
+<div>
+<span class="font-semibold text-gray-700">實盤執行</span>
+<span class="text-gray-600 text-sm ml-2">透過券商API或模擬交易，將驗證後的策略實際投入市場</span>
+</div>
+</div>
+<div class="flex items-start">
+<div class="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-1 flex-shrink-0">7</div>
+<div>
+<span class="font-semibold text-gray-700">監控優化</span>
+<span class="text-gray-600 text-sm ml-2">根據策略的實盤績效與風險變化，持續調整与改進模型</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Number -->
+<div class="page-number" style="visibility: hidden;">5 / 18</div>
+</div>
+
+</body></html>

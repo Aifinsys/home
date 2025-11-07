@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI量化交易新紀元</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script><style>
+        body {width: 1280px; height: 720px; overflow: hidden; margin: 0;
+            padding: 0;}
+        .slide {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            
+        }
+        .network-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+        }
+        .node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #6d28d9;
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(109, 40, 217, 0.7), rgba(16, 185, 129, 0.7));
+            transform-origin: left center;
+            animation: fade 4s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        @keyframes fade {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.2; }
+        }
+        .content-overlay {
+            position: relative;
+            z-index: 10;
+        }
+        .title-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-left: 5px solid #10b981;
+        }
+        .accent-line {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #10b981);
+        }
+    
+html {
+    overflow: hidden;
+}</style>
+</head>
+<body>
+<div class="slide bg-gray-100" style=" overflow: hidden;">
+<!-- Neural network background -->
+<div class="network-bg" id="networkBg"></div>
+<!-- Content overlay -->
+<div class="content-overlay flex flex-col justify-center items-center h-full px-16">
+<!-- Date -->
+<div class="self-end mb-8 text-gray-500">
+<i class="far fa-calendar-alt mr-2"></i>20251031 <br>Ai Fintech Corp.
+            </div>
+<!-- Main title -->
+<div class="title-box p-8 rounded-lg shadow-xl max-w-4xl mb-6">
+<h1 class="text-5xl font-bold text-gray-800 mb-4 tracking-tight">
+                    AI量化交易新紀元：<br>從零到一的策略革命
+                </h1>
+<div class="accent-line mb-6"></div>
+<h2 class="text-2xl text-gray-700 font-medium">
+                    運用大型語言模型（LLM）打造您的專屬交易智慧
+                </h2>
+</div>
+<!-- Bottom section -->
+<div class="mt-16 flex items-center text-gray-600">
+<div class="flex items-center">
+<i class="fas fa-robot text-purple-600 text-2xl mr-3"></i>
+<i class="fas fa-chart-line text-green-600 text-2xl"></i>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Create neural network background
+        const networkBg = document.getElementById('networkBg');
+        const nodeCount = 20;
+        const connectionCount = 30;
+        
+        // Create nodes
+        for (let i = 0; i < nodeCount; i++) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.style.left = `${Math.random() * 100}%`;
+            node.style.top = `${Math.random() * 100}%`;
+            node.style.animationDelay = `${Math.random() * 2}s`;
+            networkBg.appendChild(node);
+        }
+        
+        // Create connections between random nodes
+        const nodes = document.querySelectorAll('.node');
+        for (let i = 0; i < connectionCount; i++) {
+            const startNode = nodes[Math.floor(Math.random() * nodes.length)];
+            const endNode = nodes[Math.floor(Math.random() * nodes.length)];
+            
+            if (startNode !== endNode) {
+                const startRect = startNode.getBoundingClientRect();
+                const endRect = endNode.getBoundingClientRect();
+                
+                const connection = document.createElement('div');
+                connection.className = 'connection';
+                
+                // Calculate position and dimensions
+                const startX = startRect.left + startRect.width / 2;
+                const startY = startRect.top + startRect.height / 2;
+                const endX = endRect.left + endRect.width / 2;
+                const endY = endRect.top + endRect.height / 2;
+                
+                const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                
+                connection.style.width = `${length}px`;
+                connection.style.left = `${startX}px`;
+                connection.style.top = `${startY}px`;
+                connection.style.transform = `rotate(${angle}deg)`;
+                connection.style.animationDelay = `${Math.random() * 3}s`;
+                
+                networkBg.appendChild(connection);
+            }
+        }
+    </script>
+
+</body></html>
