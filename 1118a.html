@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>經典K線型態 1-18 完整圖解</title>
+<style>
+    /* 讓頁面滾動更平滑 (可選) */
+    html { scroll-behavior: smooth; }
+
+    body {font-family:"Microsoft JhengHei","Segoe UI",sans-serif; background:#f5f7fa; margin:0; padding:20px;}
+    .container {max-width:1260px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.1); overflow:hidden;}
+    
+    /* --- 標題與摘要 --- */
+    h1.main-title {text-align:center; padding:30px 0; background:#2c3e50; color:white; margin:0; font-size:30px;}
+    h2.section-title {text-align:center; padding-top: 30px; color:#2c3e50; font-size: 28px; margin-top: 20px; margin-bottom: 0; border-top: 2px solid #e0e0e0;}
+    
+    .summary { 
+        background: #f5f7fa; 
+        border-bottom: 2px solid #e0e0e0; 
+        color: #333; 
+        padding: 25px 40px; 
+        margin: 0; 
+        font-size: 16px; 
+        line-height: 1.7;
+    }
+    .summary h3 { margin-top: 0; color: #2c3e50; font-size: 20px;}
+    .summary ul { padding-left: 20px; margin-top: 10px; margin-bottom: 0;}
+
+    /* --- 通用項目樣式 --- */
+    .item {flex:1; min-width:480px; margin:20px; display:flex; background:#fdfdfd; border-radius:12px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+    .info {flex:1; display:flex; flex-direction:column; justify-content:center;}
+    .name {font-size:26px; font-weight:bold; color:#2c3e50; margin-bottom:8px;}
+    .ename {font-size:18px; color:#666; margin-bottom:15px;}
+    .desc {font-size:16px; color:#444; margin-bottom:15px;}
+    .signal {align-self:flex-start; border-radius:8px; font-weight:bold;}
+
+    /* --- 訊號燈 (台股版) --- */
+    .bull {background:#f8d7da; color:#721c24;} /* 看漲 */
+    .bear {background:#d4edda; color:#155724;} /* 看跌 */
+    .neutral {background:#fff3cd; color:#856404;} /* 中性 */
+
+    /* --- Section 1 (單根) 專用樣式 --- */
+    .row-single {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-single .chart {flex:0 0 280px; background:#fafafa; padding:30px 0; display:flex; justify-content:center; align-items:center;}
+    .row-single .info {padding:25px 30px;}
+    .row-single .desc {line-height:1.7;}
+    .row-single .signal {padding:8px 18px; font-size:15px;}
+    
+    /* --- Section 2 (多根) 專用樣式 --- */
+    .row-multi {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-multi .chart {flex:0 0 320px; background:#fafafa; padding:40px 0; display:flex; justify-content:center; align-items:center;}
+    .row-multi .info {padding:30px 35px;}
+    .row-multi .desc {line-height:1.75;}
+    .row-multi .signal {padding:10px 20px; font-size:16px;}
+    
+    /* --- 頁尾 --- */
+    .footer {text-align:center; padding:30px 40px 40px 40px; color:#666; font-size:15px; line-height: 1.8;}
+    .footer p { margin: 0; }
+    
+    /* --- 回到頂端按鈕 --- */
+    .back-to-top {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #34495e;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .back-to-top:hover {
+        background-color: #2c3e50;
+    }
+
+    /* --- RWD --- */
+    @media (max-width:960px){
+        .item{flex-direction:column; text-align:center;}
+        /* 針對不同 section 的 SVG 調整 */
+        .row-single .chart svg{width:200px;}
+        .row-multi .chart svg{width:220px;}
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="page-top">
+    <h1 class="main-title">經典K線型態 1-18 完整圖解 </h1>
+
+    <div class="summary">
+      <h3>摘要</h3>
+      <p>整合了 <strong>18 種經典K線型態</strong>「<strong>紅漲、綠跌</strong>」配色。<br>
+      內容分兩大部分：
+      <ul>
+        <li><strong>第 1-8 號：</strong>經典單根K線型態</li>
+        <li><strong>第 9-18 號：</strong>雙根與三根以上K線型態</li>
+      </ul>
+      所有圖示均為 SVG 向量格式，可無限放大而不失真，適合用於教學或列印。
+      </p>
+    </div>
+
+    <h2 class="section-title">8種經典單根K線型態圖解（第1～8號）</h2>
+
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#dc3545" stroke="#b02a37" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">1. 大陽線</div>
+          <div class="ename">Marubozu Red (White)</div>
+          <div class="desc">幾乎無上下影線的強勢大漲K線，開盤即最低、收盤即最高，全天多方完全掌控。</div>
+          <span class="signal bull">強烈多頭訊號</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#28a745" stroke="#1e7e34" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">2. 大陰線</div>
+          <div class="ename">Marubozu Green (Black)</div>
+          <div class="desc">幾乎無上下影線的強勢大跌K線，開盤即最高、收盤即最低，全天空方完全掌控。</div>
+          <span class="signal bear">強烈空頭訊號</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">3. 錘子線</div>
+          <div class="ename">Hammer</div>
+          <div class="desc">出現在下跌趨勢底部，下影線≥實體2倍，上影線極短或無，顯示空方殺尾盤後多方強力反攻。</div>
+          <span class="signal bull">看漲反轉訊號</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">4. 吊人線</div>
+          <div class="ename">Hanging Man</div>
+          <div class="desc">出現在上漲趨勢頂部，形態與錘子線完全相同，但意義相反，顯示多方拉抬失敗。</div>
+          <span class="signal bear">看跌反轉訊號</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">5. 倒錘子線</div>
+          <div class="ename">Inverted Hammer</div>
+          <div class="desc">出現在下跌趨勢底部，上影線長、下影線極短，顯示多方試圖反攻但尚未完全成功。</div>
+          <span class="signal bull">看漲反轉訊號（需次日確認）</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">6. 射擊之星</div>
+          <div class="ename">Shooting Star</div>
+          <div class="desc">出現在上漲趨勢頂部，上影線長、下影線極短，顯示多方衝高後被空方強力打壓。</div>
+          <span class="signal bear">看跌反轉訊號</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="50" x2="100" y2="270" stroke="#666" stroke-width="5"/>
+            <rect x="82" y="140" width="36" height="50" fill="#ffc107" stroke="#e0a800" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">7. 紡錘線</div>
+          <div class="ename">Spinning Top</div>
+          <div class="desc">實體很小、上下影線都長，多空激烈拉鋸，顯示趨勢即將改變或進入盤整。</div>
+          <span class="signal neutral">多空交戰‧趨勢轉折前兆</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="70" x2="100" y2="250" stroke="#666" stroke-width="6"/>
+            <line x1="70" y1="160" x2="130" y2="160" stroke="#666" stroke-width="6"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">8. 十字線</div>
+          <div class="ename">Doji</div>
+          <div class="desc">開盤價≈收盤價，多空完全勢均力敵，常為重要反轉訊號（視前趨勢與位置而定）。</div>
+          <span class="signal neutral">極強反轉或盤整訊號</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">經典K線型態圖解（第9～18號）－ 雙根與三根以上形態</h2>
+
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="40" width="50" height="200" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">9. 吞噬型態（看漲）</div>
+          <div class="ename">Bullish Engulfing</div>
+          <div class="desc">第二根大陽線實體完全吞噬前一根陰線實體。<br>空方力量被多方徹底壓制，常出現於下跌末端。</div>
+          <span class="signal bull">強烈底部反轉訊號</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="100" width="50" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="60" width="50" height="200" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">10. 吞噬型態（看跌）</div>
+          <div class="ename">Bearish Engulfing</div>
+          <div class="desc">第二根大陰線實體完全吞噬前一根陽線實體。<br>多方力量被空方徹底壓制，常出現於上漲末端。</div>
+          <span class="signal bear">強烈頂部反轉訊號</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="120" width="50" height="100" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">11. 刺穿型態</div>
+          <div class="ename">Piercing Pattern</div>
+          <div class="desc">大陰線後接陽線，陽線收盤深入陰線實體一半以上。<br>多方強力反攻，價格「刺穿」空方防線。</div>
+          <span class="signal bull">底部看漲反轉</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="100" width="50" height="100" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">12. 烏雲罩頂</div>
+          <div class="ename">Dark Cloud Cover</div>
+          <div class="desc">大陽線後接陰線，陰線收盤跌破陽線實體一半以下。<br>空方強力反撲，烏雲籠罩多方。</div>
+          <span class="signal bear">頂部看跌反轉</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="80" x2="80" y2="280" stroke="#28a745" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="80" fill="#28a745"/>
+            <line x1="200" y1="80" x2="200" y2="280" stroke="#dc3545" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="100" fill="#dc3545"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">13. 多方確認型態</div>
+          <div class="ename">Tweezer Bottom</div>
+          <div class="desc">兩根K線最低價相同或極接近，形成水平支撐。<br>顯示該價位有極強買盤防守。</div>
+          <span class="signal bull">底部看漲反轉</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="60" x2="80" y2="260" stroke="#dc3545" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="100" fill="#dc3545"/>
+            <line x1="200" y1="60" x2="200" y2="260" stroke="#28a745" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="80" fill="#28a745"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">14. 空方確認型態</div>
+          <div class="ename">Tweezer Top</div>
+          <div class="desc">兩根K線最高價相同或極接近，形成水平壓力。<br>顯示該價位有極強賣壓。</div>
+          <span class="signal bear">頂部看跌反轉</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="140" width="45" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="115" y="100" width="45" height="130" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="180" y="60" width="45" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">15. 紅三兵</div>
+          <div class="ename">Three White Soldiers</div>
+          <div class="desc">連續三根中長陽線，每根開盤在前一根實體內，收盤逐步創高。<br>多方穩健推進。</div>
+          <span class="signal bull">強烈看漲延續</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="45" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="115" y="90" width="45" height="130" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="180" y="120" width="45" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">16. 黑三鴉</div>
+          <div class="ename">Three Black Crows</div>
+          <div class="desc">連續三根中長陰線，每根開盤在前一根實體內，收盤逐步創低。<br>空方穩健壓制。</div>
+          <span class="signal bear">強烈看跌延續</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="135" y="140" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="100" x2="150" y2="200" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">17. 早晨之星</div>
+          <div class="ename">Morning Star</div>
+          <div class="desc">大陰線 → 小K（跳空）→ 大陽線。<br>空方動能衰竭，多方強勢接棒，最經典的底部反轉形態。</div>
+          <span class="signal bull">極強底部看漲反轉</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="135" y="150" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="110" x2="150" y2="210" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="100" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">18. 黃昏之星</div>
+          <div class="ename">Evening Star</div>
+          <div class="desc">大陽線 → 小K（跳空）→ 大陰線。<br>多方動能耗盡，空方強勢接管，最經典的頂部反轉形態。</div>
+          <span class="signal bear">極強頂部看跌反轉</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p> AI Fintech Corp. 製作，僅供金融決策學習使用。</p>
+      <a href="https://www.aifinsys.com" class="back-to-top" target="_blank"製作。> 回到首頁</a>
+    </div>
+
+</div>
+</body>
+</html>
