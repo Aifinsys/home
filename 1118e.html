@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Classic Candlestick Patterns 1-18: Complete Guide (Red-Up/Green-Down)</title>
+<style>
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+
+    body {font-family:"Segoe UI", "Microsoft JhengHei", sans-serif; background:#f5f7fa; margin:0; padding:20px;}
+    .container {max-width:1260px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.1); overflow:hidden;}
+    
+    /* --- Title & Summary --- */
+    h1.main-title {text-align:center; padding:30px 0; background:#2c3e50; color:white; margin:0; font-size:30px;}
+    h2.section-title {text-align:center; padding-top: 30px; color:#2c3e50; font-size: 28px; margin-top: 20px; margin-bottom: 0; border-top: 2px solid #e0e0e0;}
+    
+    .summary { 
+        background: #f5f7fa; 
+        border-bottom: 2px solid #e0e0e0; 
+        color: #333; 
+        padding: 25px 40px; 
+        margin: 0; 
+        font-size: 16px; 
+        line-height: 1.7;
+    }
+    .summary h3 { margin-top: 0; color: #2c3e50; font-size: 20px;}
+    .summary ul { padding-left: 20px; margin-top: 10px; margin-bottom: 0;}
+
+    /* --- Common Item Styles --- */
+    .item {flex:1; min-width:480px; margin:20px; display:flex; background:#fdfdfd; border-radius:12px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+    .info {flex:1; display:flex; flex-direction:column; justify-content:center;}
+    .name {font-size:26px; font-weight:bold; color:#2c3e50; margin-bottom:8px;}
+    .ename {font-size:18px; color:#666; margin-bottom:15px;}
+    .desc {font-size:16px; color:#444; margin-bottom:15px;}
+    .signal {align-self:flex-start; border-radius:8px; font-weight:bold;}
+
+    /* --- Signal Lights (TAIEX/CN Market Version) --- */
+    .bull {background:#f8d7da; color:#721c24;} /* Bullish (Red) */
+    .bear {background:#d4edda; color:#155724;} /* Bearish (Green) */
+    .neutral {background:#fff3cd; color:#856404;} /* Neutral */
+
+    /* --- Section 1 (Single-Stick) Styles --- */
+    .row-single {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-single .chart {flex:0 0 280px; background:#fafafa; padding:30px 0; display:flex; justify-content:center; align-items:center;}
+    .row-single .info {padding:25px 30px;}
+    .row-single .desc {line-height:1.7;}
+    .row-single .signal {padding:8px 18px; font-size:15px;}
+    
+    /* --- Section 2 (Multi-Stick) Styles --- */
+    .row-multi {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-multi .chart {flex:0 0 320px; background:#fafafa; padding:40px 0; display:flex; justify-content:center; align-items:center;}
+    .row-multi .info {padding:30px 35px;}
+    .row-multi .desc {line-height:1.75;}
+    .row-multi .signal {padding:10px 20px; font-size:16px;}
+    
+    /* --- Footer --- */
+    .footer {text-align:center; padding:30px 40px 40px 40px; color:#666; font-size:15px; line-height: 1.8;}
+    .footer p { margin: 0; }
+    
+    /* --- Back to Top Button --- */
+    .back-to-top {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #34495e;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .back-to-top:hover {
+        background-color: #2c3e50;
+    }
+
+    /* --- RWD --- */
+    @media (max-width:960px){
+        .item{flex-direction:column; text-align:center;}
+        /* SVG adjustments for different sections */
+        .row-single .chart svg{width:200px;}
+        .row-multi .chart svg{width:220px;}
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="page-top">
+    <h1 class="main-title">Classic Candlestick Patterns 1-18: Complete Guide (Red-Up/Green-Down)</h1>
+
+    <div class="summary">
+      <h3>Page Summary</h3>
+      <p>This page integrates <strong>18 classic candlestick patterns</strong>, all adjusted to the "<strong>Red for Up, Green for Down</strong>" color scheme common in Taiwanese and Chinese markets.<br> 
+      The content is divided into two main parts:
+      <ul>
+        <li><strong>Patterns 1-8:</strong> Classic Single-Stick Patterns</li>
+        <li><strong>Patterns 9-18:</strong> Double and Triple-Stick Patterns</li>
+      </ul>
+      All charts are SVG vector graphics, ensuring they can be zoomed indefinitely without losing quality, ideal for teaching or printing.
+      </p>
+    </div>
+
+    <h2 class="section-title">8 Classic Single-Stick Candlestick Patterns (Patterns 1-8)</h2>
+
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#dc3545" stroke="#b02a37" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">1. Bullish Marubozu</div>
+          <div class="ename">Marubozu (Bullish)</div>
+          <div class="desc">A strong bullish candle with almost no wicks. The open is the low, and the close is the high. Bulls were in complete control.</div>
+          <span class="signal bull">Strong Bullish Signal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#28a745" stroke="#1e7e34" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">2. Bearish Marubozu</div>
+          <div class="ename">Marubozu (Bearish)</div>
+          <div class="desc">A strong bearish candle with almost no wicks. The open is the high, and the close is the low. Bears were in complete control.</div>
+          <span class="signal bear">Strong Bearish Signal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">3. Hammer</div>
+          <div class="ename">Hammer</div>
+          <div class="desc">Appears at the bottom of a downtrend. Lower wick is ≥ 2x the body. Very short or no upper wick. Shows bears failed and bulls strongly countered.</div>
+          <span class="signal bull">Bullish Reversal Signal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">4. Hanging Man</div>
+          <div class="ename">Hanging Man</div>
+          <div class="desc">Appears at the top of an uptrend. Identical shape to a Hammer but with the opposite meaning. Shows a potential failure of the bulls.</div>
+          <span class="signal bear">Bearish Reversal Signal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">5. Inverted Hammer</div>
+          <div class="ename">Inverted Hammer</div>
+          <div class="desc">Appears at the bottom of a downtrend. Long upper wick, very short lower wick. Shows bulls tried to rally but haven't fully succeeded.</div>
+          <span class="signal bull">Bullish Reversal (Needs Confirmation)</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">6. Shooting Star</div>
+          <div class="ename">Shooting Star</div>
+          <div class="desc">Appears at the top of an uptrend. Long upper wick, very short lower wick. Shows bulls rallied but were strongly rejected by bears.</div>
+          <span class="signal bear">Bearish Reversal Signal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="50" x2="100" y2="270" stroke="#666" stroke-width="5"/>
+            <rect x="82" y="140" width="36" height="50" fill="#ffc107" stroke="#e0a800" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">7. Spinning Top</div>
+          <div class="ename">Spinning Top</div>
+          <div class="desc">Small body with long upper and lower wicks. Indicates intense indecision between bulls and bears. Signals a potential trend change or consolidation.</div>
+          <span class="signal neutral">Indecision / Potential Reversal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="70" x2="100" y2="250" stroke="#666" stroke-width="6"/>
+            <line x1="70" y1="160" x2="130" y2="160" stroke="#666" stroke-width="6"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">8. Doji</div>
+          <div class="ename">Doji</div>
+          <div class="desc">Open price ≈ Close price. Represents perfect equilibrium between bulls and bears. Often a key reversal signal (depending on context).</div>
+          <span class="signal neutral">Strong Reversal or Indecision Signal</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Classic Candlestick Patterns (Patterns 9-18) - Double & Triple-Stick Formations</h2>
+
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="40" width="50" height="200" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">9. Bullish Engulfing</div>
+          <div class="ename">Bullish Engulfing</div>
+          <div class="desc">A large bullish candle's real body completely engulfs the prior bearish candle's body.<br>Bearish power is completely suppressed by bulls. Often at downtrend bottoms.</div>
+          <span class="signal bull">Strong Bottom Reversal Signal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="100" width="50" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="60" width="50" height="200" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">10. Bearish Engulfing</div>
+          <div class="ename">Bearish Engulfing</div>
+          <div class="desc">A large bearish candle's real body completely engulfs the prior bullish candle's body.<br>Bullish power is completely suppressed by bears. Often at uptrend tops.</div>
+          <span class="signal bear">Strong Top Reversal Signal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="120" width="50" height="100" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">11. Piercing Pattern</div>
+          <div class="ename">Piercing Pattern</div>
+          <div class="desc">A large bearish candle is followed by a bullish candle that closes above the 50% mark of the first candle's body.<br>Bulls launch a strong counter-attack, 'piercing' the bear's defense.</div>
+          <span class="signal bull">Bottom Bullish Reversal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="100" width="50" height="100" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">12. Dark Cloud Cover</div>
+          <div class="ename">Dark Cloud Cover</div>
+          <div class="desc">A large bullish candle is followed by a bearish candle that closes below the 50% mark of the first candle's body.<br>Bears strike back, casting a 'dark cloud' over the bulls.</div>
+          <span class="signal bear">Top Bearish Reversal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="80" x2="80" y2="280" stroke="#28a745" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="80" fill="#28a745"/>
+            <line x1="200" y1="80" x2="200" y2="280" stroke="#dc3545" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="100" fill="#dc3545"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">13. Tweezer Bottom</div>
+          <div class="ename">Tweezer Bottom</div>
+          <div class="desc">Two candles have the same or nearly identical low prices, forming a horizontal support level.<br>Indicates strong buying support at this price.</div>
+          <span class="signal bull">Bottom Bullish Reversal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="60" x2="80" y2="260" stroke="#dc3545" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="100" fill="#dc3545"/>
+            <line x1="200" y1="60" x2="200" y2="260" stroke="#28a745" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="80" fill="#28a745"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">14. Tweezer Top</div>
+          <div class="ename">Tweezer Top</div>
+          <div class="desc">Two candles have the same or nearly identical high prices, forming a horizontal resistance level.<br>Indicates strong selling pressure at this price.</div>
+          <span class="signal bear">Top Bearish Reversal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="140" width="45" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="115" y="100" width="45" height="130" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="180" y="60" width="45" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">15. Three White Soldiers</div>
+          <div class="ename">Three White Soldiers</div>
+          <div class="desc">Three consecutive medium-to-long bullish candles. Each opens within the previous body and closes at a new high.<br>Represents a steady bullish advance.</div>
+          <span class="signal bull">Strong Bullish Continuation</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="45" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="115" y="90" width="45" height="130" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="180" y="120" width="45" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">16. Three Black Crows</div>
+          <div class="ename">Three Black Crows</div>
+          <div class="desc">Three consecutive medium-to-long bearish candles. Each opens within the previous body and closes at a new low.<br>Represents a steady bearish press.</div>
+          <span class="signal bear">Strong Bearish Continuation</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="135" y="140" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="100" x2="150" y2="200" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">17. Morning Star</div>
+          <div class="ename">Morning Star</div>
+          <div class="desc">Large Bearish Candle → Small Body (gaps down) → Large Bullish Candle.<br>Bearish momentum is exhausted. Bulls take over. A classic bottom reversal.</div>
+          <span class="signal bull">Very Strong Bottom Bullish Reversal</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="135" y="150" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="110" x2="150" y2="210" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="100" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">18. Evening Star</div>
+          <div class="ename">Evening Star</div>
+          <div class="desc">Large Bullish Candle → Small Body (gaps up) → Large Bearish Candle.<br>Bullish momentum is exhausted. Bears take over. A classic top reversal.</div>
+          <span class="signal bear">Very Strong Top Bearish Reversal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Complete 1-18 classic candlestick patterns | Vector images zoom without distortion</p>
+       <a href="https://www.aifinsys.com" class="back-to-top" target="_blank"製作。> HOME</a>
+    </div>
+
+</div>
+</body>
+</html>

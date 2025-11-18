@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>クラシックローソク足パターン 1-18 完全ガイド (陽線赤・陰線緑)</title>
+<style>
+    /* スムーズスクロール */
+    html { scroll-behavior: smooth; }
+
+    body {font-family:"Microsoft JhengHei", "Segoe UI", "Meiryo", sans-serif; background:#f5f7fa; margin:0; padding:20px;}
+    .container {max-width:1260px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.1); overflow:hidden;}
+    
+    /* --- タイトルと概要 --- */
+    h1.main-title {text-align:center; padding:30px 0; background:#2c3e50; color:white; margin:0; font-size:30px;}
+    h2.section-title {text-align:center; padding-top: 30px; color:#2c3e50; font-size: 28px; margin-top: 20px; margin-bottom: 0; border-top: 2px solid #e0e0e0;}
+    
+    .summary { 
+        background: #f5f7fa; 
+        border-bottom: 2px solid #e0e0e0; 
+        color: #333; 
+        padding: 25px 40px; 
+        margin: 0; 
+        font-size: 16px; 
+        line-height: 1.7;
+    }
+    .summary h3 { margin-top: 0; color: #2c3e50; font-size: 20px;}
+    .summary ul { padding-left: 20px; margin-top: 10px; margin-bottom: 0;}
+
+    /* --- 共通アイテムスタイル --- */
+    .item {flex:1; min-width:480px; margin:20px; display:flex; background:#fdfdfd; border-radius:12px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+    .info {flex:1; display:flex; flex-direction:column; justify-content:center;}
+    .name {font-size:26px; font-weight:bold; color:#2c3e50; margin-bottom:8px;}
+    .ename {font-size:18px; color:#666; margin-bottom:15px;}
+    .desc {font-size:16px; color:#444; margin-bottom:15px;}
+    .signal {align-self:flex-start; border-radius:8px; font-weight:bold;}
+
+    /* --- シグナルライト (陽線赤・陰線緑) --- */
+    .bull {background:#f8d7da; color:#721c24;} /* 強気 (赤) */
+    .bear {background:#d4edda; color:#155724;} /* 弱気 (緑) */
+    .neutral {background:#fff3cd; color:#856404;} /* 中立 */
+
+    /* --- セクション1 (単線) スタイル --- */
+    .row-single {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-single .chart {flex:0 0 280px; background:#fafafa; padding:30px 0; display:flex; justify-content:center; align-items:center;}
+    .row-single .info {padding:25px 30px;}
+    .row-single .desc {line-height:1.7;}
+    .row-single .signal {padding:8px 18px; font-size:15px;}
+    
+    /* --- セクション2 (複数線) スタイル --- */
+    .row-multi {display:flex; flex-wrap:wrap; margin:30px 20px;}
+    .row-multi .chart {flex:0 0 320px; background:#fafafa; padding:40px 0; display:flex; justify-content:center; align-items:center;}
+    .row-multi .info {padding:30px 35px;}
+    .row-multi .desc {line-height:1.75;}
+    .row-multi .signal {padding:10px 20px; font-size:16px;}
+    
+    /* --- フッター --- */
+    .footer {text-align:center; padding:30px 40px 40px 40px; color:#666; font-size:15px; line-height: 1.8;}
+    .footer p { margin: 0; }
+    
+    /* --- トップへ戻るボタン --- */
+    .back-to-top {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #34495e;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .back-to-top:hover {
+        background-color: #2c3e50;
+    }
+
+    /* --- レスポンシブ --- */
+    @media (max-width:960px){
+        .item{flex-direction:column; text-align:center;}
+        /* SVG調整 */
+        .row-single .chart svg{width:200px;}
+        .row-multi .chart svg{width:220px;}
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="page-top">
+    <h1 class="main-title">クラシックローソク足パターン 1-18 完全ガイド (陽線赤・陰線緑)</h1>
+
+    <div class="summary">
+      <h3>ページ概要</h3>
+      <p>このページは、<strong>18種のクラシックなローソク足パターン</strong>を統合し、すべて「<strong>陽線は赤、陰線は緑</strong>」の配色（台湾/中国市場）に調整したものです。<br> 
+      内容は2つの主要な部分に分かれています：
+      <ul>
+        <li><strong>パターン 1-8:</strong> 基本的な単線パターン</li>
+        <li><strong>パターン 9-18:</strong> 複数線（2本・3本）パターン</li>
+      </ul>
+      すべてのチャートはSVGベクター形式であり、品質を損なうことなく無限に拡大でき、教育や印刷に最適です。
+      </p>
+    </div>
+
+    <h2 class="section-title">8つの基本的な単線ローソク足パターン（1～8）</h2>
+
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#dc3545" stroke="#b02a37" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">1. 大陽線（陽の丸坊主）</div>
+          <div class="ename">Bullish Marubozu</div>
+          <div class="desc">上下にヒゲがほとんどない強い陽線。始値が安値、終値が高値となり、終日買い方が完全に主導権を握っています。</div>
+          <span class="signal bull">強い買いシグナル</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320"><rect x="70" y="50" width="60" height="220" fill="#28a745" stroke="#1e7e34" stroke-width="4"/></svg>
+        </div>
+        <div class="info">
+          <div class="name">2. 大陰線（陰の丸坊主）</div>
+          <div class="ename">Bearish Marubozu</div>
+          <div class="desc">上下にヒゲがほとんどない強い陰線。始値が高値、終値が安値となり、終日売り方が完全に主導権を握っています。</div>
+          <span class="signal bear">強い売りシグナル</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">3. ハンマー（金槌）</div>
+          <div class="ename">Hammer</div>
+          <div class="desc">下降トレンドの底で出現。下ヒゲが実体の2倍以上。上ヒゲは非常に短いか無し。売り方の最後の投げを買い方が強力に押し戻した形。</div>
+          <span class="signal bull">買い転換シグナル</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="300" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="90" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">4. 首吊り線</div>
+          <div class="ename">Hanging Man</div>
+          <div class="desc">上昇トレンドの天井で出現。形はハンマーと同一だが意味は逆。買い方の高値追いが失敗した可能性を示す。</div>
+          <span class="signal bear">売り転換シグナル</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#dc3545" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#dc3545" stroke="#b02a37" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">5. 倒立ハンマー</div>
+          <div class="ename">Inverted Hammer</div>
+          <div class="desc">下降トレンドの底で出現。上ヒゲが長く、下ヒゲは非常に短い。買い方が反撃を試みたが、まだ完全には成功していない。</div>
+          <span class="signal bull">買い転換（要確認）</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="40" x2="100" y2="280" stroke="#28a745" stroke-width="6"/>
+            <rect x="75" y="190" width="50" height="70" fill="#28a745" stroke="#1e7e34" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">6. 流れ星</div>
+          <div class="ename">Shooting Star</div>
+          <div class="desc">上昇トレンドの天井で出現。上ヒゲが長く、下ヒゲは非常に短い。買い方が高値を試したが、売り方に強く押し戻された形。</div>
+          <span class="signal bear">売り転換シグナル</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-single">
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="50" x2="100" y2="270" stroke="#666" stroke-width="5"/>
+            <rect x="82" y="140" width="36" height="50" fill="#ffc107" stroke="#e0a800" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">7. コマ</div>
+          <div class="ename">Spinning Top</div>
+          <div class="desc">実体が小さく、上下のヒゲが長い。買いと売りの力が拮抗している状態。トレンド転換や保ち合いの兆候。</div>
+          <span class="signal neutral">迷い・転換の兆し</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="200" height="320" viewBox="0 0 200 320">
+            <line x1="100" y1="70" x2="100" y2="250" stroke="#666" stroke-width="6"/>
+            <line x1="70" y1="160" x2="130" y2="160" stroke="#666" stroke-width="6"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">8. 十字線（同時線）</div>
+          <div class="ename">Doji</div>
+          <div class="desc">始値≈終値。買いと売りの力が完全に均衡。トレンドや位置によって重要な転換シグナルとなる。</div>
+          <span class="signal neutral">強力な転換・迷い</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">クラシックローソク足パターン（9～18）－ 複数線</h2>
+
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="40" width="50" height="200" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">9. 包み足（買い）</div>
+          <div class="ename">Bullish Engulfing</div>
+          <div class="desc">大きな陽線が、前の陰線の実体を完全に包み込む。<br>売り方の力が買い方に完全に抑え込まれた形。下降トレンドの底でよく見られる。</div>
+          <span class="signal bull">強い底値転換シグナル</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="100" width="50" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="60" width="50" height="200" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">10. 包み足（売り）</div>
+          <div class="ename">Bearish Engulfing</div>
+          <div class="desc">大きな陰線が、前の陽線の実体を完全に包み込む。<br>買い方の力が売り方に完全に抑え込まれた形。上昇トレンドの天井でよく見られる。</div>
+          <span class="signal bear">強い天井転換シグナル</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="170" y="120" width="50" height="100" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">11. 切り込み線</div>
+          <div class="ename">Piercing Pattern</div>
+          <div class="desc">大きな陰線の後、陽線が出現し、陰線の実体の半分以上に深く切り込む。<br>買い方が強力に反撃し、売り方の防衛線を「切り込む」。</div>
+          <span class="signal bull">底値・買い転換</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="60" y="80" width="50" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="170" y="100" width="50" height="100" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">12. かぶせ線</div>
+          <div class="ename">Dark Cloud Cover</div>
+          <div class="desc">大きな陽線の後、陰線が出現し、陽線の実体の半分以下に深くかぶさる。<br>売り方が強力に反撃し、買い方の上に「暗雲」が立ち込める。</div>
+          <span class="signal bear">天井・売り転換</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="80" x2="80" y2="280" stroke="#28a745" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="80" fill="#28a745"/>
+            <line x1="200" y1="80" x2="200" y2="280" stroke="#dc3545" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="100" fill="#dc3545"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">13. 毛抜き底</div>
+          <div class="ename">Tweezer Bottom</div>
+          <div class="desc">2本のローソク足の安値が同じか、ほぼ同じで、水平なサポートラインを形成。<br>この価格帯で強力な買い支えがあることを示す。</div>
+          <span class="signal bull">底値・買い転換</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <line x1="80" y1="60" x2="80" y2="260" stroke="#dc3545" stroke-width="5"/>
+            <rect x="60" y="100" width="40" height="100" fill="#dc3545"/>
+            <line x1="200" y1="60" x2="200" y2="260" stroke="#28a745" stroke-width="5"/>
+            <rect x="180" y="120" width="40" height="80" fill="#28a745"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">14. 毛抜き天井</div>
+          <div class="ename">Tweezer Top</div>
+          <div class="desc">2本のローソク足の高値が同じか、ほぼ同じで、水平なレジスタンスラインを形成。<br>この価格帯で強力な売り圧力があることを示す。</div>
+          <span class="signal bear">天井・売り転換</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="140" width="45" height="120" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="115" y="100" width="45" height="130" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="180" y="60" width="45" height="140" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">15. 赤三兵</div>
+          <div class="ename">Three White Soldiers</div>
+          <div class="desc">中程度から長い陽線が3本連続する。各ローソク足は前の実体内で始まり、高値を更新して引ける。<br>買い方の着実な前進を示す。</div>
+          <span class="signal bull">強い買い継続</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="45" height="120" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="115" y="90" width="45" height="130" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="180" y="120" width="45" height="140" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">16. 三羽烏</div>
+          <div class="ename">Three Black Crows</div>
+          <div class="desc">中程度から長い陰線が3本連続する。各ローソク足は前の実体内で始まり、安値を更新して引ける。<br>売り方の着実な圧力を示す。</div>
+          <span class="signal bear">強い売り継続</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row-multi">
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="60" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+            <rect x="135" y="140" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="100" x2="150" y2="200" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">17. 明けの明星</div>
+          <div class="ename">Morning Star</div>
+          <div class="desc">大陰線 → 小さなローソク足（窓を開けて下落） → 大陽線。<br>売り手の勢いが尽き、買い手が強く引き継ぐ。典型的な底値反転パターン。</div>
+          <span class="signal bull">非常に強い底値買い転換</span>
+        </div>
+      </div>
+    
+      <div class="item">
+        <div class="chart">
+          <svg width="280" height="320" viewBox="0 0 280 320">
+            <rect x="50" y="80" width="50" height="160" fill="#dc3545" stroke="#b02a37" stroke-width="3"/>
+            <rect x="135" y="150" width="30" height="30" fill="#ffc107"/>
+            <line x1="150" y1="110" x2="150" y2="210" stroke="#666" stroke-width="4"/>
+            <rect x="210" y="100" width="50" height="160" fill="#28a745" stroke="#1e7e34" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="name">18. 宵の明星</div>
+          <div class="ename">Evening Star</div>
+          <div class="desc">大陽線 → 小さなローソク足（窓を開けて上昇） → 大陰線。<br>買い手の勢いが尽き、売り手が強く引き継ぐ。典型的な天井反転パターン。</div>
+          <span class="signal bear">非常に強い天井売り転換</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>全18種のクラシックローソク足パターン | ベクター画像で拡大しても鮮明 </p>
+       <a href="https://www.aifinsys.com" class="back-to-top" target="_blank"製作。>トップへ戻る</a>
+    </div>
+
+</div>
+</body>
+</html>
