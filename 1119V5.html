@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 智能量化投資組合生成器 (V5)</title>
+    <style>
+        /* --- 基礎樣式 --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* --- 主容器 --- */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 頁首 --- */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { margin: 0; font-size: 1.8rem; font-weight: 700; }
+        .header p { margin: 10px 0 0; opacity: 0.9; font-size: 0.95rem; }
+
+        /* --- 內容區 --- */
+        .content { padding: 30px; flex-grow: 1; }
+
+        /* --- 表單元件 --- */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
+        .form-control {
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 6px; font-size: 1rem; box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus { border-color: #2a5298; outline: none; box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1); }
+        .helper-text { font-size: 0.85rem; color: #888; margin-top: 5px; }
+
+        /* --- 提示區塊 --- */
+        .error-note {
+            background: #e3f2fd; color: #0d47a1; padding: 12px;
+            border-radius: 6px; font-size: 0.9rem; margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        /* --- 按鈕區 --- */
+        .btn-area { display: flex; gap: 15px; margin-top: 20px; }
+        .btn {
+            flex: 1; padding: 12px; border: none; border-radius: 6px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; color: white;
+        }
+        .btn-primary { background-color: #2a5298; }
+        .btn-primary:hover { background-color: #1c3b75; transform: translateY(-1px); }
+        .btn-copy { background-color: #28a745; }
+        .btn-copy:hover { background-color: #218838; }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+
+        /* --- 程式碼輸出 --- */
+        textarea#code-output {
+            width: 100%; height: 300px; background-color: #2d2d2d; color: #f8f8f2;
+            font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem;
+            padding: 15px; border-radius: 8px; border: none; resize: vertical;
+            box-sizing: border-box; margin-top: 15px;
+        }
+
+        /* --- 頁尾 (New Added) --- */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        .footer p {
+            margin: 0 0 15px 0;
+            font-size: 1rem;
+            color: #555;
+            font-weight: 500;
+        }
+        .btn-home {
+            ddisplay: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff; /* 藍色 */
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap; /* 確保文字不換行 */
+        }
+        .btn-home:hover {
+            background-color: #5a6268;
+        }
+
+        @media (max-width: 600px) {
+            .container { margin: 0; border-radius: 0; }
+            .btn-area { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>AI 量化投資組合生成器(V5)</h1>
+        <p>Multi-Factor Quantitative Model(5) to Python Code</p>
+    </div>
+
+    <div class="content">
+        
+        <div class="info-section">
+            <div class="info-title">量化演算原理 (Quantitative Logic)</div>
+            <div class="info-text">
+                本系統基於 <strong>APT (Arbitrage Pricing Theory)</strong> 與 <strong>現代投資組合理論 (MPT)</strong>，自動生成 Python 代碼執行以下分析：
+                <ul>
+                    <li><strong>因子回歸 (Factor Regression)：</strong> 利用 6 大因子 (Value, Growth, Momentum, Quality, LowVol, Size) 拆解個股報酬來源，計算真實 Beta。</li>
+                    <li><strong>風險模型 (Risk Model)：</strong> 透過因子共變異數矩陣估計投資組合波動，比單純使用歷史報酬更精準。</li>
+                    <li><strong>效率前緣優化 (Efficient Frontier)：</strong> 使用 Scipy 求解器，在「不做空 (Long-Only)」限制下，尋找夏普比率 (Sharpe Ratio) 最高的最佳權重配置。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-section" style="border-left-color: #28a745;">
+            <div class="info-title">使用步驟 (Instructions)</div>
+            <div class="info-text">
+                <ol>
+                    <li>在下方輸入您想分析的投資組合成分股 (例如：0050 成分股或美股代碼)。</li>
+                    <li>設定回測起始日期 (建議至少 3 年以獲得有效統計數據)。</li>
+                    <li>點擊 <strong>「生成 Python 策略代碼」</strong>。</li>
+                    <li>點擊 <strong>「一鍵複製」</strong>，將代碼貼入 <a href="https://colab.research.google.com/" target="_blank">Google Colab</a> 執行即可獲得圖表報告。</li>
+                </ol>
+            </div>
+        </div>
+
+        <form id="quant-form">
+            <div class="form-group">
+                <label class="form-label">投資標的清單 (Stock Tickers)</label>
+                <input type="text" id="tickers" class="form-control" 
+                       value="2330.TW, 2317.TW, 0050.TW, AAPL, TSLA" 
+                       placeholder="請輸入代碼，以逗號分隔">
+                <div class="helper-text">支援混合輸入：台股 (如 2330.TW) 與 美股 (如 NVDA)。錯誤代碼會自動被忽略。</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">分析起始日期 (Start Date)</label>
+                <input type="date" id="start-date" class="form-control" value="2020-01-01">
+            </div>
+
+            <div class="btn-area">
+                <button type="button" class="btn btn-primary" id="generate-btn">生成 Python 策略代碼 🚀</button>
+            </div>
+        </form>
+
+        <textarea id="code-output" readonly placeholder="點擊上方按鈕後，生成的 Python 代碼將顯示於此..."></textarea>
+        
+        <div class="btn-area">
+            <button type="button" class="btn btn-copy" id="copy-btn" disabled>一鍵複製代碼 📋</button>
+        </div>
+    </div>
+
+    <div class="footer">
+                <p>本工具由 AI Fintech Corp.研發，僅供量化策略運行學習使用。</p>
+        <p>所有分析結果均不構成任何投資建議。© 2025</p>
+        <a href="https://www.aifinsys.com" class="btn-home" target="_blank">
+                返回官網
+            </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generate-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const outputArea = document.getElementById('code-output');
+        const tickerInput = document.getElementById('tickers');
+        const startDateInput = document.getElementById('start-date');
+
+        generateBtn.addEventListener('click', function() {
+            const tickersRaw = tickerInput.value;
+            const startDate = startDateInput.value;
+            
+            // 簡單的字串處理轉 List
+            const tickerArray = tickersRaw.split(/[,，\n]+/).map(t => t.trim()).filter(t => t !== "");
+            
+            if (tickerArray.length === 0) {
+                alert("請至少輸入一檔股票代碼！");
+                return;
+            }
+
+            const tickerString = JSON.stringify(tickerArray);
+
+            // Python Code Template (基於 Robust Ver 2.2 邏輯)
+            const pythonCode = `
+# ==============================================
+# AI 量化投資組合分析腳本 (Ver 2.2 Robust)
+# 自動修復: 輸入錯誤、數據對齊、Pandas 版本兼容
+# ==============================================
+
+# 1. 安裝與匯入
+!pip install yfinance statsmodels pandas numpy scipy matplotlib seaborn -q
+
+import yfinance as yf
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy.optimize import minimize
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 2. 接收使用者參數
+user_tickers = ${tickerString}
+start_date = '${startDate}'
+end_date = pd.Timestamp.now().strftime('%Y-%m-%d')
+
+print(f"🚀 啟動量化引擎... 原始輸入: {len(user_tickers)} 檔")
+print(f"📅 分析區間: {start_date} 至 {end_date}")
+
+# 因子代理 ETF (美股代碼)
+factor_proxies = {
+    'Value': 'IWD', 'Growth': 'IWF', 'Momentum': 'MTUM', 
+    'Quality': 'QUAL', 'LowVol': 'USMV', 'Size': 'IWM'
+}
+factor_tickers = list(factor_proxies.values())
+all_symbols = user_tickers + factor_tickers
+
+# 3. 數據下載 (容錯模式)
+print("📥 下載市場數據中...")
+try:
+    data = yf.download(all_symbols, start=start_date, end=end_date, auto_adjust=True, progress=False)
+    
+    # 處理 yfinance 多層索引
+    if isinstance(data.columns, pd.MultiIndex):
+        try:
+            data = data.xs('Close', level=0, axis=1)
+        except:
+            if 'Close' in data.columns.get_level_values(0):
+                 data = data['Close']
+except Exception as e:
+    print(f"❌ 數據下載異常 (但不中斷): {e}")
+    data = pd.DataFrame()
+
+# 4. 數據清洗 (Smart Cleaning)
+if data.empty:
+    raise ValueError("無法獲取任何數據，請檢查網路狀態。")
+
+# (A) 移除全空欄位 (處理輸入錯誤如 APPL)
+data = data.dropna(axis=1, how='all')
+valid_tickers = [t for t in user_tickers if t in data.columns]
+print(f"✅ 有效標的 ({len(valid_tickers)}): {valid_tickers}")
+
+removed = set(user_tickers) - set(valid_tickers)
+if removed:
+    print(f"⚠️ 已自動剔除無效代碼: {removed}")
+
+# (B) 計算月報酬 (Pandas 2.0+ 兼容寫法)
+monthly_prices = data.resample('ME').last()
+monthly_returns = monthly_prices.pct_change(fill_method=None)
+
+# (C) 檢查因子完整性
+available_factors = [f for f in factor_tickers if f in monthly_returns.columns]
+if len(available_factors) < len(factor_tickers):
+    print("⚠️ 警告: 部分因子數據缺失，模型將降級執行。")
+
+# 5. 因子回歸 (Pairwise Alignment 核心修復)
+print("🧮 執行因子回歸與風險建模...")
+
+factor_exposures = []
+idio_variances = []
+asset_expected_returns = []
+final_valid_assets = [] 
+
+# 準備因子矩陣
+factor_data_raw = monthly_returns[available_factors]
+factor_data_raw.columns = [k for k, v in factor_proxies.items() if v in available_factors]
+
+mu_factors = factor_data_raw.mean()
+cov_factors = factor_data_raw.cov()
+
+for stock in valid_tickers:
+    # 關鍵：只取該股票與因子「同時存在」的月份
+    combined = pd.concat([monthly_returns[stock], factor_data_raw], axis=1).dropna()
+    
+    if len(combined) < 12:
+        print(f"⚠️ 跳過 {stock}: 有效數據不足 12 個月")
+        continue
+        
+    y = combined.iloc[:, 0]
+    X = sm.add_constant(combined.iloc[:, 1:])
+    
+    try:
+        model = sm.OLS(y, X).fit()
+        betas = model.params.drop('const')
+        
+        factor_exposures.append(betas)
+        idio_variances.append(model.mse_resid)
+        asset_expected_returns.append(np.dot(betas, mu_factors))
+        final_valid_assets.append(stock)
+    except:
+        pass
+
+if not final_valid_assets:
+    raise ValueError("數據不足，無法進行優化分析。")
+
+df_exposures = pd.DataFrame(factor_exposures, index=final_valid_assets)
+df_exposures.columns = factor_data_raw.columns
+
+# 6. 投資組合優化
+print(f"⚖️ 針對 {len(final_valid_assets)} 檔資產執行優化...")
+
+B = df_exposures.values
+D = np.diag(idio_variances)
+Sigma_asset = B @ cov_factors.values @ B.T + D
+Mu_asset = np.array(asset_expected_returns)
+
+def neg_sharpe(weights, mu, sigma):
+    port_ret = np.dot(weights, mu)
+    port_vol = np.sqrt(np.dot(weights.T, np.dot(sigma, weights)))
+    return -port_ret / port_vol if port_vol > 0 else 0
+
+constraints = ({'type': 'eq', 'fun': lambda w: np.sum(w) - 1})
+bounds = tuple((0.0, 1.0) for _ in range(len(final_valid_assets)))
+init_guess = [1/len(final_valid_assets)] * len(final_valid_assets)
+
+opt_res = minimize(neg_sharpe, init_guess, args=(Mu_asset, Sigma_asset),
+                   method='SLSQP', bounds=bounds, constraints=constraints)
+opt_weights = opt_res.x
+
+# 7. 視覺化報告
+print("📊 生成圖表...")
+plt.figure(figsize=(18, 12))
+
+# Heatmap
+plt.subplot(2, 2, 1)
+sns.heatmap(df_exposures, annot=True, cmap='coolwarm', center=0, fmt=".2f")
+plt.title('Factor Exposures (Beta)', fontweight='bold')
+
+# Weights
+plt.subplot(2, 2, 2)
+bars = plt.bar(final_valid_assets, opt_weights, color='#4c72b0', alpha=0.8)
+plt.title('Optimized Weights (Long-Only)', fontweight='bold')
+for bar in bars:
+    yval = bar.get_height()
+    if yval > 0.01: plt.text(bar.get_x() + bar.get_width()/2, yval, f'{yval*100:.1f}%', ha='center', va='bottom')
+
+# Efficient Frontier
+plt.subplot(2, 2, 3)
+ws = np.random.random((1000, len(final_valid_assets)))
+ws = (ws.T / ws.sum(axis=1)).T
+rets = ws.dot(Mu_asset) * 12
+vols = np.sqrt(np.diag(ws @ Sigma_asset @ ws.T)) * np.sqrt(12)
+sharpes = rets / vols
+plt.scatter(vols, rets, c=sharpes, cmap='viridis', alpha=0.3, s=10)
+opt_ret_ann = np.dot(opt_weights, Mu_asset) * 12
+opt_vol_ann = np.sqrt(np.dot(opt_weights.T, np.dot(Sigma_asset, opt_weights))) * np.sqrt(12)
+plt.scatter(opt_vol_ann, opt_ret_ann, c='red', s=150, marker='*', label='Optimal')
+plt.title('Efficient Frontier', fontweight='bold')
+plt.legend()
+
+# Backtest
+plt.subplot(2, 2, 4)
+stock_rets_clean = monthly_returns[final_valid_assets].fillna(0)
+port_ret_series = stock_rets_clean.dot(opt_weights)
+(1 + port_ret_series).cumprod().plot(color='red', label='Optimized Strategy')
+plt.title('Historical Backtest', fontweight='bold')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+print(f"✅ 分析完成！建議最大持倉: {final_valid_assets[np.argmax(opt_weights)]} ({np.max(opt_weights)*100:.1f}%)")
+            `.trim();
+
+            outputArea.value = pythonCode;
+            copyBtn.disabled = false;
+            copyBtn.innerText = "一鍵複製代碼 📋";
+            copyBtn.classList.remove('btn-secondary');
+            copyBtn.classList.add('btn-copy');
+        });
+
+        // 複製功能
+        copyBtn.addEventListener('click', function() {
+            outputArea.select();
+            navigator.clipboard.writeText(outputArea.value).then(() => {
+                copyBtn.innerText = "複製成功！✅";
+                setTimeout(() => {
+                    copyBtn.innerText = "一鍵複製代碼 📋";
+                }, 2000);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
