@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投資因子量化分析與台股實戰</title>
+    <title>投資因子量化分析與台股實戰 | 完整講義</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
@@ -49,6 +50,7 @@
             max-width: 900px;
             margin: 2rem auto;
             padding: 0 1.5rem;
+            padding-bottom: 4rem; /* 為了 footer 留空間 */
         }
 
         .card {
@@ -130,10 +132,29 @@
 
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 1rem;
             color: #7f8c8d;
             font-size: 0.9rem;
             border-top: 1px solid #ddd;
+            background-color: #f1f2f6;
+            margin-top: 2rem;
+        }
+
+        /* 回主頁按鈕樣式 */
+        .home-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .home-btn:hover {
+            background-color: var(--accent-color);
         }
         
         /* Strategy Timeline Styles */
@@ -246,56 +267,160 @@
     </section>
 
     <section class="card">
-        <h2>🐍 Python 實作範本 (Pandas)</h2>
-        <p>以下程式碼包含了「保守獲利推算」與「棄息保價」的核心邏輯。</p>
+        <h2>🐍 Python 實作範本 (完整互動版)</h2>
+        <p>以下程式碼包含了數據下載、自動後綴補全、保守獲利推算與棄息保價的核心邏輯。</p>
         <pre><code class="language-python">
+import yfinance as yf
 import pandas as pd
 import numpy as np
 
+# --- 1. 定義數據下載與整理函數 ---
+def fetch_and_prepare_data(ticker_symbol):
+    print(f"📥 正在下載 {ticker_symbol} 的數據...")
+    try:
+        stock = yf.Ticker(ticker_symbol)
+        
+        # A. 取得股價資料 (Daily)
+        df_price = stock.history(period="5y") # 設定下載過去 5 年
+        
+        if df_price.empty:
+            print(f"❌ 錯誤：找不到 {ticker_symbol} 的股價資料，請檢查代碼是否正確。")
+            return None
+
+        df_price = df_price[['Close']] # 只保留收盤價
+        df_price.index = df_price.index.tz_localize(None) # 移除時區
+        
+        # B. 取得股利資料
+        dividends = stock.dividends
+        dividends.index = dividends.index.tz_localize(None)
+        
+        # 將除息日併入
+        df_price['dividend_amt'] = dividends
+        # 標記除息日：如果有股利金額，當天就是除息日
+        df_price['ex_dividend_date'] = np.where(df_price['dividend_amt'] > 0, df_price.index, pd.NaT)
+        
+        # C. 取得 EPS 資料 (處理季報對齊)
+        financials = stock.quarterly_financials.T
+        # 尋找 EPS 欄位 (名稱可能不同，模糊搜尋)
+        eps_col = [c for c in financials.columns if 'Basic EPS' in str(c) or 'Earnings Per Share' in str(c)]
+        
+        if eps_col:
+            df_eps = financials[eps_col].iloc[:, 0].to_frame(name='eps') # 取第一個匹配的欄位
+            df_eps.index = df_eps.index.tz_localize(None)
+            
+            # 將季報 EPS 合併進日資料 (使用向前填充 ffill)
+            df_final = df_price.join(df_eps)
+            df_final['eps'] = df_final['eps'].ffill()
+        else:
+            print("⚠️ 警告：找不到 EPS 欄位，將使用預設模擬值 (2.5) 代替。")
+            df_final = df_price
+            df_final['eps'] = 2.5 
+            
+        # 填補缺失的 EPS (避免剛開始幾天是 NaN)
+        df_final['eps'] = df_final['eps'].fillna(method='bfill')
+            
+        return df_final
+
+    except Exception as e:
+        print(f"❌ 發生錯誤: {e}")
+        return None
+
+# --- 2. 定義策略邏輯 ---
 def high_yield_strategy_optimized(df):
     """
-    輸入: df (包含 'date', 'close', 'eps', 'ex_dividend_date' 等欄位)
-    輸出: 帶有買賣訊號的 DataFrame
+    輸入: df (包含 'Close', 'eps', 'ex_dividend_date')
     """
+    df = df.copy()
     
-    # 1. 數據準備
-    df['date'] = pd.to_datetime(df['date'])
-    df['ex_dividend_date'] = pd.to_datetime(df['ex_dividend_date'])
+    # 確保日期索引正確
+    df['date'] = df.index
     
-    # 2. 計算預估股利 (獲利推算)
-    # 計算近四季 EPS 總和
-    df['t12m_eps'] = df['eps'].rolling(window=4).sum()
+    # 計算近四季 EPS 總和 (這裡做簡單估算：若 EPS 為季資料，則 * 4 為年化)
+    # 注意：真實情況建議用 rolling sum，但需確保數據頻率正確。
+    # 這裡假設 df['eps'] 已經是 TTM (Trailing 12 Months) 或是最近一季 * 4
+    df['t12m_eps'] = df['eps'] * 4 
     
-    # [參數]：保守配息率 (針對 0050/權值股設定安全邊際)
+    # [參數] 保守配息率 (針對 0050/權值股)
     conservative_payout = 0.7
     
+    # 計算預估數據
     df['estimated_dividend'] = df['t12m_eps'] * conservative_payout
-    df['estimated_yield'] = df['estimated_dividend'] / df['close']
+    df['estimated_yield'] = df['estimated_dividend'] / df['Close']
     
-    # 3. 產生進場訊號 (Buy Signal)
-    # 邏輯：保守預估殖利率 > 5% 且 EPS > 0
-    df['buy_signal'] = np.where(
-        (df['estimated_yield'] > 0.05) & (df['t12m_eps'] > 0), 
-        1, 0
-    )
+    # --- 進場訊號 ---
+    # 條件：保守預估殖利率 > 5% 且 EPS > 0
+    df['buy_signal'] = np.where((df['estimated_yield'] > 0.05) & (df['t12m_eps'] > 0), 1, 0)
     
-    # 4. 產生出場訊號 (Exit Signal - 棄息保價)
-    # 計算距離除息日還有幾天
-    df['days_to_ex'] = (df['ex_dividend_date'] - df['date']).dt.days
+    # --- 出場訊號 (棄息保價) ---
+    # 找出所有除息日
+    ex_dates = df[df['ex_dividend_date'].notna()].index
     
-    # 邏輯：在除息日 "前 1 天" 賣出
-    df['sell_signal'] = np.where(df['days_to_ex'] == 1, 1, 0)
-    
+    df['sell_signal'] = 0
+    # 標記除息日的前一天 (T-1)
+    for date in ex_dates:
+        if date in df.index:
+            loc = df.index.get_loc(date)
+            if loc > 0:
+                # 在除息日前一天的 'sell_signal' 欄位填入 1
+                df.iloc[loc-1, df.columns.get_loc('sell_signal')] = 1
+            
     return df
+
+# --- 3. 執行主程式 (互動區) ---
+if __name__ == "__main__":
+    print("=== 台股高殖利率策略分析工具 ===")
+    
+    while True:
+        # 1. 獲取使用者輸入
+        user_input = input("\n請輸入股票代碼 (輸入 q 離開): ").strip().upper()
+        
+        if user_input == 'Q':
+            print("程式結束。👋")
+            break
+            
+        if not user_input:
+            continue
+
+        # 2. 自動補上後綴邏輯
+        ticker = user_input
+        # 如果沒有 .TW 也沒有 .TWO，預設加上 .TW
+        if not ticker.endswith('.TW') and not ticker.endswith('.TWO'):
+            print(f"💡 偵測到未輸入後綴，自動嘗試加上 .TW -> {ticker}.TW")
+            ticker = ticker + ".TW"
+            
+        # 3. 下載數據
+        df_data = fetch_and_prepare_data(ticker)
+        
+        # 4. 執行策略
+        if df_data is not None:
+            df_result = high_yield_strategy_optimized(df_data)
+            
+            # 篩選出有訊號的日子
+            signals = df_result[(df_result['buy_signal'] == 1) | (df_result['sell_signal'] == 1)]
+            
+            if not signals.empty:
+                print(f"\n📊 {ticker} 近期策略訊號:")
+                # 顯示日期、收盤價、預估殖利率、買/賣訊號
+                print(signals[['Close', 'estimated_yield', 'buy_signal', 'sell_signal']].tail(5))
+                
+                # 統計
+                b_count = df_result['buy_signal'].sum()
+                s_count = df_result['sell_signal'].sum()
+                print(f"\n統計結果 (過去5年):")
+                print(f"🔴 買進訊號次數: {b_count}")
+                print(f"🟢 賣出(棄息)次數: {s_count}")
+            else:
+                print(f"\n⚠️ {ticker} 在這段期間內沒有觸發任何策略訊號。")
         </code></pre>
     </section>
 
-    <footer>
-        <p>© 2025  Ai Fintech Corp. 量化科學實驗室(Colab-1124INV01.py)</p>
-        <p>免責聲明：本內容僅供教學研究，不代表任何投資建議。</p>
-    </footer>
-
 </div>
+
+<footer>
+    <p>© 2025  Ai Fintecg Corp. 量化科學實驗室(Colab 1124INV01.py)</p>
+        <p>免責聲明：本內容僅供教學研究，不代表任何投資建議。</p>
+    <a href="index.html" class="home-btn">↩ 回主頁</a>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
