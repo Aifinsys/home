@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投資因子量化分析與台股實戰 | 完整講義</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --highlight-color: #e74c3c;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        h2 {
+            border-left: 5px solid var(--accent-color);
+            padding-left: 1rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .icon {
+            margin-right: 0.5rem;
+            font-size: 1.2em;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: var(--highlight-color);
+            font-weight: bold;
+        }
+
+        .formula {
+            background-color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 0.5rem;
+        }
+        .tag-value { background-color: #27ae60; }
+        .tag-momentum { background-color: #e67e22; }
+        .tag-size { background-color: #8e44ad; }
+        .tag-quality { background-color: #2980b9; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        /* Strategy Timeline Styles */
+        .timeline {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+        }
+        .timeline-item {
+            padding: 10px 20px;
+            border-left: 3px solid var(--accent-color);
+            margin-left: 10px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 18px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+        
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>投資因子量化分析與台股實戰</h1>
+    <p>從理論基礎到高殖利率策略 Python 實作</p>
+</header>
+
+<div class="container">
+
+    <section class="card">
+        <h2>第一單元：認識因子 (Factor Identification) 🏷️</h2>
+        <p>因子是解釋資產報酬率的特徵。量化投資不看「明牌」，而是透過數學統計尋找具備長期超額報酬潛力的特徵。</p>
+        
+        <h3>投資界的元素週期表</h3>
+        <div>
+            <p><span class="tag tag-value">價值 Value</span> <strong>買得便宜</strong> (P/E, P/B) - 均值回歸邏輯。</p>
+            <p><span class="tag tag-momentum">動能 Momentum</span> <strong>強者恆強</strong> (過去報酬) - 利用投資人反應不足。</p>
+            <p><span class="tag tag-size">規模 Size</span> <strong>小搏大</strong> (市值) - 風險溢酬補償。</p>
+            <p><span class="tag tag-quality">品質 Quality</span> <strong>體質優良</strong> (ROE, ESG) - 避免價值陷阱。</p>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="factorChart"></canvas>
+        </div>
+        <p style="text-align: center; font-size: 0.9rem; color: #666;">*圖示：不同因子在長期市場中的超額報酬示意（虛擬數據）</p>
+    </section>
+
+    <section class="card">
+        <h2>第二單元：驗證因子 (Factor Verification) 🧪</h2>
+        
+        <h3>1. IC 值 (Information Coefficient)</h3>
+        <p>判斷因子是否具備預測能力。</p>
+        <div class="formula">
+            IC = Correlation(Factor_Value<sub>t</sub>, Return<sub>t+1</sub>)
+        </div>
+        <ul>
+            <li><strong>判讀標準：</strong>在充滿雜訊的股市中，<span class="highlight">IC > 0.05 (5%)</span> 即視為優秀因子。</li>
+        </ul>
+
+        <h3>2. 分層回測 (Layered Backtesting)</h3>
+        <p>這是一個優秀因子應該呈現的「彩虹圖」。最高分組 (Top) 表現最好，最低分組 (Bottom) 表現最差，且中間不交叉。</p>
+        
+        <div class="chart-container">
+            <canvas id="backtestChart"></canvas>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>第三單元：組合策略 (Portfolio Construction) 🏗️</h2>
+        <ul>
+            <li><strong>多因子模型：</strong>組合低相關性因子以提升夏普比率 (Sharpe Ratio)。</li>
+            <li><strong>權重分配：</strong>實務上，「簡單平均 (Equal Weighting)」往往比複雜的最佳化算法更具魯棒性。</li>
+            <li><strong>風險控制 (市場中性)：</strong>做多強勢股 + 放空大盤 = 純粹的 Alpha (選股獲利)。</li>
+        </ul>
+        <div class="formula">
+            總報酬 = (市場漲跌 × Beta) + (選股能力 × Alpha)
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>第四單元：台股實戰案例——高殖利率均值回歸 🇹🇼</h2>
+        <p>利用「股價下跌導致殖利率飆高」的蹺蹺板效應，搭配除息行情的進出策略。</p>
+
+        <h3>策略時序圖</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>11月 - 1月 (左側佈局)</strong><br>
+                利用 EPS 推算預估股利，提前埋伏。注意：需使用保守配息率 (0.7) 避免估值過高。
+            </div>
+            <div class="timeline-item">
+                <strong>3月 - 4月 (右側追擊)</strong><br>
+                董事會宣告股利後，確認殖利率 > 5% 且股價未噴出時買進。
+            </div>
+            <div class="timeline-item">
+                <strong style="color: var(--highlight-color);">除息日前 1 天 (出場)</strong><br>
+                執行「棄息保價」。賣出股票，鎖定價差，避開股利所得稅與貼息風險。
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>🐍 Python 實作範本 (Pandas)</h2>
+        <p>以下程式碼包含了「保守獲利推算」與「棄息保價」的核心邏輯。</p>
+        <pre><code class="language-python">
+import pandas as pd
+import numpy as np
+
+def high_yield_strategy_optimized(df):
+    """
+    輸入: df (包含 'date', 'close', 'eps', 'ex_dividend_date' 等欄位)
+    輸出: 帶有買賣訊號的 DataFrame
+    """
+    
+    # 1. 數據準備
+    df['date'] = pd.to_datetime(df['date'])
+    df['ex_dividend_date'] = pd.to_datetime(df['ex_dividend_date'])
+    
+    # 2. 計算預估股利 (獲利推算)
+    # 計算近四季 EPS 總和
+    df['t12m_eps'] = df['eps'].rolling(window=4).sum()
+    
+    # [參數]：保守配息率 (針對 0050/權值股設定安全邊際)
+    conservative_payout = 0.7
+    
+    df['estimated_dividend'] = df['t12m_eps'] * conservative_payout
+    df['estimated_yield'] = df['estimated_dividend'] / df['close']
+    
+    # 3. 產生進場訊號 (Buy Signal)
+    # 邏輯：保守預估殖利率 > 5% 且 EPS > 0
+    df['buy_signal'] = np.where(
+        (df['estimated_yield'] > 0.05) & (df['t12m_eps'] > 0), 
+        1, 0
+    )
+    
+    # 4. 產生出場訊號 (Exit Signal - 棄息保價)
+    # 計算距離除息日還有幾天
+    df['days_to_ex'] = (df['ex_dividend_date'] - df['date']).dt.days
+    
+    # 邏輯：在除息日 "前 1 天" 賣出
+    df['sell_signal'] = np.where(df['days_to_ex'] == 1, 1, 0)
+    
+    return df
+        </code></pre>
+    </section>
+
+    <footer>
+        <p>© 2025  Ai Fintecg Corp. 量化科學實驗室(Colab 1124INV01.py)</p>
+        <p>免責聲明：本內容僅供教學研究，不代表任何投資建議。</p>
+    </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script>
+    // 設定全域字型
+    Chart.defaults.font.family = '"PingFang TC", "Microsoft JhengHei", sans-serif';
+
+    // 1. 因子表現圖 (Bar Chart)
+    const ctxFactor = document.getElementById('factorChart').getContext('2d');
+    new Chart(ctxFactor, {
+        type: 'bar',
+        data: {
+            labels: ['價值 Value', '動能 Momentum', '規模 Size', '品質 Quality', '市場大盤 Beta'],
+            datasets: [{
+                label: '年化超額報酬率 (Alpha) %',
+                data: [4.5, 5.2, 2.1, 3.8, 0],
+                backgroundColor: [
+                    'rgba(39, 174, 96, 0.7)',
+                    'rgba(230, 126, 34, 0.7)',
+                    'rgba(142, 68, 173, 0.7)',
+                    'rgba(41, 128, 185, 0.7)',
+                    'rgba(149, 165, 166, 0.3)'
+                ],
+                borderColor: [
+                    'rgba(39, 174, 96, 1)',
+                    'rgba(230, 126, 34, 1)',
+                    'rgba(142, 68, 173, 1)',
+                    'rgba(41, 128, 185, 1)',
+                    'rgba(149, 165, 166, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: '各因子長期超額報酬示意' }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // 2. 分層回測圖 (Line Chart - The Rainbow)
+    const ctxBacktest = document.getElementById('backtestChart').getContext('2d');
+    
+    // 生成模擬數據：單調性 (Monotonic)
+    const labels = ['2019', '2020', '2021', '2022', '2023'];
+    
+    new Chart(ctxBacktest, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Group 1 (最高分)',
+                    data: [100, 120, 150, 140, 180],
+                    borderColor: '#e74c3c', // Red (Top)
+                    backgroundColor: '#e74c3c',
+                    tension: 0.3
+                },
+                {
+                    label: 'Group 2',
+                    data: [100, 115, 135, 125, 150],
+                    borderColor: '#e67e22', // Orange
+                    backgroundColor: '#e67e22',
+                    tension: 0.3
+                },
+                {
+                    label: 'Group 3 (市場平均)',
+                    data: [100, 110, 120, 110, 130],
+                    borderColor: '#f1c40f', // Yellow
+                    backgroundColor: '#f1c40f',
+                    tension: 0.3
+                },
+                {
+                    label: 'Group 4',
+                    data: [100, 105, 110, 95, 110],
+                    borderColor: '#2ecc71', // Green
+                    backgroundColor: '#2ecc71',
+                    tension: 0.3
+                },
+                {
+                    label: 'Group 5 (最低分)',
+                    data: [100, 95, 80, 70, 60],
+                    borderColor: '#3498db', // Blue (Bottom)
+                    backgroundColor: '#3498db',
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: '理想的因子分層回測 (累積淨值)' }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+        }
+    });
+</script>
+
+</body>
+</html>
