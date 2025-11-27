@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai 互動式財經詞彙教學系統</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .glossary-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .glossary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom scrollbar for table container */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .quiz-option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="goHome()">
+                <i class="fa-solid fa-chart-line text-2xl"></i>
+                <h1 class="text-xl font-bold tracking-wide">中山永續金融科技『財經詞彙互動教學』</h1>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <button onclick="switchMode('study')" class="hover:text-indigo-200 transition font-medium"><i class="fa-solid fa-book-open mr-1"></i> 學習模式</button>
+                <button onclick="switchMode('cards')" class="hover:text-indigo-200 transition font-medium"><i class="fa-solid fa-layer-group mr-1"></i> 單字卡</button>
+                <button onclick="switchMode('quiz')" class="hover:text-indigo-200 transition font-medium"><i class="fa-solid fa-graduation-cap mr-1"></i> 自我測驗</button>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-indigo-800 pb-4 px-4">
+            <button onclick="switchMode('study')" class="block py-2 text-white w-full text-left">學習模式</button>
+            <button onclick="switchMode('cards')" class="block py-2 text-white w-full text-left">單字卡</button>
+            <button onclick="switchMode('quiz')" class="block py-2 text-white w-full text-left">自我測驗</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Controls Section (Search & Filter) -->
+        <div id="controls-section" class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                <!-- Search -->
+                <div class="relative w-full md:w-1/3">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="搜尋術語 (中文或英文)..." 
+                           class="w-full py-2 pl-10 pr-4 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                </div>
+
+                <!-- Category Filter -->
+                <div class="w-full md:w-2/3 flex flex-wrap gap-2 justify-center md:justify-end" id="category-buttons">
+                    <button class="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-white transition hover:opacity-90 active" data-cat="all">全部</button>
+                    <!-- Buttons will be injected here via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Table (Study Mode) -->
+        <div id="view-study" class="animate-fade-in">
+            <div class="bg-white rounded-xl shadow overflow-hidden border border-gray-200">
+                <div class="table-container overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100 text-gray-600 uppercase text-xs font-bold">
+                            <tr>
+                                <th class="px-6 py-4">分類</th>
+                                <th class="px-6 py-4">術語 (英/中)</th>
+                                <th class="px-6 py-4 w-1/3">說明</th>
+                                <th class="px-6 py-4 w-1/4">例句 / 公式 <span class="text-indigo-500 text-[10px] ml-1 bg-indigo-50 px-1 rounded border border-indigo-200">New</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-gray-200">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="no-results" class="hidden p-8 text-center text-gray-500">
+                    <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
+                    <p>找不到符合的詞彙</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View: Cards (Flashcard Mode) -->
+        <div id="view-cards" class="hidden animate-fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cards-container">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+
+        <!-- View: Quiz Mode -->
+        <div id="view-quiz" class="hidden animate-fade-in max-w-2xl mx-auto">
+            <!-- Start Screen -->
+            <div id="quiz-start-screen" class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-indigo-500 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">詞彙小測驗</h2>
+                <p class="text-gray-600 mb-6">總共 5 題，測試你對財經術語的熟悉程度！</p>
+                <div class="text-6xl text-indigo-200 mb-8"><i class="fa-solid fa-clipboard-question"></i></div>
+                <button onclick="startNewQuizRound()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full transition shadow-md transform hover:scale-105">
+                    開始測驗
+                </button>
+            </div>
+
+            <!-- Quiz Running Screen -->
+            <div id="quiz-running-screen" class="hidden bg-white rounded-xl shadow-lg p-8 border-t-4 border-indigo-500">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <span id="quiz-progress" class="text-sm font-bold text-gray-400">第 1 / 5 題</span>
+                    <span id="quiz-score" class="text-lg font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">得分: 0</span>
+                </div>
+                
+                <div id="quiz-content" class="text-center">
+                    <div class="mb-2 text-gray-500 text-sm font-medium tracking-wider uppercase">Definition</div>
+                    <p id="question-text" class="text-xl text-gray-800 mb-8 min-h-[80px] flex items-center justify-center font-medium">
+                        <!-- Question Text Here -->
+                    </p>
+                    
+                    <div id="options-container" class="grid grid-cols-1 gap-3">
+                        <!-- Options Here -->
+                    </div>
+                </div>
+                
+                <div id="quiz-feedback" class="mt-6 text-center hidden p-3 rounded-lg font-bold animate-fade-in"></div>
+            </div>
+
+            <!-- Quiz Result Screen -->
+            <div id="quiz-result-screen" class="hidden bg-white rounded-xl shadow-lg p-8 border-t-4 border-indigo-500 text-center animate-fade-in">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">測驗完成！</h2>
+                <div class="text-sm text-gray-500 mb-6">以下是您的成績</div>
+                
+                <div class="flex justify-center items-center mb-6">
+                    <div class="w-32 h-32 rounded-full border-8 border-indigo-100 flex flex-col items-center justify-center bg-white shadow-inner">
+                        <span id="final-score" class="text-3xl font-bold text-indigo-600">0</span>
+                        <span class="text-xs text-gray-400">總分</span>
+                    </div>
+                </div>
+
+                <p id="final-comment" class="text-xl font-bold text-gray-700 mb-8">不錯喔！</p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="startNewQuizRound()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition shadow">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> 再試一次
+                    </button>
+                    <button onclick="switchMode('study')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-lg transition shadow">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> 回上一頁
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <h3 class="text-2xl text-white font-bold mb-2">財經術語互動教學系統</h3>
+                <p class="text-sm opacity-70">Ai FinTech Corp. 本系統僅供教學使用。 &copy; 2025</p>
+            </div>
+            
+            <div class="mb-6">
+                <button onclick="goHome()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-full border border-gray-600 transition hover:shadow-lg">
+                    <i class="fa-solid fa-house mr-2"></i> <a href="index.html" class="home-btn">回主頁</a>
+                </button>
+            </div>
+            
+            <p class="text-xs mt-4 border-t border-gray-700 pt-4">Ai FinTech Corp. | Educational Purpose</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // ---------------------------------------------------------
+        // 1. DATA PREPARATION (COMPLETE ~200 Terms)
+        // ---------------------------------------------------------
+        const rawData = [
+            // ================= 總體經濟 (Macroeconomics) =================
+            { category: "總體經濟", en: "GDP (Gross Domestic Product)", zh: "國內生產毛額", desc: "衡量一國在一定期間內生產的最終商品與服務總值。", formula: "C + I + G + (X - M)", example: "GDP 成長率通常反映經濟景氣。" },
+            { category: "總體經濟", en: "GNP (Gross National Product)", zh: "國民生產毛額", desc: "衡量國民在全球生產的商品與服務總值。", formula: "GDP + 海外要素所得淨額", example: "GNP 關注的是國民的生產力，而非地域。" },
+            { category: "總體經濟", en: "Inflation", zh: "通貨膨脹", desc: "物價普遍上漲、貨幣購買力下降。", formula: "CPI 年增率", example: "高通膨可能導致央行升息。" },
+            { category: "總體經濟", en: "Deflation", zh: "通貨緊縮", desc: "物價普遍下跌、需求疲弱。", formula: "無", example: "通縮可能導致經濟陷入停滯。" },
+            { category: "總體經濟", en: "Interest Rate", zh: "利率", desc: "借貸資金的成本。", formula: "無", example: "聯準會宣布維持基準利率不變。" },
+            { category: "總體經濟", en: "Benchmark Rate", zh: "基準利率", desc: "央行設定並影響整體市場利率。", formula: "無", example: "美國聯邦基金利率是全球最重要的基準利率。" },
+            { category: "總體經濟", en: "Central Bank", zh: "中央銀行", desc: "調控貨幣政策與維持金融穩定的機構。", formula: "無", example: "台灣的中央銀行負責發行貨幣。" },
+            { category: "總體經濟", en: "Money Supply (M1/M2)", zh: "貨幣供給 M1/M2", desc: "流通貨幣量指標，M2 包含 M1 與定存等。", formula: "無", example: "M2 年增率常被視為資金動能的指標。" },
+            { category: "總體經濟", en: "Fiscal Policy", zh: "財政政策", desc: "政府透過稅收與支出影響經濟。", formula: "無", example: "減稅是一種擴張性的財政政策。" },
+            { category: "總體經濟", en: "Monetary Policy", zh: "貨幣政策", desc: "央行調整利率與貨幣供給。", formula: "無", example: "量化寬鬆 (QE) 屬於非傳統貨幣政策。" },
+            { category: "總體經濟", en: "CPI (Consumer Price Index)", zh: "消費者物價指數", desc: "衡量消費者購買商品和服務的價格變化。", formula: "無", example: "CPI 是衡量通膨的重要指標。" },
+            { category: "總體經濟", en: "PPI (Producer Price Index)", zh: "生產者物價指數", desc: "衡量生產者出廠價格的變化。", formula: "無", example: "PPI 通常被視為 CPI 的領先指標。" },
+            { category: "總體經濟", en: "Unemployment Rate", zh: "失業率", desc: "勞動力中失業人口的比例。", formula: "(失業人數 / 勞動力) × 100%", example: "非農就業數據會影響失業率與股市。" },
+            { category: "總體經濟", en: "Recession", zh: "經濟衰退", desc: "經濟活動顯著下降，通常指 GDP 連兩季負成長。", formula: "無", example: "2008 年金融海嘯導致全球經濟衰退。" },
+            { category: "總體經濟", en: "Stagflation", zh: "停滯性通膨", desc: "經濟成長停滯與高通膨並存。", formula: "高通膨 + 高失業", example: "1970 年代的石油危機造成了停滯性通膨。" },
+            { category: "總體經濟", en: "Trade Balance", zh: "貿易收支", desc: "出口總值減去進口總值。", formula: "出口 - 進口", example: "貿易順差代表出口大於進口。" },
+            { category: "總體經濟", en: "Forex Reserves", zh: "外匯存底", desc: "央行持有的外幣資產。", formula: "無", example: "中國擁有全球最大的外匯存底。" },
+            { category: "總體經濟", en: "Purchasing Power Parity (PPP)", zh: "購買力平價", desc: "比較不同國家貨幣購買力的理論。", formula: "無", example: "大麥克指數是 PPP 的一種趣味應用。" },
+
+            // ================= 基本市場概念 (Basic Market Concepts) =================
+            { category: "基本市場概念", en: "Stock", zh: "股票", desc: "公司所有權的一部分。", formula: "無", example: "我買了一張 Apple 的股票。" },
+            { category: "基本市場概念", en: "Share", zh: "股份", desc: "股票的最小單位。", formula: "無", example: "他持有該公司 1000 股股份。" },
+            { category: "基本市場概念", en: "Equity", zh: "權益/股權", desc: "股東對公司的所有權份額。", formula: "資產 - 負債", example: "股東權益包含股本與保留盈餘。" },
+            { category: "基本市場概念", en: "Market Capitalization", zh: "市值", desc: "公司整體市場價值。", formula: "股價 × 流通股數", example: "台積電的市值突破新高。" },
+            { category: "基本市場概念", en: "IPO", zh: "首次公開發行", desc: "企業首次發行股票給大眾。", formula: "無", example: "這家新創公司預計明年進行 IPO。" },
+            { category: "基本市場概念", en: "Float", zh: "流通股數", desc: "能被交易者買賣的股票數量。", formula: "發行總股數 - 內部持有", example: "流通股數過少可能導致股價劇烈波動。" },
+            { category: "基本市場概念", en: "Dividend", zh: "股息", desc: "公司獲利分配給股東的金額。", formula: "EPS × 發放率", example: "這檔股票每年配發穩定的股息。" },
+            { category: "基本市場概念", en: "Yield", zh: "殖利率", desc: "投資回報率的一種衡量。", formula: "(股息 ÷ 股價) × 100%", example: "高殖利率股票吸引存股族。" },
+            { category: "基本市場概念", en: "Blue Chip", zh: "藍籌股", desc: "大型、穩定、長期獲利公司股票。", formula: "無", example: "可口可樂被視為典型的藍籌股。" },
+            { category: "基本市場概念", en: "Index", zh: "指數", desc: "追蹤市場一籃子股票的數據。", formula: "加權平均", example: "S&P 500 是美國股市的重要指數。" },
+            { category: "基本市場概念", en: "ETF", zh: "指數型基金", desc: "追蹤指數並在市場上交易的基金。", formula: "無", example: "0050 是一種追蹤台灣50指數的 ETF。" },
+            { category: "基本市場概念", en: "Mutual Fund", zh: "共同基金", desc: "由專業經理人管理的基金。", formula: "無", example: "共同基金適合沒時間看盤的投資人。" },
+            { category: "基本市場概念", en: "REITs", zh: "不動產投資信託", desc: "投資收益型不動產的證券化產品。", formula: "無", example: "投資 REITs 可以當房東收租。" },
+            { category: "基本市場概念", en: "Liquidity", zh: "流動性", desc: "資產能以接近市價快速賣出的程度。", formula: "無", example: "房地產的流動性通常比股票差。" },
+            { category: "基本市場概念", en: "Volatility", zh: "波動率", desc: "價格變動的劇烈程度。", formula: "標準差 (Standard Deviation)", example: "財報發布前，股價波動率通常會上升。" },
+            { category: "基本市場概念", en: "Market Order", zh: "市價單", desc: "以當前最優價格立即成交的委託。", formula: "無", example: "為了搶進場，他使用了市價單買入。" },
+            { category: "基本市場概念", en: "Limit Order", zh: "限價單", desc: "設定價格，只有達到時才成交。", formula: "無", example: "我掛了 100 元的限價單等待買入。" },
+            { category: "基本市場概念", en: "Bid", zh: "買價", desc: "買方願意出的最高價格。", formula: "無", example: "目前的最佳買價是 $50.5。" },
+            { category: "基本市場概念", en: "Ask", zh: "賣價", desc: "賣方願意接受的最低價格。", formula: "無", example: "賣價與買價之間的差距稱為價差。" },
+            { category: "基本市場概念", en: "Spread", zh: "價差", desc: "買價與賣價之間的差距。", formula: "Ask - Bid", example: "流動性差的股票通常價差較大。" },
+            { category: "基本市場概念", en: "Ticker", zh: "股票代號", desc: "交易所中代表特定股票的代碼。", formula: "無", example: "Apple 的股票代號是 AAPL。" },
+            { category: "基本市場概念", en: "Exchange", zh: "交易所", desc: "進行證券買賣的場所。", formula: "無", example: "紐約證券交易所 (NYSE) 是世界上最大的交易所。" },
+            { category: "基本市場概念", en: "Volume", zh: "成交量", desc: "一段時間內交易的股票數量。", formula: "無", example: "爆量上漲通常代表買氣強勁。" },
+            
+            // ================= 股市與證券 (Stocks & Securities) =================
+            { category: "股市與證券", en: "P/E Ratio", zh: "本益比", desc: "股價除以每股盈餘，用於估值。", formula: "股價 / EPS", example: "科技股的本益比通常較高。" },
+            { category: "股市與證券", en: "P/B Ratio", zh: "股價淨值比", desc: "股價除以每股淨值。", formula: "股價 / Book Value", example: "P/B 小於 1 可能代表股價被低估。" },
+            { category: "股市與證券", en: "EPS", zh: "每股盈餘", desc: "公司淨利除以流通在外股數。", formula: "淨利 / 流通股數", example: "EPS 是計算本益比的分母。" },
+            { category: "股市與證券", en: "Stock Split", zh: "股票分割", desc: "增加股數並降低股價，總價值不變。", formula: "無", example: "NVIDIA 宣布 1 拆 10 的股票分割。" },
+            { category: "股市與證券", en: "Buyback", zh: "庫藏股回購", desc: "公司買回自家股票，通常能提振股價。", formula: "無", example: "波克夏海瑟威進行了大規模的股票回購。" },
+            { category: "股市與證券", en: "Bull Market", zh: "牛市", desc: "市場價格呈現長期上漲趨勢。", formula: "無", example: "牛市期間投資人信心高漲。" },
+            { category: "股市與證券", en: "Bear Market", zh: "熊市", desc: "市場價格呈現長期下跌趨勢。", formula: "跌幅 > 20%", example: "熊市通常伴隨著經濟衰退。" },
+            { category: "股市與證券", en: "Correction", zh: "修正/回檔", desc: "股價短期下跌，通常幅度為10%左右。", formula: "跌幅 10%~20%", example: "健康的市場需要適度的修正。" },
+            { category: "股市與證券", en: "Rally", zh: "反彈", desc: "股價在下跌後出現上漲。", formula: "無", example: "利多消息帶動股市強勁反彈。" },
+            { category: "股市與證券", en: "Outstanding Shares", zh: "流通在外股數", desc: "投資人與公司內部持有的股票總數。", formula: "無", example: "計算市值需使用流通在外股數。" },
+            { category: "股市與證券", en: "Preferred Stock", zh: "優先股", desc: "享有優先配息權，但通常無投票權。", formula: "無", example: "優先股性質介於股票與債券之間。" },
+            { category: "股市與證券", en: "Common Stock", zh: "普通股", desc: "享有投票權與盈餘分配權的股票。", formula: "無", example: "大多數投資人買賣的是普通股。" },
+            { category: "股市與證券", en: "ADR", zh: "美國存託憑證", desc: "非美國公司在美國股市發行的憑證。", formula: "無", example: "台積電 ADR 在紐約證交所交易。" },
+            { category: "股市與證券", en: "Short Squeeze", zh: "軋空", desc: "空頭被迫回補導致股價急漲。", formula: "無", example: "GameStop 事件是著名的軋空案例。" },
+            
+            // ================= 財務報表 (Financial Statements) =================
+            { category: "財務報表", en: "Balance Sheet", zh: "資產負債表", desc: "呈現公司資產、負債與股東權益。", formula: "資產 = 負債 + 權益", example: "資產負債表反映特定時間點的財務狀況。" },
+            { category: "財務報表", en: "Income Statement", zh: "損益表", desc: "呈現公司收入、成本與淨利。", formula: "營收 - 費用 = 淨利", example: "損益表顯示公司在一段時間內的賺錢能力。" },
+            { category: "財務報表", en: "Cash Flow Statement", zh: "現金流量表", desc: "顯示公司現金來源與用途。", formula: "營運 + 投資 + 融資", example: "獲利的公司也可能因為現金流斷裂而倒閉。" },
+            { category: "財務報表", en: "Revenue", zh: "營業收入", desc: "公司主要業務的收入。", formula: "銷量 × 價格", example: "本季營收創歷史新高。" },
+            { category: "財務報表", en: "Gross Profit", zh: "毛利", desc: "收入扣除銷貨成本後的利潤。", formula: "營收 - COGS", example: "毛利反映產品的直接獲利能力。" },
+            { category: "財務報表", en: "Gross Margin", zh: "毛利率", desc: "毛利占收入的百分比。", formula: "毛利 / 營收", example: "軟體業通常有極高的毛利率。" },
+            { category: "財務報表", en: "Operating Profit", zh: "營業利益", desc: "扣除營業費用後的獲利。", formula: "毛利 - 營業費用", example: "營業利益反映本業的獲利狀況。" },
+            { category: "財務報表", en: "Operating Margin", zh: "營益率", desc: "營業利益占收入的比重。", formula: "營業利益 / 營收", example: "營益率提升代表公司管理效率變好。" },
+            { category: "財務報表", en: "Net Income", zh: "淨利", desc: "扣除所有費用、稅金後的最終獲利。", formula: "稅前淨利 - 稅", example: "淨利是計算 EPS 的基礎。" },
+            { category: "財務報表", en: "FCF (Free Cash Flow)", zh: "自由現金流", desc: "企業可自由運用的現金。", formula: "營運現金流 - 資本支出", example: "巴菲特非常重視自由現金流。" },
+            { category: "財務報表", en: "Debt Ratio", zh: "負債比率", desc: "負債占總資產的比率。", formula: "總負債 / 總資產", example: "負債比率過高可能增加財務風險。" },
+            { category: "財務報表", en: "Current Ratio", zh: "流動比率", desc: "衡量短期償債能力。", formula: "流動資產 / 流動負債", example: "流動比率大於 2 通常被視為健康。" },
+            { category: "財務報表", en: "Quick Ratio", zh: "速動比率", desc: "扣除存貨後的短期償債能力。", formula: "(流動資產 - 存貨) / 流動負債", example: "速動比率比流動比率更嚴格。" },
+            { category: "財務報表", en: "ROE", zh: "股東權益報酬率", desc: "衡量利用股東資金獲利的效率。", formula: "淨利 / 股東權益", example: "巴菲特偏好 ROE 長期高於 15% 的公司。" },
+            { category: "財務報表", en: "ROA", zh: "資產報酬率", desc: "衡量利用總資產獲利的效率。", formula: "淨利 / 總資產", example: "銀行業通常較看重 ROA。" },
+            { category: "財務報表", en: "EBITDA", zh: "息稅折舊攤銷前獲利", desc: "排除融資與會計決策影響的獲利。", formula: "營業利益 + 折舊 + 攤銷", example: "EBITDA 常用於評估併購價值。" },
+            { category: "財務報表", en: "Working Capital", zh: "營運資金", desc: "公司維持日常營運所需的資金。", formula: "流動資產 - 流動負債", example: "營運資金不足可能導致周轉不靈。" },
+            
+            // ================= 銀行與金融市場 (Banking & Finance) =================
+            { category: "銀行與金融市場", en: "LCR", zh: "流動性覆蓋率", desc: "銀行應付短期資金需求的能力。", formula: "高流動性資產 / 淨現金流出", example: "Basel III 規範了銀行的 LCR 標準。" },
+            { category: "銀行與金融市場", en: "Stress Test", zh: "壓力測試", desc: "評估銀行在極端情況下的承受力。", formula: "無", example: "聯準會每年會對大銀行進行壓力測試。" },
+            { category: "銀行與金融市場", en: "Compliance", zh: "合規", desc: "金融機構遵守法規。", formula: "無", example: "合規部門負責確保銀行不違反法規。" },
+            { category: "銀行與金融市場", en: "AML (Anti-Money Laundering)", zh: "反洗錢", desc: "防止不法資金進入金融體系。", formula: "無", example: "銀行開戶需進行嚴格的 AML 審查。" },
+            { category: "銀行與金融市場", en: "KYC (Know Your Customer)", zh: "認識你的客戶", desc: "確認客戶身分的程序。", formula: "無", example: "KYC 是防制洗錢的第一道防線。" },
+            { category: "銀行與金融市場", en: "Credit Rating", zh: "信用評等", desc: "評估借款人違約風險的等級。", formula: "無", example: "AAA 是最高的信用評等。" },
+            { category: "銀行與金融市場", en: "Default", zh: "違約", desc: "無法履行債務償還義務。", formula: "無", example: "債券違約會導致投資人損失慘重。" },
+            { category: "銀行與金融市場", en: "Collateral", zh: "擔保品", desc: "借款人提供的資產保證。", formula: "無", example: "房貸通常以房屋作為擔保品。" },
+            { category: "銀行與金融市場", en: "Prime Rate", zh: "最優惠利率", desc: "銀行借給信用最好客戶的利率。", formula: "無", example: "房貸利率通常以 Prime Rate 為基準加碼。" },
+            { category: "銀行與金融市場", en: "Capital Adequacy Ratio", zh: "資本適足率", desc: "衡量銀行資本足以承擔風險的程度。", formula: "自有資本 / 風險性資產", example: "資本適足率過低會被主管機關糾正。" },
+            { category: "銀行與金融市場", en: "SWIFT", zh: "環球銀行金融電信協會", desc: "全球銀行間進行金融訊息傳遞的系統。", formula: "無", example: "俄羅斯曾被踢出 SWIFT 系統作為制裁。" },
+
+            // ================= 衍生性商品 (Derivatives) =================
+            { category: "衍生性商品", en: "Gamma", zh: "Gamma", desc: "Delta 變化的加速度。", formula: "∂²V/∂S²", example: "Gamma 風險在選擇權快到期時最大。" },
+            { category: "衍生性商品", en: "Theta", zh: "Theta", desc: "時間流逝造成期權價值減少。", formula: "∂V/∂t", example: "作為選擇權賣方，Theta 是你的朋友。" },
+            { category: "衍生性商品", en: "Vega", zh: "Vega", desc: "期權價值對波動率變化敏感度。", formula: "∂V/∂σ", example: "波動率大增，Vega 導致權利金上漲。" },
+            { category: "衍生性商品", en: "Rho", zh: "Rho", desc: "期權價值對利率變化的敏感度。", formula: "∂V/∂r", example: "長期期權受 Rho 的影響較大。" },
+            { category: "衍生性商品", en: "Delta", zh: "Delta", desc: "期權價格對標的資產價格的敏感度。", formula: "∂V/∂S", example: "Delta 0.5 代表股價漲1元，權利金漲0.5元。" },
+            { category: "衍生性商品", en: "Hedge", zh: "對沖/避險", desc: "減少投資組合的風險。", formula: "無", example: "航空公司買入燃油期貨來對沖油價上漲風險。" },
+            { category: "衍生性商品", en: "Leverage", zh: "槓桿", desc: "以小資金放大報酬與風險。", formula: "總曝險 / 自有資金", example: "期貨交易具有高槓桿特性。" },
+            { category: "衍生性商品", en: "Margin", zh: "保證金", desc: "使用槓桿需繳交的押金。", formula: "無", example: "維持保證金不足會被追繳。" },
+            { category: "衍生性商品", en: "Mark-to-Market", zh: "每日結算", desc: "依市場價格每天調整價值。", formula: "無", example: "期貨交易採取每日結算制度。" },
+            { category: "衍生性商品", en: "Contango", zh: "正價差(升水)", desc: "遠月期貨價格高於近月價格。", formula: "期貨 > 現貨", example: "原油期貨通常呈現 Contango 結構。" },
+            { category: "衍生性商品", en: "Backwardation", zh: "逆價差", desc: "遠月期貨價格低於近月價格。", formula: "期貨 < 現貨", example: "現貨短缺時容易出現逆價差。" },
+            { category: "衍生性商品", en: "Call Option", zh: "買權", desc: "在特定時間以特定價格買入的權利。", formula: "無", example: "看漲股價可以買入 Call。" },
+            { category: "衍生性商品", en: "Put Option", zh: "賣權", desc: "在特定時間以特定價格賣出的權利。", formula: "無", example: "看跌股價可以買入 Put。" },
+            { category: "衍生性商品", en: "Futures", zh: "期貨", desc: "約定未來交易的標準化合約。", formula: "無", example: "台指期是台灣最熱門的期貨商品。" },
+            { category: "衍生性商品", en: "VIX", zh: "恐慌指數", desc: "衡量 S&P 500 未來波動率的預期。", formula: "無", example: "股市大跌時 VIX 通常會飆升。" },
+
+            // ================= 策略與風控 (Strategy & Risk) =================
+            { category: "策略與風控", en: "Long", zh: "做多", desc: "預期價格上漲而買入。", formula: "無", example: "我看好後市，所以建立多頭部位。" },
+            { category: "策略與風控", en: "Short", zh: "放空", desc: "預期價格下跌而賣出。", formula: "無", example: "他認為股價被高估，決定放空。" },
+            { category: "策略與風控", en: "Stop Loss", zh: "停損", desc: "防止虧損擴大的出場單。", formula: "無", example: "設定 10% 停損是良好的紀律。" },
+            { category: "策略與風控", en: "Take Profit", zh: "停利", desc: "確保獲利落袋的出場單。", formula: "無", example: "到達目標價後應執行停利。" },
+            { category: "策略與風控", en: "Risk-Reward Ratio", zh: "風報比", desc: "潛在獲利與潛在虧損的比例。", formula: "獲利空間 / 停損空間", example: "專業交易者通常尋找風報比 1:3 以上的機會。" },
+            { category: "策略與風控", en: "Position Size", zh: "部位規模", desc: "每筆交易投入的資金量。", formula: "無", example: "控制部位規模是風險管理的關鍵。" },
+            { category: "策略與風控", en: "Sharpe Ratio", zh: "夏普值", desc: "衡量承受每單位風險所獲得的超額報酬。", formula: "(Rp - Rf) / σp", example: "這檔基金的夏普值很高，代表CP值不錯。" },
+            { category: "策略與風控", en: "Drawdown", zh: "回撤", desc: "帳戶高點至低點的損失幅度。", formula: "(峰值 - 谷值) / 峰值", example: "最大回撤是評估策略風險的重要指標。" },
+            { category: "策略與風控", en: "Alpha", zh: "超額報酬", desc: "超越市場基準的報酬。", formula: "Rp - [Rf + β(Rm - Rf)]", example: "基金經理人追求正 Alpha。" },
+            { category: "策略與風控", en: "Beta", zh: "系統風險", desc: "資產對市場波動的敏感度。", formula: "Cov(ra, rm) / Var(rm)", example: "Beta 大於 1 代表比大盤波動更劇烈。" },
+            { category: "策略與風控", en: "Arbitrage", zh: "套利", desc: "利用不同市場的價差獲利。", formula: "無", example: "ETF 與成分股之間的套利很常見。" },
+            { category: "策略與風控", en: "Day Trading", zh: "當沖", desc: "當日買賣不留倉的交易策略。", formula: "無", example: "當沖交易需要極高的專注力。" },
+            { category: "策略與風控", en: "Swing Trading", zh: "波段交易", desc: "持有數天至數週以捕捉波段行情的策略。", formula: "無", example: "波段交易不需要整天盯盤。" },
+            { category: "策略與風控", en: "Fundamental Analysis", zh: "基本面分析", desc: "透過分析財報與經濟數據評估價值。", formula: "無", example: "巴菲特是基本面分析的大師。" },
+            { category: "策略與風控", en: "Technical Analysis", zh: "技術面分析", desc: "透過分析圖表與價格行為預測走勢。", formula: "無", example: "技術分析常用於短線交易。" },
+            
+            // ================= 投資與理財 (Investment & Wealth) =================
+            { category: "投資與理財", en: "Asset Allocation", zh: "資產配置", desc: "將投資分散於不同資產類別。", formula: "無", example: "股債 60/40 是經典的資產配置。" },
+            { category: "投資與理財", en: "Diversification", zh: "分散投資", desc: "降低單一事件風險。", formula: "無", example: "雞蛋不要放在同一個籃子裡。" },
+            { category: "投資與理財", en: "Risk Tolerance", zh: "風險承受度", desc: "投資人可承受的下跌幅度。", formula: "無", example: "年輕人的風險承受度通常較高。" },
+            { category: "投資與理財", en: "Portfolio", zh: "投資組合", desc: "投資人持有的資產集合。", formula: "無", example: "定期再平衡投資組合很重要。" },
+            { category: "投資與理財", en: "NAV", zh: "淨值", desc: "基金每單位的價值。", formula: "(基金總資產 - 負債) / 單位數", example: "基金淨值會隨市場波動每日更新。" },
+            { category: "投資與理財", en: "Compound Interest", zh: "複利", desc: "利息滾利息的效果。", formula: "P(1+r)^n", example: "複利是世界第八大奇蹟。" },
+            { category: "投資與理財", en: "DCA (Dollar Cost Averaging)", zh: "定期定額", desc: "固定時間投入固定金額。", formula: "無", example: "定期定額可以降低平均持有成本。" },
+            { category: "投資與理財", en: "Expense Ratio", zh: "內扣費用", desc: "基金或 ETF 的管理費用。", formula: "無", example: "長期投資應選擇低內扣費用的 ETF。" },
+            { category: "投資與理財", en: "Bond", zh: "債券", desc: "政府或企業發行的借據。", formula: "無", example: "美國公債被視為無風險資產。" },
+            { category: "投資與理財", en: "Coupon", zh: "票息", desc: "債券支付的利息。", formula: "面額 × 票面利率", example: "這張債券每半年支付一次票息。" },
+            { category: "投資與理財", en: "Maturity", zh: "到期日", desc: "債券本金償還的日期。", formula: "無", example: "長天期債券對利率變化較敏感。" },
+            { category: "投資與理財", en: "Yield to Maturity (YTM)", zh: "持有到期殖利率", desc: "持有債券至到期的預期報酬率。", formula: "無", example: "YTM 是比較不同債券報酬的標準。" }
+        ];
+
+        // ---------------------------------------------------------
+        // 2. CONFIGURATION & STATE
+        // ---------------------------------------------------------
+        
+        const categoryColors = {
+            "基本市場概念": "bg-blue-100 text-blue-800 border-blue-200",
+            "衍生性商品": "bg-purple-100 text-purple-800 border-purple-200",
+            "策略與風控": "bg-red-100 text-red-800 border-red-200",
+            "總體經濟": "bg-green-100 text-green-800 border-green-200",
+            "股市與證券": "bg-orange-100 text-orange-800 border-orange-200",
+            "財務報表": "bg-teal-100 text-teal-800 border-teal-200",
+            "投資與理財": "bg-yellow-100 text-yellow-800 border-yellow-200",
+            "銀行與金融市場": "bg-cyan-100 text-cyan-800 border-cyan-200",
+            "default": "bg-gray-100 text-gray-800 border-gray-200"
+        };
+
+        let currentCategory = 'all';
+        let currentSearch = '';
+        
+        // Quiz State
+        const QUESTIONS_PER_ROUND = 5;
+        let quizQueue = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctCount = 0;
+
+        // ---------------------------------------------------------
+        // 3. CORE FUNCTIONS
+        // ---------------------------------------------------------
+
+        function init() {
+            renderCategoryButtons();
+            renderData();
+            
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase();
+                renderData();
+            });
+        }
+
+        function goHome() {
+            switchMode('study');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Reset filters
+            currentCategory = 'all';
+            currentSearch = '';
+            document.getElementById('searchInput').value = '';
+            filterCategory('all', null); // Reuse filter logic to update buttons
+        }
+
+        function getCategoryClass(cat) {
+            return categoryColors[cat] || categoryColors['default'];
+        }
+
+        function renderCategoryButtons() {
+            const categories = [...new Set(rawData.map(item => item.category))];
+            const container = document.getElementById('category-buttons');
+            container.innerHTML = `<button class="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-white transition hover:opacity-90 active shadow-md transform scale-105" data-cat="all" onclick="filterCategory('all', this)">全部</button>`;
+            
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-1.5 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition`;
+                btn.textContent = cat;
+                btn.onclick = () => filterCategory(cat, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(cat, btnElement) {
+            currentCategory = cat;
+            
+            const buttons = document.getElementById('category-buttons').querySelectorAll('button');
+            buttons.forEach(b => {
+                if (b.textContent === currentCategory || (currentCategory === 'all' && b.dataset.cat === 'all')) {
+                    b.className = "px-4 py-1.5 rounded-full text-sm font-medium bg-gray-800 text-white transition shadow-md transform scale-105";
+                } else {
+                    b.className = "px-4 py-1.5 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition";
+                }
+            });
+            renderData();
+        }
+
+        function getFilteredData() {
+            return rawData.filter(item => {
+                const matchCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchSearch = item.en.toLowerCase().includes(currentSearch) || 
+                                    item.zh.includes(currentSearch) ||
+                                    item.desc.includes(currentSearch);
+                return matchCat && matchSearch;
+            });
+        }
+
+        function renderData() {
+            const data = getFilteredData();
+            const tableBody = document.getElementById('table-body');
+            const cardsContainer = document.getElementById('cards-container');
+            const noResults = document.getElementById('no-results');
+
+            tableBody.innerHTML = '';
+            cardsContainer.innerHTML = '';
+
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                
+                data.forEach(item => {
+                    const badgeClass = getCategoryClass(item.category);
+                    
+                    // Table Row
+                    const row = `
+                        <tr class="hover:bg-gray-50 transition duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${badgeClass}">
+                                    ${item.category}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-gray-900">${item.en}</span>
+                                    <span class="text-sm text-gray-500">${item.zh}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <p class="text-sm text-gray-700">${item.desc}</p>
+                            </td>
+                            <td class="px-6 py-4 bg-gray-50/50">
+                                <div class="text-xs space-y-1">
+                                    ${item.formula !== '無' ? `<div class="font-mono text-indigo-600"><span class="font-bold text-gray-400">f:</span> ${item.formula}</div>` : ''}
+                                    ${item.example ? `<div class="italic text-gray-600"><span class="font-bold text-gray-400">e.g.</span> ${item.example}</div>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+
+                    // Card
+                    const card = `
+                        <div class="glossary-card bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between h-full relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-gray-100 to-transparent -mr-8 -mt-8 rounded-full"></div>
+                            
+                            <div>
+                                <span class="inline-block px-2 py-1 mb-3 text-xs font-semibold rounded border ${badgeClass}">
+                                    ${item.category}
+                                </span>
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-xl font-bold text-gray-800">${item.en}</h3>
+                                </div>
+                                <h4 class="text-md text-indigo-600 font-medium mb-3 pb-2 border-b border-gray-100">${item.zh}</h4>
+                                <p class="text-gray-600 text-sm leading-relaxed mb-4">${item.desc}</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-500 mt-auto">
+                                ${item.formula !== '無' ? `<div class="mb-1 flex"><span class="w-4 mr-2 text-center"><i class="fa-solid fa-calculator"></i></span> <span class="font-mono">${item.formula}</span></div>` : ''}
+                                <div class="flex"><span class="w-4 mr-2 text-center"><i class="fa-solid fa-quote-left"></i></span> <span class="italic">${item.example}</span></div>
+                            </div>
+                        </div>
+                    `;
+                    cardsContainer.innerHTML += card;
+                });
+            }
+        }
+
+        // ---------------------------------------------------------
+        // 4. VIEW SWITCHING
+        // ---------------------------------------------------------
+        
+        function switchMode(mode) {
+            // Hide all views
+            document.getElementById('view-study').classList.add('hidden');
+            document.getElementById('view-cards').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('controls-section').classList.remove('hidden');
+
+            // Reset navbar
+            const navBtns = document.querySelectorAll('nav button');
+            navBtns.forEach(btn => btn.classList.remove('text-indigo-200', 'underline'));
+
+            if (mode === 'study') {
+                document.getElementById('view-study').classList.remove('hidden');
+            } else if (mode === 'cards') {
+                document.getElementById('view-cards').classList.remove('hidden');
+            } else if (mode === 'quiz') {
+                document.getElementById('view-quiz').classList.remove('hidden');
+                document.getElementById('controls-section').classList.add('hidden');
+                // Reset quiz to start screen if quiz not running
+                if (quizQueue.length === 0 || currentQuestionIndex >= QUESTIONS_PER_ROUND) {
+                     showQuizStartScreen();
+                }
+            }
+        }
+
+        // ---------------------------------------------------------
+        // 5. QUIZ LOGIC
+        // ---------------------------------------------------------
+
+        function showQuizStartScreen() {
+            document.getElementById('quiz-start-screen').classList.remove('hidden');
+            document.getElementById('quiz-running-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+        }
+
+        function startNewQuizRound() {
+            // 1. Reset State
+            score = 0;
+            correctCount = 0;
+            currentQuestionIndex = 0;
+            
+            // 2. Generate Random Questions for this round
+            // Shuffle entire dataset
+            const shuffled = [...rawData].sort(() => 0.5 - Math.random());
+            // Take first 5
+            quizQueue = shuffled.slice(0, QUESTIONS_PER_ROUND);
+
+            // 3. Switch UI
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-running-screen').classList.remove('hidden');
+
+            // 4. Render First Question
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            // UI Cleanup
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.add('hidden');
+            feedback.className = "mt-6 text-center hidden p-3 rounded-lg font-bold animate-fade-in";
+            
+            // Update Headers
+            document.getElementById('quiz-score').textContent = `得分: ${score}`;
+            document.getElementById('quiz-progress').textContent = `第 ${currentQuestionIndex + 1} / ${QUESTIONS_PER_ROUND} 題`;
+
+            // Get Current Question Data
+            const currentQ = quizQueue[currentQuestionIndex];
+            document.getElementById('question-text').textContent = currentQ.desc;
+
+            // Generate Options (1 correct + 3 wrong)
+            let options = [currentQ];
+            while (options.length < 4) {
+                const r = rawData[Math.floor(Math.random() * rawData.length)];
+                if (!options.some(o => o.en === r.en)) options.push(r);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            // Render Buttons
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-option-btn w-full text-left bg-gray-50 hover:bg-indigo-50 border border-gray-200 hover:border-indigo-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition duration-200 flex justify-between items-center group";
+                btn.innerHTML = `<span>${opt.en} <span class="text-sm text-gray-400 font-normal ml-2">(${opt.zh})</span></span> <i class="fa-regular fa-circle text-gray-300 group-hover:text-indigo-400"></i>`;
+                btn.onclick = () => checkAnswer(opt, currentQ, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct, btnElement) {
+            const feedback = document.getElementById('quiz-feedback');
+            const buttons = document.querySelectorAll('.quiz-option-btn');
+            
+            // Disable buttons
+            buttons.forEach(b => b.disabled = true);
+
+            let isCorrect = (selected.en === correct.en);
+
+            if (isCorrect) {
+                // Correct Logic
+                score += 20; // 100 points total for 5 questions
+                correctCount++;
+                document.getElementById('quiz-score').textContent = `得分: ${score}`;
+                
+                btnElement.classList.remove('bg-gray-50');
+                btnElement.classList.add('bg-green-100', 'border-green-400', 'text-green-800');
+                btnElement.querySelector('i').className = "fa-solid fa-check-circle text-green-600";
+                
+                feedback.textContent = "答對了！";
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                // Wrong Logic
+                btnElement.classList.remove('bg-gray-50');
+                btnElement.classList.add('bg-red-100', 'border-red-400', 'text-red-800');
+                btnElement.querySelector('i').className = "fa-solid fa-times-circle text-red-600";
+
+                // Highlight correct one
+                buttons.forEach(b => {
+                    if (b.innerText.includes(correct.en)) {
+                        b.classList.add('bg-green-50', 'border-green-300');
+                        b.querySelector('i').className = "fa-solid fa-check-circle text-green-600 opacity-50";
+                    }
+                });
+
+                feedback.textContent = `答錯了。正確答案是：${correct.en}`;
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedback.classList.remove('hidden');
+
+            // Setup Next Button logic
+            currentQuestionIndex++;
+            const isFinished = currentQuestionIndex >= QUESTIONS_PER_ROUND;
+            
+            const nextBtnText = isFinished ? "查看結果" : "下一題 →";
+            
+            // Create Next Button
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = nextBtnText;
+            nextBtn.className = "mt-4 bg-indigo-600 text-white px-8 py-2 rounded-full hover:bg-indigo-700 transition shadow-lg block mx-auto animate-fade-in";
+            nextBtn.onclick = () => {
+                if (isFinished) {
+                    showQuizSummary();
+                } else {
+                    renderQuizQuestion();
+                }
+            };
+            feedback.appendChild(nextBtn);
+        }
+
+        function showQuizSummary() {
+            document.getElementById('quiz-running-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+
+            const scoreEl = document.getElementById('final-score');
+            const commentEl = document.getElementById('final-comment');
+            
+            // Animation for score
+            let current = 0;
+            const timer = setInterval(() => {
+                current += 1;
+                scoreEl.textContent = current;
+                if (current >= score) clearInterval(timer);
+            }, 20);
+
+            // Comment Logic
+            if (score === 100) {
+                commentEl.textContent = "太強了！全部答對！🏆";
+                commentEl.className = "text-xl font-bold text-yellow-600 mb-8";
+            } else if (score >= 80) {
+                commentEl.textContent = "很棒喔！財經專家！🌟";
+                commentEl.className = "text-xl font-bold text-green-600 mb-8";
+            } else if (score >= 60) {
+                commentEl.textContent = "還不錯，繼續加油！💪";
+                commentEl.className = "text-xl font-bold text-indigo-600 mb-8";
+            } else {
+                commentEl.textContent = "再接再厲，多複習一下吧！📚";
+                commentEl.className = "text-xl font-bold text-gray-600 mb-8";
+            }
+        }
+
+        // Initialize App
+        init();
+
+    </script>
+</body>
+</html>

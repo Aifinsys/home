@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>財經詞彙互動教學系統 - 使用說明流程圖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .infographic-container {
+            /* 9:16 Aspect Ratio Simulation (Height is 1.7777 times the width) */
+            max-width: 450px; /* Max width for mobile view */
+            width: 100%;
+            margin: auto;
+            position: relative;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e3a8a 10%, #f3f4f6 10%, #f3f4f6 100%);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: #1e3a8a; /* Indigo-800 */
+            color: white;
+            padding: 1.5rem 1rem;
+            border-bottom-left-radius: 2rem;
+            border-bottom-right-radius: 2rem;
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .step-icon {
+            flex-shrink: 0;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: white;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937; /* Gray-800 */
+            margin-bottom: 0.25rem;
+        }
+        .step-desc {
+            font-size: 0.9rem;
+            color: #4b5563; /* Gray-600 */
+        }
+        .flow-line {
+            position: absolute;
+            left: 2.75rem; /* Centered between the step circles */
+            top: 50px; /* Start below the header */
+            bottom: 0px;
+            width: 3px;
+            background: #9ca3af; /* Gray-400 */
+            z-index: 5;
+        }
+        .flow-line-container {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 70%;
+            width: 5px;
+            z-index: 5;
+        }
+        /* Custom flow line for the timeline */
+        .timeline-line {
+            position: absolute;
+            left: 2.5rem;
+            width: 3px;
+            background-color: #3b82f6; /* Blue-500 */
+            top: 0;
+            bottom: 0;
+        }
+        .timeline-container {
+            position: relative;
+            padding-left: 5.5rem;
+            padding-right: 1rem;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="infographic-container">
+        
+        <!-- Header Section -->
+        <div class="header text-center pt-8 pb-10 mb-4">
+            <i class="fa-solid fa-graduation-cap text-5xl mb-3 text-indigo-300"></i>
+            <h1 class="text-3xl font-black mb-1 tracking-wider">財經詞彙互動教學系統</h1>
+            <p class="text-indigo-300 text-sm font-medium">快速上手您的學習之旅</p>
+        </div>
+        
+        <!-- Timeline Container -->
+        <div class="timeline-container flex-grow">
+            <!-- Timeline Line -->
+            <div class="timeline-line"></div>
+
+            <!-- Step 1: 選擇模式 (Study) -->
+            <div class="flow-step mb-8">
+                <div class="step-icon bg-green-500 shadow-lg ring-4 ring-white">1</div>
+                <div class="step-content">
+                    <div class="step-title">步驟 1: 學習模式 (Study)</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-table text-xs text-green-500 mr-1"></i> 
+                        總覽所有詞彙、中文翻譯、詳細說明、計算公式與實用例句。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: 篩選與搜尋 -->
+            <div class="flow-step mb-8">
+                <div class="step-icon bg-amber-500 shadow-lg ring-4 ring-white">2</div>
+                <div class="step-content">
+                    <div class="step-title">步驟 2: 篩選與搜尋</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-filter text-xs text-amber-500 mr-1"></i> 
+                        使用「類別按鈕」或「搜尋欄」快速定位目標詞彙。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: 專注記憶 (Cards) -->
+            <div class="flow-step mb-8">
+                <div class="step-icon bg-indigo-500 shadow-lg ring-4 ring-white">3</div>
+                <div class="step-content">
+                    <div class="step-title">步驟 3: 單字卡模式 (Cards)</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-layer-group text-xs text-indigo-500 mr-1"></i> 
+                        切換至單字卡，以卡片形式瀏覽，專注於定義與公式記憶。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: 自我測驗 (Quiz) -->
+            <div class="flow-step mb-8">
+                <div class="step-icon bg-red-500 shadow-lg ring-4 ring-white">4</div>
+                <div class="step-content">
+                    <div class="step-title">步驟 4: 自我測驗 (Quiz)</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-clipboard-question text-xs text-red-500 mr-1"></i> 
+                        點擊「開始測驗」，進行 5 題選擇題，考驗詞彙掌握度。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: 查看成績 -->
+            <div class="flow-step mb-8">
+                <div class="step-icon bg-purple-500 shadow-lg ring-4 ring-white">5</div>
+                <div class="step-content">
+                    <div class="step-title">步驟 5: 即時回饋與成績</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-check-double text-xs text-purple-500 mr-1"></i> 
+                        即時顯示答題結果。測驗結束後，查看總分與學習建議。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Action/Tip -->
+            <div class="flow-step bg-blue-50 border-blue-400 border-2 mb-4">
+                <div class="step-icon bg-blue-700 shadow-lg ring-4 ring-white">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title text-blue-700">學習提示：不斷重複</div>
+                    <div class="step-desc">
+                        <i class="fa-solid fa-repeat text-xs text-blue-500 mr-1"></i> 
+                        建議透過「學習」→「卡片」→「測驗」的循環，確保知識內化！
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- 頁尾 Section: 謝謝使用與回主頁按鍵 -->
+        <div class="w-full text-center pt-6 pb-4 px-4 bg-white border-t border-gray-200 mt-auto">
+            <p class="text-xl font-bold text-gray-700 mb-3">Ai FinTech Corp.  &copy; 2025</p>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95">
+               <a href="1127ao.html" class="home-btn">開始學習</a>
+            </button>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95">
+               <a href="index.html" class="home-btn">回到主頁</a>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>
