@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量化策略抗噪框架與回測驗證系統 v2.0</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'SF Pro Display', Roboto, monospace;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(15,23,42,0) 70%);
+            z-index: -1;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Checklists --- */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .checklist li:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent-cyan);
+        }
+
+        .checklist li input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 4px;
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist li input[type="checkbox"]:checked {
+            background-color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        .checklist li input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--bg-main);
+            font-weight: bold;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- Strategy Tags --- */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .strategy-item {
+            background: var(--bg-input);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .strategy-item h4 {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* --- Simulation Visuals --- */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(6, 182, 212, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            font-family: 'Courier New', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        /* --- Score Gauge Section --- */
+        .score-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .gauge-container {
+            width: 250px;
+            height: 140px;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: var(--bg-input);
+            stroke-width: 20;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke: var(--accent-cyan);
+            stroke-width: 20;
+            stroke-dasharray: 0, 100; /* Controlled by JS */
+            transition: stroke-dasharray 1s ease-out, stroke 0.5s;
+            stroke-linecap: round;
+        }
+
+        .score-text {
+            font-size: 3rem;
+            font-weight: bold;
+            fill: var(--text-primary);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            fill: var(--text-secondary);
+        }
+
+        .score-rating {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Chart Canvas */
+        #equityCurve {
+            width: 100%;
+            height: 200px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Quant Strategy Validator</h1>
+        <p>量化策略抗噪框架與回測驗證系統 v2.0</p>
+    </header>
+
+    <div class="card">
+        <h2>01. 策略健康度儀表板</h2>
+        <div class="grid-2" style="align-items: center;">
+            <div class="score-section">
+                <svg class="gauge-container" viewBox="0 0 200 120">
+                    <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" />
+                    <path id="gaugeFill" class="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" stroke-dasharray="0 251" />
+                    <text id="gaugeText" x="100" y="90" text-anchor="middle" class="score-text">0</text>
+                    <text x="100" y="115" text-anchor="middle" class="score-label">Total Score</text>
+                </svg>
+                <div id="scoreRating" class="score-rating" style="background: var(--bg-input); color: var(--text-secondary);">
+                    尚未評分
+                </div>
+            </div>
+            
+            <div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    本系統基於「微觀結構噪音」與「過度擬合」風險模型設計。請在下方勾選您已實施的項目，系統將動態計算策略的穩健性。
+                </p>
+                <div class="strategy-item" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>設計與架構</span>
+                    <span id="designScoreText" style="color: var(--accent-cyan); font-weight: bold;">0%</span>
+                </div>
+                <div style="height: 6px; background: var(--bg-input); border-radius: 3px; overflow: hidden; margin-bottom: 1rem;">
+                    <div id="designBar" style="height: 100%; width: 0%; background: var(--accent-cyan); transition: width 0.5s;"></div>
+                </div>
+
+                <div class="strategy-item" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>回測與驗證</span>
+                    <span id="validScoreText" style="color: var(--accent-blue); font-weight: bold;">0%</span>
+                </div>
+                <div style="height: 6px; background: var(--bg-input); border-radius: 3px; overflow: hidden;">
+                    <div id="validBar" style="height: 100%; width: 0%; background: var(--accent-blue); transition: width 0.5s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>02. 抗噪設計框架</h2>
+        <div class="grid-2">
+            <div>
+                <h3>核心設計原則</h3>
+                <ul class="checklist" id="design-checklist">
+                    <li><label><input type="checkbox"> 參數數量 ≤ 4 個核心參數</label></li>
+                    <li><label><input type="checkbox"> 時間框架 > 小時線 (避開 Tick 噪音)</label></li>
+                    <li><label><input type="checkbox"> 避免多指標疊加 (共線性風險)</label></li>
+                    <li><label><input type="checkbox"> 使用經典參數 (避免參數微調)</label></li>
+                    <li><label><input type="checkbox"> 引入市場狀態識別 (Regime Filter)</label></li>
+                </ul>
+            </div>
+            <div>
+                <h3>風險管理機制</h3>
+                <ul class="checklist" id="risk-checklist">
+                    <li><label><input type="checkbox"> 模擬動態滑價 (非固定值)</label></li>
+                    <li><label><input type="checkbox"> 設立策略級別停損 (Drawdown Stop)</label></li>
+                    <li><label><input type="checkbox"> 監控信號噪音比 (SNR)</label></li>
+                    <li><label><input type="checkbox"> 交易成本佔比 < 20% 預期獲利</label></li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <h3>各類策略抗噪指南</h3>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <h4>趨勢策略 Trend</h4>
+                    <p style="color: var(--text-secondary)">使用寬通道過濾假突破；避免針對歷史假突破優化參數。</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>震盪策略 Mean Rev</h4>
+                    <p style="color: var(--text-secondary)">引入波動率過濾；避免在趨勢起點誤判為超買超賣。</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Scalping / HFT</h4>
+                    <p style="color: var(--text-secondary)">不單依賴 VWAP；引入 Order Book Imbalance 與流動性深度。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>03. 回測與模擬驗證</h2>
+        <div class="grid-2">
+            <div>
+                <h3>驗證流程清單</h3>
+                <ul class="checklist" id="validation-checklist">
+                    <li><label><input type="checkbox"> 數據清洗 (去除壞點/插值)</label></li>
+                    <li><label><input type="checkbox"> 樣本外測試 (Out-of-Sample)</label></li>
+                    <li><label><input type="checkbox"> 前向分析 (Walk-Forward)</label></li>
+                    <li><label><input type="checkbox"> 蒙特卡洛模擬 (Monte Carlo)</label></li>
+                    <li><label><input type="checkbox"> 包含手續費與滑價成本</label></li>
+                </ul>
+                <button class="btn" id="runSimBtn">執行模擬回測 (Simulation)</button>
+            </div>
+            
+            <div>
+                <h3>資金曲線模擬</h3>
+                <svg id="equityCurve" viewBox="0 0 400 200" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:0.2" />
+                            <stop offset="100%" style="stop-color:var(--accent-cyan);stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(0, 200) scale(1, -1)">
+                         <line x1="0" y1="50" x2="400" y2="50" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                         <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                         <line x1="0" y1="150" x2="400" y2="150" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                         
+                         <path id="curvePath" d="M0 20" fill="url(#grad1)" stroke="var(--accent-cyan)" stroke-width="2" />
+                    </g>
+                    <text x="200" y="100" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="20">AWAITING DATA</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="val-sharpe">--</div>
+                <div class="metric-label">Sharpe Ratio</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="val-dd">--</div>
+                <div class="metric-label">Max Drawdown</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="val-win">--</div>
+                <div class="metric-label">Win Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="val-pf">--</div>
+                <div class="metric-label">Profit Factor</div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; color: var(--text-secondary); margin-top: 3rem; font-size: 0.8rem;">
+        <p>© 2025  Ai Fintech Corp. | 量化策略抗噪框架與回測驗證系統 | Microstructure Noise Analysis.</p>
+    </footer>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        
+        // Groups
+        const designGroup = document.querySelectorAll('#design-checklist input, #risk-checklist input');
+        const validGroup = document.querySelectorAll('#validation-checklist input');
+
+        // Initial Calculation
+        updateScore();
+
+        // Listeners
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateScore);
+            // Add click effect to parent li
+            cb.parentElement.parentElement.addEventListener('click', (e) => {
+                if (e.target !== cb && e.target !== cb.parentElement) {
+                    cb.checked = !cb.checked;
+                    updateScore();
+                }
+            });
+        });
+
+        // Simulation Button
+        const simBtn = document.getElementById('runSimBtn');
+        simBtn.addEventListener('click', runSimulation);
+
+        function updateScore() {
+            // Calculate Design Score
+            let dCount = 0;
+            designGroup.forEach(cb => { if(cb.checked) dCount++; });
+            const dTotal = designGroup.length;
+            const dPct = Math.round((dCount / dTotal) * 100);
+
+            // Calculate Validation Score
+            let vCount = 0;
+            validGroup.forEach(cb => { if(cb.checked) vCount++; });
+            const vTotal = validGroup.length;
+            const vPct = Math.round((vCount / vTotal) * 100);
+
+            // Total Score
+            const totalCount = dCount + vCount;
+            const totalMax = dTotal + vTotal;
+            const totalScore = Math.round((totalCount / totalMax) * 100);
+
+            // Update UI Bars
+            document.getElementById('designBar').style.width = `${dPct}%`;
+            document.getElementById('designScoreText').textContent = `${dPct}%`;
+            
+            document.getElementById('validBar').style.width = `${vPct}%`;
+            document.getElementById('validScoreText').textContent = `${vPct}%`;
+
+            // Update Gauge
+            updateGauge(totalScore);
+        }
+
+        function updateGauge(score) {
+            const gaugeFill = document.getElementById('gaugeFill');
+            const gaugeText = document.getElementById('gaugeText');
+            const scoreRating = document.getElementById('scoreRating');
+
+            // Arc length for radius 80 is approx 251.2 (PI * 80)
+            const maxDash = 251; 
+            const dashValue = (score / 100) * maxDash;
+            
+            gaugeFill.style.strokeDasharray = `${dashValue}, 251`;
+            
+            // Color logic
+            let color = 'var(--danger)';
+            let text = 'High Risk';
+            let bg = 'rgba(239, 68, 68, 0.2)';
+
+            if (score >= 60) { color = 'var(--warning)'; text = 'Moderate'; bg = 'rgba(245, 158, 11, 0.2)'; }
+            if (score >= 80) { color = 'var(--success)'; text = 'Robust'; bg = 'rgba(16, 185, 129, 0.2)'; }
+            if (score >= 95) { color = 'var(--accent-cyan)'; text = 'Excellent'; bg = 'rgba(6, 182, 212, 0.2)'; }
+
+            gaugeFill.style.stroke = color;
+            scoreRating.textContent = text;
+            scoreRating.style.backgroundColor = bg;
+            scoreRating.style.color = color;
+
+            // Animate number
+            animateValue(gaugeText, parseInt(gaugeText.textContent), score, 800);
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function runSimulation() {
+            const btn = document.getElementById('runSimBtn');
+            btn.disabled = true;
+            btn.textContent = "Processing Monte Carlo...";
+
+            // Clear previous SVG
+            const path = document.getElementById('curvePath');
+            path.setAttribute('d', 'M0 20');
+            
+            // Generate random walk data
+            let points = [];
+            let y = 20;
+            for(let i=0; i<=400; i+=5) {
+                let change = (Math.random() - 0.45) * 10; // Slight upward bias
+                y += change;
+                if(y < 5) y = 5; // Floor
+                if(y > 190) y = 190; // Ceiling
+                points.push(`${i} ${y}`);
+            }
+
+            // Animate Drawing
+            let i = 0;
+            const drawInterval = setInterval(() => {
+                if (i >= points.length) {
+                    clearInterval(drawInterval);
+                    finishSimulation();
+                    return;
+                }
+                const currentPath = "M0 20 L " + points.slice(0, i+1).join(' L ');
+                path.setAttribute('d', currentPath);
+                i++;
+            }, 10);
+        }
+
+        function finishSimulation() {
+            document.getElementById('runSimBtn').disabled = false;
+            document.getElementById('runSimBtn').textContent = "Run Simulation Again";
+
+            // Generate realistic metrics based on current score
+            // Higher score = better metrics (simulated)
+            const currentScore = parseInt(document.getElementById('gaugeText').textContent);
+            const baseMultiplier = currentScore / 100;
+
+            const sharpe = (0.5 + (Math.random() * 1.5) + (baseMultiplier)).toFixed(2);
+            const dd = '-' + (30 - (Math.random() * 10) - (baseMultiplier * 15)).toFixed(1) + '%';
+            const win = (40 + (Math.random() * 10) + (baseMultiplier * 15)).toFixed(1) + '%';
+            const pf = (1.1 + (Math.random() * 0.5) + (baseMultiplier * 0.5)).toFixed(2);
+
+            document.getElementById('val-sharpe').textContent = sharpe;
+            document.getElementById('val-dd').textContent = dd;
+            document.getElementById('val-win').textContent = win;
+            document.getElementById('val-pf').textContent = pf;
+        }
+    });
+</script>
+
+</body>
+</html>
