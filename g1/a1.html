@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球資本紀元 (Capital Epoch) - 2037</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .cyber-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .asset-card {
+            transition: all 0.3s ease;
+        }
+        .asset-card:hover {
+            transform: translateY(-2px);
+            border-color: #3b82f6;
+        }
+
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+
+        .hidden { display: none; }
+        
+        .news-ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .news-ticker {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-700 p-4 flex justify-between items-center shadow-lg z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center text-xl font-bold">CE</div>
+            <div>
+                <h1 class="text-xl font-bold cyber-font tracking-wider text-blue-400">CAPITAL EPOCH</h1>
+                <p class="text-xs text-slate-400">全球資本紀元 v1.0 | 2037 AD</p>
+            </div>
+        </div>
+        <div class="flex gap-8 text-sm">
+            <div class="text-center">
+                <div class="text-slate-400">回合 (Round)</div>
+                <div class="text-xl font-bold cyber-font" id="round-display">1 / 10</div>
+            </div>
+            <div class="text-center">
+                <div class="text-slate-400">現金 (Cash)</div>
+                <div class="text-xl font-bold text-green-400 cyber-font" id="cash-display">$100,000</div>
+            </div>
+            <div class="text-center">
+                <div class="text-slate-400">總資產 (NAV)</div>
+                <div class="text-xl font-bold text-yellow-400 cyber-font" id="nav-display">$100,000</div>
+            </div>
+        </div>
+        <button onclick="game.showHelp()" class="p-2 bg-slate-800 rounded hover:bg-slate-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 11 18 0z" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- Left: Market & Assets -->
+        <section class="w-2/5 p-4 overflow-y-auto border-r border-slate-700 bg-slate-900/50">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-blue-300 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+                    資產市場 (Market)
+                </h2>
+                <span class="text-xs bg-blue-900 text-blue-200 px-2 py-1 rounded">點擊交易</span>
+            </div>
+            <div id="market-grid" class="grid gap-3">
+                <!-- Asset Cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- Center: Info & Chart -->
+        <section class="w-2/5 p-4 flex flex-col gap-4 bg-slate-800/30">
+            <!-- News Ticker -->
+            <div class="glass-panel p-2 rounded border-l-4 border-yellow-500">
+                <div class="text-xs text-yellow-500 font-bold mb-1">全球快訊 (GLOBAL NEWS)</div>
+                <div class="news-ticker-wrap">
+                    <div id="news-ticker" class="news-ticker text-sm">正在連線至全球資本網絡...</div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="glass-panel p-4 rounded flex-1 flex flex-col">
+                <h3 class="text-sm font-bold text-slate-400 mb-2">價格走勢 (Price History)</h3>
+                <div class="flex-1 relative w-full">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Insider Info & Event -->
+            <div class="glass-panel p-4 rounded h-1/3 flex flex-col">
+                <h3 class="text-sm font-bold text-purple-400 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                    情報與行動 (Intel & Actions)
+                </h3>
+                <div id="intel-panel" class="flex-1 overflow-y-auto text-sm space-y-2 mb-3 p-2 bg-black/20 rounded">
+                    <!-- Intel Content -->
+                </div>
+                <button id="next-turn-btn" onclick="game.nextTurn()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded font-bold shadow-lg transition transform active:scale-95">
+                    結束回合 (End Round)
+                </button>
+            </div>
+        </section>
+
+        <!-- Right: Portfolio -->
+        <section class="w-1/5 p-4 border-l border-slate-700 bg-slate-900/80 overflow-y-auto">
+            <h2 class="text-lg font-bold text-green-300 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                我的持倉 (Portfolio)
+            </h2>
+            
+            <!-- Role Info -->
+            <div class="mb-6 p-3 bg-slate-800 rounded border border-slate-600">
+                <div class="text-xs text-slate-400">職業 (Role)</div>
+                <div id="role-name" class="font-bold text-blue-400">--</div>
+                <div id="role-desc" class="text-xs text-slate-500 mt-1">--</div>
+            </div>
+
+            <div id="portfolio-list" class="space-y-3">
+                <!-- Portfolio items -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    
+    <!-- Role Selection Modal -->
+    <div id="role-modal" class="modal">
+        <div class="bg-slate-800 p-8 rounded-xl border border-slate-600 max-w-4xl w-full m-4 shadow-2xl">
+            <h2 class="text-3xl font-bold text-center mb-2 text-white cyber-font">選擇你的身份</h2>
+            <p class="text-center text-slate-400 mb-8">2037 全球資本紀元，你的專長將決定你的生存方式。</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Roles injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="trade-modal" class="modal hidden">
+        <div class="bg-slate-800 p-6 rounded-xl border border-slate-600 w-96 shadow-2xl">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 id="trade-asset-name" class="text-xl font-bold text-white">Asset Name</h3>
+                    <p id="trade-asset-price" class="text-lg text-blue-400 cyber-font">$0</p>
+                </div>
+                <button onclick="ui.closeTradeModal()" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            
+            <div class="bg-slate-900 p-3 rounded mb-4">
+                <p class="text-xs text-slate-400">持有數量: <span id="trade-owned" class="text-white">0</span></p>
+                <p class="text-xs text-slate-400">最大可買: <span id="trade-max-buy" class="text-white">0</span></p>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 mb-6">
+                <button onclick="game.adjustTradeAmount(-1)" class="w-8 h-8 bg-slate-700 rounded hover:bg-slate-600">-</button>
+                <input id="trade-amount" type="number" value="1" min="1" class="w-20 bg-slate-900 border border-slate-700 rounded p-1 text-center text-white">
+                <button onclick="game.adjustTradeAmount(1)" class="w-8 h-8 bg-slate-700 rounded hover:bg-slate-600">+</button>
+            </div>
+
+            <p class="text-center text-sm mb-4 text-slate-300">總金額: <span id="trade-total" class="text-yellow-400 cyber-font">$0</span></p>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="game.executeTrade('buy')" class="bg-green-600 hover:bg-green-500 py-2 rounded font-bold text-white">買入 (Buy)</button>
+                <button onclick="game.executeTrade('sell')" class="bg-red-600 hover:bg-red-500 py-2 rounded font-bold text-white">賣出 (Sell)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Game Modal -->
+    <div id="end-modal" class="modal hidden">
+        <div class="bg-slate-800 p-8 rounded-xl border border-yellow-500 max-w-lg w-full text-center">
+            <h2 class="text-3xl font-bold text-yellow-500 mb-4 cyber-font">GAME OVER</h2>
+            <p class="text-slate-300 mb-6">2037 財政年度已結束。</p>
+            
+            <div class="bg-slate-900 p-6 rounded mb-6">
+                <div class="text-slate-400 text-sm">最終資產淨值 (NAV)</div>
+                <div id="final-score" class="text-4xl font-bold text-white cyber-font my-2">$0</div>
+                <div id="final-rank" class="text-green-400 font-bold text-xl">投資傳奇</div>
+            </div>
+
+            <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded font-bold text-white w-full">重新挑戰</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Game Configuration & Data ---
+
+        const ASSET_TYPES = {
+            STOCK: { name: "股票", color: "blue", volatility: 0.15 },
+            CRYPTO: { name: "加密資產", color: "purple", volatility: 0.35 },
+            COMMODITY: { name: "大宗商品", color: "yellow", volatility: 0.1 },
+            REIT: { name: "房地產", color: "orange", volatility: 0.05 },
+            BOND: { name: "債券", color: "green", volatility: 0.02 }
+        };
+
+        // From PDF
+        const ROLES = [
+            { id: 'ai_expert', name: 'AI 專家', desc: '科技股收益 +20%', icon: '🤖', effect: (g) => g.roleBonus = { type: 'TECH', multi: 1.2 } },
+            { id: 'crypto_guru', name: '加密傳教士', desc: '加密資產收益 +20%', icon: '₿', effect: (g) => g.roleBonus = { type: 'CRYPTO', multi: 1.2 } },
+            { id: 'estate_tycoon', name: '房產大亨', desc: '房地產租金收益雙倍', icon: '🏢', effect: (g) => g.roleBonus = { type: 'REIT', dividendMulti: 2 } },
+            { id: 'insider', name: '內線交易者', desc: '每回合獲得 2 條內線消息', icon: '🕵️', effect: (g) => g.extraIntel = true }
+        ];
+
+        const INITIAL_ASSETS = [
+            { id: 'NVDA_AI', name: 'AI 運算核心', type: 'STOCK', subType: 'TECH', price: 100, dividend: 0.02 },
+            { id: 'TSLA_EV', name: '綠能載具', type: 'STOCK', subType: 'TECH', price: 80, dividend: 0.01 },
+            { id: 'BTC_COIN', name: '比特幣', type: 'CRYPTO', subType: 'CRYPTO', price: 200, dividend: 0 },
+            { id: 'OIL_FUT', name: '全球原油', type: 'COMMODITY', subType: 'COMMODITY', price: 50, dividend: 0.03 },
+            { id: 'NY_REIT', name: '紐約商辦', type: 'REIT', subType: 'REIT', price: 120, dividend: 0.05 },
+            { id: 'US_BOND', name: '美國國債', type: 'BOND', subType: 'BOND', price: 100, dividend: 0.04 }
+        ];
+
+        // From PDF Events
+        const EVENTS = [
+            { text: "AI 泡沫破裂！科技股重挫。", type: 'CRASH', target: 'TECH', impact: -0.3 },
+            { text: "中東地緣衝突升溫，原油暴漲。", type: 'BOOM', target: 'COMMODITY', impact: 0.4 },
+            { text: "美聯儲宣佈降息，全市場普漲。", type: 'BOOM', target: 'ALL', impact: 0.15 },
+            { text: "區塊鏈監管法規收緊，加密貨幣暴跌。", type: 'CRASH', target: 'CRYPTO', impact: -0.4 },
+            { text: "綠能革命！政府補貼新能源產業。", type: 'BOOM', target: 'TECH', impact: 0.25 },
+            { text: "全球經濟衰退，現金為王。", type: 'CRASH', target: 'ALL', impact: -0.1 },
+            { text: "房市復甦，租金收益提升。", type: 'BOOM', target: 'REIT', impact: 0.15 },
+            { text: "黑客攻擊交易所，投資人恐慌。", type: 'CRASH', target: 'CRYPTO', impact: -0.2 }
+        ];
+
+        // --- Game Engine ---
+
+        class CapitalEpoch {
+            constructor() {
+                this.round = 1;
+                this.maxRounds = 10;
+                this.cash = 100000;
+                this.role = null;
+                this.roleBonus = {}; 
+                this.extraIntel = false;
+                
+                // Deep copy initial assets
+                this.assets = JSON.parse(JSON.stringify(INITIAL_ASSETS));
+                this.assets.forEach(a => {
+                    a.history = [a.price];
+                    a.trend = 0;
+                });
+
+                this.portfolio = {}; // { assetId: quantity }
+                this.assets.forEach(a => this.portfolio[a.id] = 0);
+                
+                this.currentEvent = null;
+                this.insiderInfo = null;
+                this.log = [];
+
+                this.chart = null;
+            }
+
+            init() {
+                ui.renderRoleSelection();
+                ui.initChart();
+                this.startRound();
+            }
+
+            selectRole(roleId) {
+                const role = ROLES.find(r => r.id === roleId);
+                this.role = role;
+                role.effect(this);
+                ui.updateRoleDisplay(role);
+                ui.hideModal('role-modal');
+                this.updateUI();
+            }
+
+            startRound() {
+                // Generate Info for this round
+                this.generateInsiderInfo();
+                ui.renderIntel(this.insiderInfo);
+                ui.updateTicker("新回合開始。請根據內線情報調整您的投資組合...");
+            }
+
+            generateInsiderInfo() {
+                // Pick a random asset or sector to be affected next turn
+                const targetIdx = Math.floor(Math.random() * this.assets.length);
+                const asset = this.assets[targetIdx];
+                
+                // Determine direction (Simulate "True" insider info)
+                // In this simplified version, info is 80% accurate
+                const isPositive = Math.random() > 0.5;
+                const accuracy = Math.random() > 0.2; // 20% chance info is wrong (trap)
+
+                this.insiderInfo = {
+                    target: asset.name,
+                    targetId: asset.id,
+                    type: asset.subType,
+                    direction: isPositive ? '上漲' : '下跌',
+                    isTrue: accuracy,
+                    msg: `情報員透露：${asset.name} 下一季財報可能${isPositive ? '優於' : '低於'}預期。`
+                };
+
+                // Insider role gets extra info
+                if (this.extraIntel) {
+                    const eventIdx = Math.floor(Math.random() * EVENTS.length);
+                    this.insiderInfo.extraMsg = `宏觀洩漏：${EVENTS[eventIdx].text.substring(0, 10)}... 可能發生。`;
+                }
+            }
+
+            calculateNAV() {
+                let assetValue = 0;
+                for (let id in this.portfolio) {
+                    const asset = this.assets.find(a => a.id === id);
+                    assetValue += this.portfolio[id] * asset.price;
+                }
+                return this.cash + assetValue;
+            }
+
+            executeTrade(action) {
+                const input = document.getElementById('trade-amount');
+                const qty = parseInt(input.value);
+                const assetId = ui.currentTradeAssetId;
+                const asset = this.assets.find(a => a.id === assetId);
+
+                if (qty <= 0) return;
+
+                if (action === 'buy') {
+                    const cost = qty * asset.price;
+                    if (this.cash >= cost) {
+                        this.cash -= cost;
+                        this.portfolio[assetId] += qty;
+                        ui.showNotification(`買入 ${qty} ${asset.name}`, 'success');
+                    } else {
+                        ui.showNotification('現金不足！', 'error');
+                        return;
+                    }
+                } else if (action === 'sell') {
+                    if (this.portfolio[assetId] >= qty) {
+                        const revenue = qty * asset.price;
+                        this.cash += revenue;
+                        this.portfolio[assetId] -= qty;
+                        ui.showNotification(`賣出 ${qty} ${asset.name}`, 'success');
+                    } else {
+                        ui.showNotification('持倉不足！', 'error');
+                        return;
+                    }
+                }
+
+                ui.closeTradeModal();
+                this.updateUI();
+            }
+
+            nextTurn() {
+                // 1. Trigger Event
+                const eventChance = Math.random();
+                let activeEvent = null;
+                
+                if (eventChance > 0.3) { // 70% chance of event
+                    const eventIdx = Math.floor(Math.random() * EVENTS.length);
+                    activeEvent = EVENTS[eventIdx];
+                    ui.updateTicker(`[重大事件] ${activeEvent.text}`);
+                } else {
+                    ui.updateTicker("市場平穩運行中...");
+                }
+
+                // 2. Update Prices
+                this.assets.forEach(asset => {
+                    let changePercent = 0;
+
+                    // Base Volatility (Random walk)
+                    const vol = ASSET_TYPES[asset.type].volatility;
+                    const randomMove = (Math.random() * vol * 2) - vol; // -vol to +vol
+                    changePercent += randomMove;
+
+                    // Event Impact
+                    if (activeEvent) {
+                        if (activeEvent.target === 'ALL' || activeEvent.target === asset.subType) {
+                            changePercent += activeEvent.impact;
+                        }
+                    }
+
+                    // Insider Logic realization (Did the insider info come true?)
+                    if (this.insiderInfo.targetId === asset.id) {
+                        // If info was true, push price in that direction slightly more
+                        if (this.insiderInfo.isTrue) {
+                            changePercent += (this.insiderInfo.direction === '上漲' ? 0.1 : -0.1);
+                        } else {
+                             // It was false info, market reacts opposite or randomly
+                            changePercent += (this.insiderInfo.direction === '上漲' ? -0.05 : 0.05);
+                        }
+                    }
+
+                    // Apply Change
+                    let oldPrice = asset.price;
+                    asset.price = Math.max(1, Math.round(asset.price * (1 + changePercent)));
+                    asset.history.push(asset.price);
+                    asset.trend = ((asset.price - oldPrice) / oldPrice * 100).toFixed(1);
+
+                    // 3. Dividends / Interest (Settlement)
+                    if (this.portfolio[asset.id] > 0 && asset.dividend > 0) {
+                        let divRate = asset.dividend;
+                        // Role Bonus Logic
+                        if (this.roleBonus.type === asset.subType) {
+                            if (this.roleBonus.multi) divRate *= this.roleBonus.multi; // Price gain logic handled in NAV usually, but simplified here as cash yield for some roles
+                            if (this.roleBonus.dividendMulti) divRate *= this.roleBonus.dividendMulti;
+                        }
+
+                        const income = Math.round(this.portfolio[asset.id] * asset.price * divRate);
+                        if (income > 0) {
+                            this.cash += income;
+                            // ui.showNotification(`收到 ${asset.name} 股息 $${income}`, 'info');
+                        }
+                    }
+                });
+
+                // 4. Check Game End
+                if (this.round >= this.maxRounds) {
+                    this.endGame();
+                    return;
+                }
+
+                // 5. Next Round Setup
+                this.round++;
+                this.startRound(); // Generates new intel
+                this.updateUI();
+            }
+
+            endGame() {
+                const nav = this.calculateNAV();
+                const profit = ((nav - 100000) / 100000 * 100).toFixed(1);
+                document.getElementById('final-score').innerText = `$${nav.toLocaleString()}`;
+                
+                let title = "市場韭菜";
+                if (nav > 250000) title = "華爾街之狼";
+                else if (nav > 150000) title = "優秀經理人";
+                else if (nav > 100000) title = "避險專家";
+
+                document.getElementById('final-rank').innerText = `${title} (回報率: ${profit}%)`;
+                ui.showModal('end-modal');
+            }
+
+            updateUI() {
+                document.getElementById('round-display').innerText = `${this.round} / ${this.maxRounds}`;
+                document.getElementById('cash-display').innerText = `$${Math.floor(this.cash).toLocaleString()}`;
+                document.getElementById('nav-display').innerText = `$${Math.floor(this.calculateNAV()).toLocaleString()}`;
+                
+                ui.renderMarket(this.assets);
+                ui.renderPortfolio(this.portfolio, this.assets);
+                ui.updateChart(this.assets);
+            }
+        }
+
+        // --- UI Controller ---
+
+        const ui = {
+            currentTradeAssetId: null,
+
+            renderRoleSelection: () => {
+                const container = document.querySelector('#role-modal .grid');
+                container.innerHTML = ROLES.map(role => `
+                    <button onclick="game.selectRole('${role.id}')" class="bg-slate-700 hover:bg-slate-600 p-4 rounded-lg border border-slate-500 flex flex-col items-center gap-2 transition transform hover:scale-105">
+                        <div class="text-4xl">${role.icon}</div>
+                        <div class="font-bold text-blue-300">${role.name}</div>
+                        <div class="text-xs text-slate-400 text-center">${role.desc}</div>
+                    </button>
+                `).join('');
+            },
+
+            renderIntel: (info) => {
+                const panel = document.getElementById('intel-panel');
+                let html = `<div class="p-2 border-l-2 border-blue-500 bg-blue-900/20 mb-2">
+                    <span class="font-bold text-blue-300">內線消息:</span> ${info.msg}
+                </div>`;
+                
+                if (info.extraMsg) {
+                    html += `<div class="p-2 border-l-2 border-purple-500 bg-purple-900/20 mb-2">
+                        <span class="font-bold text-purple-300">職業特權:</span> ${info.extraMsg}
+                    </div>`;
+                }
+                panel.innerHTML = html;
+            },
+
+            renderMarket: (assets) => {
+                const grid = document.getElementById('market-grid');
+                grid.innerHTML = assets.map(asset => {
+                    const trendClass = asset.trend >= 0 ? 'trend-up' : 'trend-down';
+                    const trendSign = asset.trend >= 0 ? '+' : '';
+                    return `
+                    <div onclick="ui.openTradeModal('${asset.id}')" class="asset-card glass-panel p-3 rounded cursor-pointer border border-slate-700">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-bold text-sm text-white">${asset.name}</div>
+                                <div class="text-xs text-slate-500">${ASSET_TYPES[asset.type].name}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-white cyber-font">$${asset.price}</div>
+                                <div class="text-xs ${trendClass}">${trendSign}${asset.trend}%</div>
+                            </div>
+                        </div>
+                        <!-- Mini Bar for visual -->
+                        <div class="w-full bg-slate-700 h-1 mt-2 rounded overflow-hidden">
+                            <div class="h-full ${asset.trend >=0 ? 'bg-green-500' : 'bg-red-500'}" style="width: ${Math.min(Math.abs(asset.trend)*5, 100)}%"></div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            },
+
+            renderPortfolio: (portfolio, assets) => {
+                const list = document.getElementById('portfolio-list');
+                let html = '';
+                let hasAssets = false;
+                
+                for (let [id, qty] of Object.entries(portfolio)) {
+                    if (qty > 0) {
+                        hasAssets = true;
+                        const asset = assets.find(a => a.id === id);
+                        const totalVal = qty * asset.price;
+                        html += `
+                        <div class="bg-slate-800 p-2 rounded border-l-2 border-blue-500 flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-white">${asset.name}</div>
+                                <div class="text-xs text-slate-400">持有: ${qty}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-blue-300">$${totalVal.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                }
+
+                if (!hasAssets) {
+                    html = '<div class="text-center text-slate-500 text-sm mt-10">尚未持有資產</div>';
+                }
+                list.innerHTML = html;
+            },
+
+            updateRoleDisplay: (role) => {
+                document.getElementById('role-name').innerText = role.name + " " + role.icon;
+                document.getElementById('role-desc').innerText = role.desc;
+            },
+
+            updateTicker: (text) => {
+                document.getElementById('news-ticker').innerText = text;
+            },
+
+            showHelp: () => {
+                alert("遊戲目標：\n在10回合內利用內線消息與資產配置，最大化您的總資產。\n\n玩法：\n1. 觀察左側情報面板的消息。\n2. 點擊市場資產進行買賣。\n3. 結束回合，觸發價格波動。\n4. 注意：消息有時是假的！");
+            },
+
+            showNotification: (msg, type) => {
+                // Simple alert replacement for this single-file scope, could be toast
+                // console.log(`[${type}] ${msg}`);
+                // A better ephemeral toast could go here, sticking to simplicity for now.
+            },
+
+            // Modal Logic
+            openTradeModal: (assetId) => {
+                ui.currentTradeAssetId = assetId;
+                const asset = game.assets.find(a => a.id === assetId);
+                const owned = game.portfolio[assetId];
+                
+                document.getElementById('trade-asset-name').innerText = asset.name;
+                document.getElementById('trade-asset-price').innerText = `$${asset.price}`;
+                document.getElementById('trade-owned').innerText = owned;
+                document.getElementById('trade-max-buy').innerText = Math.floor(game.cash / asset.price);
+                
+                document.getElementById('trade-amount').value = 1;
+                game.adjustTradeAmount(0); // update total
+
+                ui.showModal('trade-modal');
+            },
+
+            closeTradeModal: () => {
+                ui.hideModal('trade-modal');
+                ui.currentTradeAssetId = null;
+            },
+
+            showModal: (id) => document.getElementById(id).classList.remove('hidden'),
+            hideModal: (id) => document.getElementById(id).classList.add('hidden'),
+
+            // Chart.js Integration
+            initChart: () => {
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                game.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['R0', 'R1'],
+                        datasets: []
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94a3b8' } }
+                        },
+                        scales: {
+                            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                        }
+                    }
+                });
+            },
+
+            updateChart: (assets) => {
+                if (!game.chart) return;
+                
+                const labels = assets[0].history.map((_, i) => `R${i}`);
+                
+                const datasets = assets.map(asset => ({
+                    label: asset.name,
+                    data: asset.history,
+                    borderColor: ui.getColorCode(ASSET_TYPES[asset.type].color),
+                    tension: 0.3,
+                    pointRadius: 2,
+                    borderWidth: 2
+                }));
+
+                game.chart.data.labels = labels;
+                game.chart.data.datasets = datasets;
+                game.chart.update();
+            },
+
+            getColorCode: (colorName) => {
+                const map = {
+                    'blue': '#3b82f6', 'purple': '#a855f7', 'yellow': '#eab308',
+                    'orange': '#f97316', 'green': '#22c55e', 'red': '#ef4444'
+                };
+                return map[colorName] || '#fff';
+            }
+        };
+
+        // Helper attached to game object
+        game = new CapitalEpoch();
+        game.adjustTradeAmount = (delta) => {
+            const input = document.getElementById('trade-amount');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+
+            if (ui.currentTradeAssetId) {
+                const asset = game.assets.find(a => a.id === ui.currentTradeAssetId);
+                const total = val * asset.price;
+                document.getElementById('trade-total').innerText = `$${total.toLocaleString()}`;
+                
+                // Style check
+                const totalEl = document.getElementById('trade-total');
+                if (total > game.cash) totalEl.classList.replace('text-yellow-400', 'text-red-500');
+                else totalEl.classList.replace('text-red-500', 'text-yellow-400');
+            }
+        };
+
+        // Start
+        window.onload = () => game.init();
+
+    </script>
+</body>
+</html>

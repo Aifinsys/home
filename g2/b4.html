@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>操盤大師：四人混戰 Futures & Options Tycoon 4P</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .tw-up { color: #ef4444; }
+        .tw-down { color: #22c55e; }
+        .bg-tw-up { background-color: #ef4444; }
+        .bg-tw-down { background-color: #22c55e; }
+        
+        .phase-indicator {
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .active-phase {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        @keyframes ticker-change {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .price-update {
+            animation: ticker-change 0.3s ease-in-out;
+        }
+
+        .modal-bg {
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Player Themes */
+        .p0-text { color: #3b82f6; } /* Blue */
+        .p0-border { border-color: #3b82f6; }
+        .p0-bg { background-color: #2563eb; }
+
+        .p1-text { color: #ec4899; } /* Pink */
+        .p1-border { border-color: #ec4899; }
+        .p1-bg { background-color: #db2777; }
+
+        .p2-text { color: #f59e0b; } /* Amber */
+        .p2-border { border-color: #f59e0b; }
+        .p2-bg { background-color: #d97706; }
+
+        .p3-text { color: #06b6d4; } /* Cyan */
+        .p3-border { border-color: #06b6d4; }
+        .p3-bg { background-color: #0891b2; }
+
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- 頂部資訊列 -->
+    <header class="bg-slate-800 border-b border-slate-700 p-3 flex justify-between items-center sticky top-0 z-20 shadow-lg">
+        <div class="flex items-center gap-3">
+            <div id="current-player-badge" class="px-3 py-1 rounded font-bold text-white text-sm transition-colors bg-blue-600 shadow-lg border border-white/20">
+                P1 回合
+            </div>
+            <div class="hidden md:block text-xs text-slate-400 font-bold tracking-wider">操盤大師 Ai Fintech Corp. 2025 ©<span class="text-yellow-500 text-[10px] border border-yellow-500 px-1 rounded">4P版</span></div>
+        </div>
+        <div class="flex gap-4 md:gap-8 text-sm md:text-base font-mono">
+            <div class="text-center">
+                <div class="text-slate-400 text-[10px]">回合</div>
+                <div id="round-display" class="font-bold text-yellow-400">1/6</div>
+            </div>
+            <div class="text-center">
+                <div class="text-slate-400 text-[10px]">市價</div>
+                <div id="market-price" class="font-bold text-2xl text-white">100.0</div>
+            </div>
+            <div class="text-center">
+                <div class="text-slate-400 text-[10px]">IV</div>
+                <div id="market-iv" class="font-bold text-purple-400">20%</div>
+            </div>
+        </div>
+        <div class="text-right">
+            <div class="text-slate-400 text-[10px]">當前資產</div>
+            <div id="player-equity" class="font-bold text-green-400">$100,000</div>
+        </div>
+    </header>
+
+    <!-- 階段指示器 -->
+    <div class="flex justify-around bg-slate-900 text-xs md:text-sm border-b border-slate-800 py-2">
+        <div id="phase-info" class="phase-indicator px-2 py-1 rounded text-blue-300">1.資訊與下單</div>
+        <div id="phase-manipulate" class="phase-indicator px-2 py-1 rounded text-purple-300">2.市場操縱</div>
+        <div id="phase-settle" class="phase-indicator px-2 py-1 rounded text-green-300">3.結算</div>
+    </div>
+
+    <!-- 主遊戲區域 -->
+    <main class="flex-1 overflow-y-auto p-4 relative bg-slate-900">
+        
+        <!-- 遊戲初始化畫面 (角色選擇) -->
+        <div id="setup-screen" class="absolute inset-0 z-30 bg-slate-900 p-6 flex flex-col items-center justify-center overflow-y-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 text-center">
+                四人對決模式
+            </h1>
+            <div class="flex gap-2 mb-6 text-xs font-mono">
+                <span class="text-blue-500">P1</span> <span class="text-slate-600">vs</span>
+                <span class="text-pink-500">P2</span> <span class="text-slate-600">vs</span>
+                <span class="text-amber-500">P3</span> <span class="text-slate-600">vs</span>
+                <span class="text-cyan-500">P4</span>
+            </div>
+            <p id="setup-instruction" class="text-xl text-blue-400 mb-6 font-bold animate-pulse">請 P1 選擇角色</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl pb-10">
+                <!-- 角色卡片由 JS 生成 -->
+            </div>
+        </div>
+
+        <!-- 換手畫面 (Intermission) -->
+        <div id="intermission-screen" class="hidden absolute inset-0 z-40 bg-slate-900 flex flex-col items-center justify-center p-6">
+            <div class="text-6xl mb-6 text-slate-500"><i class="fas fa-users"></i></div>
+            <h2 class="text-3xl font-bold text-white mb-4">換手時間</h2>
+            <p class="text-slate-400 mb-8 text-center max-w-md">
+                請將裝置交給 <span id="next-player-name" class="font-bold text-2xl">Player X</span><br>
+                確認對方接手後再點擊開始。
+            </p>
+            <button onclick="game.startTurn()" class="bg-slate-700 hover:bg-slate-600 text-white text-xl font-bold py-4 px-12 rounded-lg shadow-lg border border-slate-500 transform transition hover:scale-105">
+                開始回合
+            </button>
+        </div>
+
+        <!-- 遊戲結束畫面 -->
+        <div id="game-over-screen" class="hidden absolute inset-0 z-50 bg-slate-900 p-6 flex flex-col items-center justify-center overflow-y-auto">
+            <h1 class="text-4xl font-bold text-yellow-500 mb-4 mt-10">最終戰績</h1>
+            <div id="final-results" class="w-full max-w-lg bg-slate-800 rounded-lg p-6 shadow-xl mb-6 border border-slate-600 space-y-3">
+                <!-- 結果由 JS 填充 -->
+            </div>
+            <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg mb-10">
+                重新開局
+            </button>
+        </div>
+
+        <!-- 核心遊戲介面 -->
+        <div id="game-interface" class="hidden h-full flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
+            
+            <!-- 左側：資訊與操作 -->
+            <div class="flex-1 flex flex-col gap-4">
+                
+                <!-- 資訊卡區域 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500 shadow-md">
+                        <div class="text-xs text-slate-400 uppercase mb-1">公開事件 (Public)</div>
+                        <div id="public-event-text" class="font-bold text-lg text-white leading-tight">等待開盤...</div>
+                        <div id="public-event-effect" class="text-sm text-blue-300 mt-1"></div>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-lg border-l-4 border-purple-500 shadow-md relative overflow-hidden">
+                        <div class="text-xs text-slate-400 uppercase mb-1">我的內線 (Private)</div>
+                        <div id="private-info-text" class="font-bold text-lg text-white leading-tight">機密檔案</div>
+                        <div class="absolute -right-4 -bottom-4 text-6xl text-purple-500 opacity-10 rotate-12"><i class="fas fa-user-secret"></i></div>
+                    </div>
+                </div>
+
+                <!-- 交易面板 -->
+                <div id="trading-panel" class="hidden bg-slate-800 rounded-lg p-4 shadow-md flex-1 flex flex-col border-t-4 border-slate-600 transition-colors">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                        <h3 class="text-lg font-bold text-white"><i class="fas fa-hand-holding-dollar mr-2"></i><span id="trading-title">下單交易</span></h3>
+                        <div class="text-sm">可用現金: <span id="available-cash" class="text-green-400 font-mono"></span></div>
+                    </div>
+                    
+                    <!-- 商品選擇 Tab -->
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="game.switchProduct('futures')" id="btn-futures" class="flex-1 py-2 rounded bg-blue-600 text-white font-bold transition-colors">指數期貨</button>
+                        <button onclick="game.switchProduct('options')" id="btn-options" class="flex-1 py-2 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition-colors">選擇權</button>
+                    </div>
+
+                    <!-- 期貨下單區 -->
+                    <div id="futures-area" class="flex-1">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <button onclick="game.tradeFutures('long')" class="bg-slate-700 hover:bg-tw-up hover:text-white group p-4 rounded-lg border border-slate-600 transition-all">
+                                <div class="text-tw-up group-hover:text-white font-bold text-xl mb-1">做多 (Long)</div>
+                                <div class="text-xs text-slate-400 group-hover:text-slate-100">預期上漲</div>
+                                <div class="mt-2 text-sm text-slate-300">保證金: $5,000</div>
+                            </button>
+                            <button onclick="game.tradeFutures('short')" class="bg-slate-700 hover:bg-tw-down hover:text-white group p-4 rounded-lg border border-slate-600 transition-all">
+                                <div class="text-tw-down group-hover:text-white font-bold text-xl mb-1">做空 (Short)</div>
+                                <div class="text-xs text-slate-400 group-hover:text-slate-100">預期下跌</div>
+                                <div class="mt-2 text-sm text-slate-300">保證金: $5,000</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 選擇權下單區 -->
+                    <div id="options-area" class="hidden flex-1">
+                         <div class="grid grid-cols-2 gap-2 mb-2">
+                            <div class="text-center text-sm text-slate-400">履約價 (Strike)</div>
+                            <select id="option-strike" class="bg-slate-900 border border-slate-600 text-white rounded p-2 w-full">
+                                <!-- Options populated by JS -->
+                            </select>
+                         </div>
+                         <div class="grid grid-cols-2 gap-4">
+                             <div class="bg-slate-700/50 p-3 rounded border border-slate-600">
+                                 <div class="text-center text-tw-up font-bold mb-2">買權 (Call)</div>
+                                 <div class="flex gap-2">
+                                     <button onclick="game.tradeOptions('call', 'buy')" class="flex-1 bg-slate-600 hover:bg-blue-600 text-white text-sm py-2 rounded">買進</button>
+                                     <button onclick="game.tradeOptions('call', 'sell')" class="flex-1 bg-slate-600 hover:bg-red-600 text-white text-sm py-2 rounded">賣出</button>
+                                 </div>
+                             </div>
+                             <div class="bg-slate-700/50 p-3 rounded border border-slate-600">
+                                 <div class="text-center text-tw-down font-bold mb-2">賣權 (Put)</div>
+                                 <div class="flex gap-2">
+                                     <button onclick="game.tradeOptions('put', 'buy')" class="flex-1 bg-slate-600 hover:bg-blue-600 text-white text-sm py-2 rounded">買進</button>
+                                     <button onclick="game.tradeOptions('put', 'sell')" class="flex-1 bg-slate-600 hover:bg-red-600 text-white text-sm py-2 rounded">賣出</button>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="mt-3 text-xs text-slate-400 text-center">
+                             *買方支付權利金，賣方收取權利金需抵押保證金
+                         </div>
+                    </div>
+
+                    <button onclick="game.finishPhase()" class="w-full mt-4 bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded shadow-lg">
+                        完成本階段操作 (換下一位)
+                    </button>
+                </div>
+
+                <!-- 操盤面板 -->
+                <div id="manipulation-panel" class="hidden bg-slate-800 rounded-lg p-4 shadow-md flex-1 border-t-4 border-purple-500 transition-colors">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center"><i class="fas fa-magic mr-2 text-purple-400"></i>市場推力 (Market Manipulation)</h3>
+                    <p class="text-sm text-slate-400 mb-4">花費資金影響最終結算價格。你的對手也在行動！</p>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <button onclick="game.manipulateMarket('pump')" class="p-3 bg-slate-700 hover:bg-tw-up border border-slate-600 rounded transition flex flex-col items-center">
+                            <span class="font-bold">推漲 (+5)</span>
+                            <span class="text-xs text-slate-400">費用: $2,000</span>
+                        </button>
+                        <button onclick="game.manipulateMarket('dump')" class="p-3 bg-slate-700 hover:bg-tw-down border border-slate-600 rounded transition flex flex-col items-center">
+                            <span class="font-bold">打壓 (-5)</span>
+                            <span class="text-xs text-slate-400">費用: $2,000</span>
+                        </button>
+                        <button onclick="game.manipulateMarket('iv_up')" class="p-3 bg-slate-700 hover:bg-purple-600 border border-slate-600 rounded transition flex flex-col items-center">
+                            <span class="font-bold">製造恐慌 (IV+5)</span>
+                            <span class="text-xs text-slate-400">費用: $1,500</span>
+                        </button>
+                        <button onclick="game.manipulateMarket('iv_down')" class="p-3 bg-slate-700 hover:bg-blue-500 border border-slate-600 rounded transition flex flex-col items-center">
+                            <span class="font-bold">壓縮波動 (IV-5)</span>
+                            <span class="text-xs text-slate-400">費用: $1,500</span>
+                        </button>
+                    </div>
+                    <div id="manipulation-log" class="h-20 overflow-y-auto bg-slate-900 p-2 rounded text-xs font-mono text-purple-300 mb-3 border border-slate-700">
+                        <!-- Log entries -->
+                    </div>
+                    <button onclick="game.finishPhase()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded shadow-lg">
+                        結束操盤 (換下一位)
+                    </button>
+                </div>
+
+                <!-- 結算報告 -->
+                <div id="settlement-panel" class="hidden bg-slate-800 rounded-lg p-4 shadow-md flex-1 border-t-4 border-green-500">
+                    <h3 class="text-lg font-bold text-white mb-2">本回合結算</h3>
+                    <div id="settlement-summary" class="bg-slate-900 p-3 rounded mb-4 text-sm font-mono h-64 overflow-y-auto space-y-4"></div>
+                    <button onclick="game.nextRound()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded shadow-lg">
+                        進入下一回合
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- 右側：資產與持倉 -->
+            <div class="w-full lg:w-80 bg-slate-800 border-l border-slate-700 p-4 flex flex-col shadow-xl z-10">
+                <div class="mb-6">
+                    <h3 class="text-slate-400 text-sm uppercase font-bold mb-2">我的持倉 (Portfolio)</h3>
+                    <div id="portfolio-list" class="space-y-2 min-h-[100px]">
+                        <div class="text-slate-500 text-center py-4 italic">空手觀望</div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-900 p-3 rounded border border-slate-700 mb-4">
+                    <h3 class="text-slate-400 text-xs uppercase font-bold mb-2">風險監控</h3>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>現金</span>
+                        <span id="risk-cash" class="text-white">$100,000</span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>保證金</span>
+                        <span id="risk-margin" class="text-yellow-400">$0</span>
+                    </div>
+                    <div class="w-full bg-slate-700 h-2 rounded-full mt-2 overflow-hidden">
+                        <div id="margin-bar" class="bg-green-500 h-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <div class="text-xs text-right mt-1 text-slate-500" id="margin-text">使用率: 0%</div>
+                </div>
+
+                <!-- 對手列表 -->
+                <div class="flex-1 border-t border-slate-700 pt-4">
+                    <h3 class="text-slate-400 text-xs uppercase font-bold mb-2">其他玩家概況</h3>
+                    <ul id="opponents-list" class="space-y-2">
+                        <!-- Generated via JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Messages -->
+    <div id="message-modal" class="hidden fixed inset-0 z-50 modal-bg flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-lg shadow-2xl max-w-md w-full border border-slate-600 p-6 transform transition-all scale-100">
+            <h3 id="modal-title" class="text-xl font-bold text-white mb-2">通知</h3>
+            <p id="modal-body" class="text-slate-300 mb-6">內容</p>
+            <button onclick="document.getElementById('message-modal').classList.add('hidden')" class="w-full bg-blue-600 text-white py-2 rounded font-bold">確定</button>
+        </div>
+    </div>
+
+    <script>
+        const ROLES = [
+            { id: 'trend', name: '趨勢騎士', desc: '突破時自動獲得額外現金獎勵 ($500)', icon: 'fa-horse-head' },
+            { id: 'risk', name: '風控官', desc: '爆倉風險降低，保證金需求減少 20%', icon: 'fa-shield-alt' },
+            { id: 'vol', name: '波動術士', desc: '操縱 IV 的成本減半', icon: 'fa-water' },
+            { id: 'quant', name: '量化幽靈', desc: '內線消息更精準，操盤影響力 +2', icon: 'fa-robot' },
+            { id: 'market', name: '操盤煉金師', desc: '每回合獲得額外 $3,000 現金流', icon: 'https://cdn.midjourney.com/e5a9c4d0-1f1a-4d8e-8e3c-9a6b8e9f4c5d/0_0.png' }
+        ];
+
+        const EVENTS = [
+            { text: '美國聯準會宣布升息', effect: 'price_down', magnitude: 15, iv_change: 5 },
+            { text: '地緣政治緊張局勢升溫', effect: 'price_down', magnitude: 10, iv_change: 15 },
+            { text: '科技巨頭財報優於預期', effect: 'price_up', magnitude: 15, iv_change: -5 },
+            { text: '失業率數據低於預期', effect: 'price_up', magnitude: 10, iv_change: 0 },
+            { text: '市場傳出併購謠言', effect: 'random', magnitude: 20, iv_change: 10 },
+            { text: '監管機構發布新禁令', effect: 'price_down', magnitude: 20, iv_change: 10 },
+            { text: '外資大幅買超', effect: 'price_up', magnitude: 20, iv_change: -2 },
+            { text: '量化基金觸發停損賣壓', effect: 'price_down', magnitude: 25, iv_change: 20 },
+            { text: '黑色星期五：恐慌蔓延', effect: 'crash', magnitude: 40, iv_change: 30 },
+            { text: '央行實施寬鬆政策', effect: 'moon', magnitude: 30, iv_change: -10 }
+        ];
+
+        class Player {
+            constructor(id, name, colorClass, borderClass, bgClass) {
+                this.id = id;
+                this.name = name;
+                this.colorClass = colorClass;
+                this.borderClass = borderClass;
+                this.bgClass = bgClass;
+                this.cash = 100000;
+                this.marginUsed = 0;
+                this.role = null;
+                this.positions = [];
+                this.privateInfo = null;
+                this.equity = 100000;
+            }
+        }
+
+        class Game {
+            constructor() {
+                this.round = 1;
+                this.maxRounds = 6;
+                this.marketPrice = 100;
+                this.marketIV = 20;
+                this.playerCount = 4;
+                this.players = [
+                    new Player(0, "Player 1", "p0-text", "p0-border", "p0-bg"),
+                    new Player(1, "Player 2", "p1-text", "p1-border", "p1-bg"),
+                    new Player(2, "Player 3", "p2-text", "p2-border", "p2-bg"),
+                    new Player(3, "Player 4", "p3-text", "p3-border", "p3-bg")
+                ];
+                this.currentPlayerIdx = 0; 
+                this.phase = 'setup'; // setup, trade, manipulate, settle
+                this.subPhase = 0; // Turn index (0 to 3) within a phase
+                this.currentEvent = null;
+                this.manipulationLog = [];
+                this.randomNoise = 0;
+                
+                this.initSetup();
+            }
+
+            get currentPlayer() {
+                return this.players[this.currentPlayerIdx];
+            }
+
+            initSetup() {
+                this.renderRoleSelection(0);
+            }
+
+            renderRoleSelection(playerIdx) {
+                const container = document.querySelector('#setup-screen .grid');
+                const instruction = document.getElementById('setup-instruction');
+                container.innerHTML = '';
+                
+                const p = this.players[playerIdx];
+                
+                instruction.innerHTML = `請 <span class="${p.colorClass}">${p.name}</span> 選擇角色`;
+                instruction.className = `text-xl mb-6 font-bold animate-pulse ${p.colorClass}`;
+
+                ROLES.forEach(role => {
+                    // If already picked, disable
+                    const isTaken = this.players.some(p => p.role && p.role.id === role.id);
+                    
+                    const card = document.createElement('button');
+                    card.className = `bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center shadow-lg group ${isTaken ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-700 hover:scale-105 transition transform'}`;
+                    if (!isTaken) {
+                        card.onclick = () => this.selectRole(playerIdx, role);
+                    }
+                    
+                    const iconHtml = role.icon.startsWith('http') 
+                        ? `<img src="${role.icon}" alt="${role.name}" class="w-12 h-12 mb-2 rounded-full border-2 border-slate-600 object-cover">`
+                        : `<div class="text-3xl mb-2 ${p.colorClass}"><i class="fas ${role.icon}"></i></div>`;
+
+                    card.innerHTML = `
+                        ${iconHtml}
+                        <h3 class="text-lg font-bold text-white mb-1">${role.name}</h3>
+                        <p class="text-xs text-slate-400 text-center h-8 overflow-hidden">${role.desc}</p>
+                        ${isTaken ? '<span class="text-xs text-red-500 mt-1">(已選)</span>' : ''}
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            selectRole(playerIdx, role) {
+                this.players[playerIdx].role = role;
+                if (playerIdx < this.playerCount - 1) {
+                    this.renderRoleSelection(playerIdx + 1);
+                } else {
+                    document.getElementById('setup-screen').classList.add('hidden');
+                    document.getElementById('game-interface').classList.remove('hidden');
+                    this.startRound();
+                }
+            }
+
+            startRound() {
+                this.phase = 'trade';
+                this.subPhase = 0; 
+                this.currentPlayerIdx = 0;
+                this.manipulationLog = [];
+                document.getElementById('manipulation-log').innerHTML = '';
+                
+                // Generate Event
+                this.currentEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+                this.randomNoise = Math.floor(Math.random() * 21) - 10;
+
+                // Generate Private Info & Role Skills
+                this.players.forEach(p => {
+                    if (p.role.id === 'market') p.cash += 3000;
+
+                    let noiseHint = this.randomNoise;
+                    if (p.role.id !== 'quant') {
+                         noiseHint += (Math.floor(Math.random() * 10) - 5); 
+                    }
+                    
+                    let hint = "";
+                    if (p.role.id === 'quant') {
+                        hint = `模型預測：噪音偏差約 ${this.randomNoise > 0 ? '+' : ''}${this.randomNoise}`;
+                    } else {
+                        if (Math.random() > 0.5) {
+                            hint = `消息：噪音傾向 ${noiseHint > 0 ? '樂觀 (+)' : '悲觀 (-)'}`;
+                        } else {
+                            hint = `情報：噪音絕對值 ${Math.abs(noiseHint) > 5 ? '>5' : '<5'}`;
+                        }
+                    }
+                    p.privateInfo = hint;
+                });
+
+                // Start with P1
+                this.showIntermission(0);
+            }
+
+            showIntermission(playerIdx) {
+                const modal = document.getElementById('intermission-screen');
+                const nextNameSpan = document.getElementById('next-player-name');
+                const p = this.players[playerIdx];
+                
+                nextNameSpan.innerText = p.name;
+                nextNameSpan.className = `font-bold text-2xl ${p.colorClass}`;
+                
+                modal.classList.remove('hidden');
+                this.currentPlayerIdx = playerIdx;
+            }
+
+            startTurn() {
+                document.getElementById('intermission-screen').classList.add('hidden');
+                this.updateUIForCurrentPlayer();
+                this.updateHeader();
+            }
+
+            updateUIForCurrentPlayer() {
+                const p = this.currentPlayer;
+                
+                // Badge & Theme
+                const badge = document.getElementById('current-player-badge');
+                const panel = document.getElementById('trading-panel');
+                const manPanel = document.getElementById('manipulation-panel');
+                
+                badge.innerText = `${p.name} 回合`;
+                badge.className = `px-3 py-1 rounded font-bold text-white text-sm transition-colors ${p.bgClass} shadow-lg border border-white/20`;
+                
+                panel.className = `bg-slate-800 rounded-lg p-4 shadow-md flex-1 flex flex-col border-t-4 transition-colors ${p.borderClass}`;
+                manPanel.className = `bg-slate-800 rounded-lg p-4 shadow-md flex-1 border-t-4 transition-colors ${p.borderClass}`;
+
+                // Phase Display
+                document.querySelectorAll('.phase-indicator').forEach(el => el.classList.remove('active-phase'));
+                if (this.phase === 'trade') {
+                    document.getElementById('phase-info').classList.add('active-phase');
+                    document.getElementById('trading-panel').classList.remove('hidden');
+                    document.getElementById('manipulation-panel').classList.add('hidden');
+                    document.getElementById('settlement-panel').classList.add('hidden');
+                } else if (this.phase === 'manipulate') {
+                    document.getElementById('phase-manipulate').classList.add('active-phase');
+                    document.getElementById('trading-panel').classList.add('hidden');
+                    document.getElementById('manipulation-panel').classList.remove('hidden');
+                } else {
+                    document.getElementById('phase-settle').classList.add('active-phase');
+                    document.getElementById('settlement-panel').classList.remove('hidden');
+                }
+
+                // Texts
+                document.getElementById('public-event-text').innerText = this.currentEvent.text;
+                document.getElementById('public-event-effect').innerText = `預期: ${this.getEffectText(this.currentEvent.effect)}`;
+                document.getElementById('private-info-text').innerText = p.privateInfo;
+
+                this.updateOptionStrikes();
+                this.updatePortfolio();
+                this.updateOpponentsList();
+            }
+
+            updateOpponentsList() {
+                const list = document.getElementById('opponents-list');
+                list.innerHTML = '';
+                
+                this.players.forEach(other => {
+                    if (other.id === this.currentPlayerIdx) return;
+                    
+                    const li = document.createElement('li');
+                    li.className = 'bg-slate-700/50 p-2 rounded text-xs flex justify-between items-center';
+                    li.innerHTML = `
+                        <div>
+                            <span class="${other.colorClass} font-bold">${other.name}</span>
+                            <div class="text-slate-500 scale-90 origin-left">${other.role.name}</div>
+                        </div>
+                        <div class="text-slate-300">$${Math.round(other.equity).toLocaleString()}</div>
+                    `;
+                    list.appendChild(li);
+                });
+            }
+
+            switchProduct(type) {
+                const btnF = document.getElementById('btn-futures');
+                const btnO = document.getElementById('btn-options');
+                const areaF = document.getElementById('futures-area');
+                const areaO = document.getElementById('options-area');
+
+                const p = this.currentPlayer;
+                const activeClass = p.bgClass; // e.g. 'bg-blue-600' logic mapped in css or use hardcode. 
+                // Using a safer approach:
+                let activeBg = 'bg-blue-600';
+                if (p.id === 1) activeBg = 'bg-pink-600';
+                if (p.id === 2) activeBg = 'bg-amber-600';
+                if (p.id === 3) activeBg = 'bg-cyan-600';
+
+                if (type === 'futures') {
+                    btnF.className = `flex-1 py-2 rounded text-white font-bold transition-colors ${activeBg}`;
+                    btnO.className = 'flex-1 py-2 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition-colors';
+                    areaF.classList.remove('hidden');
+                    areaO.classList.add('hidden');
+                } else {
+                    btnO.className = `flex-1 py-2 rounded text-white font-bold transition-colors ${activeBg}`;
+                    btnF.className = 'flex-1 py-2 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition-colors';
+                    areaF.classList.add('hidden');
+                    areaO.classList.remove('hidden');
+                }
+            }
+
+            getEffectText(effect) {
+                if (effect === 'price_up') return '看漲';
+                if (effect === 'price_down') return '看跌';
+                if (effect === 'crash') return '崩盤風險';
+                if (effect === 'moon') return '暴漲機率';
+                return '隨機震盪';
+            }
+
+            updateOptionStrikes() {
+                const select = document.getElementById('option-strike');
+                select.innerHTML = '';
+                const center = Math.round(this.marketPrice / 10) * 10;
+                for (let i = -2; i <= 2; i++) {
+                    const strike = center + (i * 10);
+                    if (strike > 0) {
+                        const option = document.createElement('option');
+                        option.value = strike;
+                        option.text = `履約價 $${strike}`;
+                        if (i === 0) option.selected = true;
+                        select.appendChild(option);
+                    }
+                }
+            }
+
+            tradeFutures(side) {
+                const p = this.currentPlayer;
+                const marginReq = 5000 * (p.role.id === 'risk' ? 0.8 : 1);
+                
+                if (p.cash < marginReq) {
+                    this.logMessage("資金不足", "現金不足以支付保證金。");
+                    return;
+                }
+
+                p.cash -= marginReq;
+                p.marginUsed += marginReq;
+                p.positions.push({ type: 'futures', side, entry: this.marketPrice, qty: 1, margin: marginReq });
+                this.updatePortfolio();
+                this.updateHeader();
+            }
+
+            tradeOptions(type, side) {
+                const p = this.currentPlayer;
+                const strike = parseInt(document.getElementById('option-strike').value);
+                const isCall = type === 'call';
+                const intrinsic = isCall ? Math.max(0, this.marketPrice - strike) : Math.max(0, strike - this.marketPrice);
+                const timeValue = (this.marketIV / 100) * this.marketPrice * 0.1;
+                const premium = Math.round((intrinsic + timeValue) * 100) / 100;
+                const contractCost = premium * 100;
+
+                if (side === 'buy') {
+                    if (p.cash < contractCost) {
+                        this.logMessage("資金不足", "現金不足支付權利金");
+                        return;
+                    }
+                    p.cash -= contractCost;
+                    p.positions.push({ type: 'option', side: 'long', right: type, strike, premium, cost: contractCost, qty: 1 });
+                } else {
+                    const marginReq = 8000 * (p.role.id === 'risk' ? 0.8 : 1);
+                    if (p.cash < marginReq) {
+                        this.logMessage("資金不足", "現金不足支付保證金");
+                        return;
+                    }
+                    p.cash += contractCost;
+                    p.cash -= marginReq;
+                    p.marginUsed += marginReq;
+                    p.positions.push({ type: 'option', side: 'short', right: type, strike, premium, received: contractCost, margin: marginReq, qty: 1 });
+                }
+                this.updatePortfolio();
+                this.updateHeader();
+            }
+
+            manipulateMarket(action) {
+                const p = this.currentPlayer;
+                let cost = 2000;
+                let influence = 5;
+
+                if (p.role.id === 'quant') influence = 7;
+                if (p.role.id === 'vol' && action.includes('iv')) cost = 750;
+                else if (action.includes('iv')) cost = 1500;
+
+                if (p.cash < cost) {
+                    this.logMessage("資金不足", "無法負擔操盤費用");
+                    return;
+                }
+
+                p.cash -= cost;
+
+                let logText = "";
+                const nameSpan = `<span class="${p.colorClass}">${p.name}</span>`;
+
+                if (action === 'pump') {
+                    this.marketPrice += influence;
+                    logText = `${nameSpan} 拉抬價格 +${influence}`;
+                } else if (action === 'dump') {
+                    this.marketPrice -= influence;
+                    logText = `${nameSpan} 打壓價格 -${influence}`;
+                } else if (action === 'iv_up') {
+                    this.marketIV += influence;
+                    logText = `${nameSpan} 製造恐慌 IV +${influence}%`;
+                } else if (action === 'iv_down') {
+                    this.marketIV = Math.max(5, this.marketIV - influence);
+                    logText = `${nameSpan} 撫平波動 IV -${influence}%`;
+                }
+
+                const priceEl = document.getElementById('market-price');
+                priceEl.classList.remove('price-update');
+                void priceEl.offsetWidth;
+                priceEl.classList.add('price-update');
+
+                this.manipulationLog.push(logText);
+                this.renderManipulationLog();
+                this.updateHeader();
+            }
+
+            renderManipulationLog() {
+                const logContainer = document.getElementById('manipulation-log');
+                logContainer.innerHTML = this.manipulationLog.map(l => `<div>> ${l}</div>`).join('');
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+
+            finishPhase() {
+                // Logic for switching turns among 4 players
+                if (this.subPhase < this.playerCount - 1) {
+                    // Same phase, next player
+                    this.subPhase++;
+                    this.showIntermission(this.subPhase);
+                } else {
+                    // End of phase for all players, move to next phase
+                    if (this.phase === 'trade') {
+                        this.phase = 'manipulate';
+                        this.subPhase = 0;
+                        this.showIntermission(0);
+                    } else if (this.phase === 'manipulate') {
+                        this.phase = 'settle';
+                        document.getElementById('trading-panel').classList.add('hidden');
+                        document.getElementById('manipulation-panel').classList.add('hidden');
+                        document.getElementById('settlement-panel').classList.remove('hidden');
+                        this.updateUIPhaseDisplayOnly();
+                        this.calculateSettlement();
+                    }
+                }
+            }
+
+            updateUIPhaseDisplayOnly() {
+                document.querySelectorAll('.phase-indicator').forEach(el => el.classList.remove('active-phase'));
+                document.getElementById('phase-settle').classList.add('active-phase');
+            }
+
+            calculateSettlement() {
+                // 1. Final Price
+                let baseChange = 0;
+                if (this.currentEvent.effect === 'price_up') baseChange = Math.random() * this.currentEvent.magnitude;
+                else if (this.currentEvent.effect === 'price_down') baseChange = -(Math.random() * this.currentEvent.magnitude);
+                else if (this.currentEvent.effect === 'crash') baseChange = -40;
+                else if (this.currentEvent.effect === 'moon') baseChange = 40;
+                else baseChange = (Math.random() * 40) - 20;
+
+                const totalChange = baseChange + this.randomNoise;
+                
+                const oldPrice = this.marketPrice;
+                this.marketPrice = Math.max(10, Math.round(this.marketPrice + totalChange));
+                this.marketIV = Math.max(5, Math.min(100, this.marketIV + this.currentEvent.iv_change));
+
+                // 2. Process Each Player
+                let summaryHtml = `<div class="text-center border-b border-slate-600 pb-2 mb-2">
+                    <div class="text-xs text-slate-400">最終收盤</div>
+                    <div class="text-2xl font-bold text-white">$${this.marketPrice}</div>
+                    <div class="text-xs ${this.marketPrice >= oldPrice ? 'text-red-400' : 'text-green-400'}">
+                        (事件影響: ${Math.round(totalChange)})
+                    </div>
+                </div>`;
+
+                this.players.forEach(p => {
+                    let pnl = 0;
+                    let details = "";
+                    
+                    p.positions.forEach(pos => {
+                        let itemPnl = 0;
+                        if (pos.type === 'futures') {
+                            const diff = this.marketPrice - pos.entry;
+                            itemPnl = (pos.side === 'long' ? diff : -diff) * 100;
+                            if (itemPnl > 0 && p.role.id === 'trend') itemPnl += 500;
+                            p.cash += pos.margin;
+                            p.marginUsed -= pos.margin;
+                        } else {
+                            const intrinsic = pos.right === 'call' 
+                                ? Math.max(0, this.marketPrice - pos.strike)
+                                : Math.max(0, pos.strike - this.marketPrice);
+                            const val = intrinsic * 100;
+                            if (pos.side === 'long') {
+                                itemPnl = val - pos.cost;
+                                p.cash += val;
+                            } else {
+                                const loss = val;
+                                itemPnl = pos.received - loss;
+                                p.cash -= loss;
+                                p.cash += pos.margin;
+                                p.marginUsed -= pos.margin;
+                            }
+                        }
+                        pnl += itemPnl;
+                    });
+
+                    p.positions = []; 
+                    p.equity = p.cash; 
+
+                    if (p.cash < 0) {
+                         if (p.role.id === 'risk') {
+                             p.cash = 5000;
+                             details += `<div class="text-xs text-blue-400 mt-1">風控官復活發動！</div>`;
+                         }
+                    }
+                    p.equity = p.cash;
+
+                    const pnlColor = pnl >= 0 ? 'text-tw-up' : 'text-tw-down';
+                    
+                    summaryHtml += `<div class="bg-slate-700/30 p-2 rounded mb-2 border-l-2 ${p.borderClass}">
+                        <div class="flex justify-between font-bold">
+                            <span class="${p.colorClass}">${p.name}</span>
+                            <span class="${pnlColor}">${pnl >= 0 ? '+' : ''}$${Math.round(pnl)}</span>
+                        </div>
+                        ${details}
+                        <div class="text-xs text-right text-slate-400 mt-1">總資產: $${Math.round(p.cash).toLocaleString()}</div>
+                    </div>`;
+                });
+
+                document.getElementById('settlement-summary').innerHTML = summaryHtml;
+                this.updateHeader();
+            }
+
+            nextRound() {
+                if (this.round >= this.maxRounds) {
+                    this.endGame();
+                } else {
+                    this.round++;
+                    this.startRound();
+                }
+            }
+
+            endGame() {
+                document.getElementById('game-interface').classList.add('hidden');
+                document.getElementById('game-over-screen').classList.remove('hidden');
+
+                // Sort players by cash
+                const sortedPlayers = [...this.players].sort((a, b) => b.cash - a.cash);
+                const winner = sortedPlayers[0];
+                
+                let html = `<div class="text-center mb-8">`;
+                html += `<div class="text-6xl mb-2 text-yellow-400"><i class="fas fa-trophy"></i></div>`;
+                html += `<div class="text-3xl text-white font-bold mb-2">冠軍: <span class="${winner.colorClass}">${winner.name}</span></div>`;
+                html += `<div class="text-sm text-slate-400">獲得稱號: 操盤大師</div>`;
+                html += `</div>`;
+
+                html += `<div class="space-y-3">`;
+                sortedPlayers.forEach((p, index) => {
+                     html += `<div class="flex justify-between items-center bg-slate-800 p-4 rounded border-l-4 ${p.borderClass} shadow-lg">
+                        <div class="flex items-center">
+                            <span class="text-2xl font-bold text-slate-500 mr-4 w-6">#${index+1}</span>
+                            <div>
+                                <div class="font-bold ${p.colorClass} text-lg">${p.name}</div>
+                                <div class="text-xs text-slate-400">${p.role.name}</div>
+                            </div>
+                        </div>
+                        <div class="text-xl text-white font-mono">$${Math.round(p.cash).toLocaleString()}</div>
+                     </div>`;
+                });
+                html += `</div>`;
+
+                document.getElementById('final-results').innerHTML = html;
+            }
+
+            updateHeader() {
+                document.getElementById('round-display').innerText = `${this.round}/${this.maxRounds}`;
+                document.getElementById('market-price').innerText = this.marketPrice.toFixed(1);
+                document.getElementById('market-iv').innerText = `${this.marketIV}%`;
+                
+                const p = this.currentPlayer;
+                if (p) {
+                    document.getElementById('player-equity').innerText = `$${Math.round(p.cash + p.marginUsed).toLocaleString()}`;
+                    document.getElementById('available-cash').innerText = `$${Math.round(p.cash).toLocaleString()}`;
+                    document.getElementById('risk-cash').innerText = `$${Math.round(p.cash).toLocaleString()}`;
+                    document.getElementById('risk-margin').innerText = `$${Math.round(p.marginUsed).toLocaleString()}`;
+                    
+                    const totalCapital = p.cash + p.marginUsed;
+                    const marginPct = totalCapital > 0 ? (p.marginUsed / totalCapital) * 100 : 0;
+                    const bar = document.getElementById('margin-bar');
+                    bar.style.width = `${marginPct}%`;
+                    bar.className = `h-full transition-all ${marginPct > 80 ? 'bg-red-500' : (marginPct > 50 ? 'bg-yellow-500' : 'bg-green-500')}`;
+                    document.getElementById('margin-text').innerText = `保證金使用率: ${Math.round(marginPct)}%`;
+                }
+            }
+
+            updatePortfolio() {
+                const list = document.getElementById('portfolio-list');
+                const p = this.currentPlayer;
+                if (p.positions.length === 0) {
+                    list.innerHTML = '<div class="text-slate-500 text-center py-4 italic">空手觀望</div>';
+                    return;
+                }
+                
+                list.innerHTML = p.positions.map(pos => {
+                    let desc = "";
+                    let badge = "";
+                    if (pos.type === 'futures') {
+                        desc = `指數 @ ${pos.entry}`;
+                        badge = pos.side === 'long' ? '<span class="bg-tw-up text-white text-xs px-1 rounded">多</span>' : '<span class="bg-tw-down text-white text-xs px-1 rounded">空</span>';
+                    } else {
+                        desc = `${pos.right === 'call' ? '買權' : '賣權'} ${pos.strike}`;
+                        badge = pos.side === 'long' ? '<span class="bg-blue-600 text-white text-xs px-1 rounded">買</span>' : '<span class="bg-red-600 text-white text-xs px-1 rounded">賣</span>';
+                    }
+                    
+                    return `<div class="bg-slate-900 p-2 rounded border border-slate-700 flex justify-between items-center">
+                        <div>${badge} <span class="text-sm text-slate-300">${desc}</span></div>
+                        <div class="text-xs text-slate-500">qty: ${pos.qty}</div>
+                    </div>`;
+                }).join('');
+            }
+
+            logMessage(title, body) {
+                document.getElementById('modal-title').innerText = title;
+                document.getElementById('modal-body').innerText = body;
+                document.getElementById('message-modal').classList.remove('hidden');
+            }
+        }
+
+        const game = new Game();
+    </script>
+</body>
+</html>
