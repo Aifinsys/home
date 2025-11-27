@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG 詞彙學習 (ESG Vocabulary Flashcards)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+        
+        /* Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        
+        /* The class that triggers the flip */
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar for categories */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Smooth fade in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Quiz animations */
+        .correct-answer {
+            background-color: #d1fae5 !important; /* emerald-100 */
+            border-color: #10b981 !important; /* emerald-500 */
+            color: #065f46 !important;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important; /* red-100 */
+            border-color: #ef4444 !important; /* red-500 */
+            color: #991b1b !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo / Home -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                    <div class="bg-emerald-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 tracking-wide">ESG 詞彙學習網</h1>
+                        <p class="text-xs text-gray-500">中山永續金融科技</p>
+                    </div>
+                </div>
+                <!-- Top Buttons -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                     <button onclick="showQuizSelection()" class="bg-orange-50 text-orange-700 hover:bg-orange-100 px-3 sm:px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 border border-orange-200">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span class="hidden sm:inline">測驗挑戰</span>
+                        <span class="sm:hidden">測驗</span>
+                    </button>
+                    <button id="toggleModeBtn" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-3 sm:px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 border border-emerald-200">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span id="modeText" class="hidden sm:inline">切換學習模式</span>
+                        <span class="sm:hidden" id="modeTextMobile">學習</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Controls & Filters (Only visible in Grid/Learn modes) -->
+    <div id="controlsArea" class="bg-white shadow-sm pb-4 pt-2 sticky top-16 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Search -->
+            <div class="mt-2 mb-4 relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-gray-400"></i>
+                </div>
+                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition duration-150 ease-in-out" placeholder="搜尋中文或英文關鍵字...">
+            </div>
+
+            <!-- Categories (Scrollable horizontally) -->
+            <div class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1" id="categoryContainer">
+                <!-- Categories injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- 1. Grid View (Default) -->
+        <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards injected here -->
+        </div>
+
+        <!-- 2. Learn View (Flashcard Mode) -->
+        <div id="learnView" class="hidden flex flex-col items-center justify-center max-w-2xl mx-auto min-h-[60vh]">
+            
+            <!-- Progress -->
+            <div class="w-full flex justify-between text-sm text-gray-500 mb-2 font-medium">
+                <span id="currentCardIndex">1</span>
+                <span id="totalCardCount">/ 20</span>
+            </div>
+            
+            <!-- The Big Card -->
+            <div class="relative w-full h-96 perspective-1000 group cursor-pointer" onclick="toggleMainCardFlip(this)">
+                <div id="mainFlashcard" class="relative w-full h-full text-center transition-transform duration-500 transform-style-3d shadow-xl rounded-2xl">
+                    
+                    <!-- Front -->
+                    <div class="absolute w-full h-full backface-hidden bg-white border border-gray-100 rounded-2xl flex flex-col items-center justify-center p-8">
+                        <span id="learnCardCategory" class="absolute top-6 right-6 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">Category</span>
+                        <div class="text-center">
+                            <h2 id="learnCardTitle" class="text-4xl font-bold text-gray-800 mb-4">Term</h2>
+                            <p class="text-gray-400 text-sm animate-pulse">(點擊翻轉查看解釋)</p>
+                        </div>
+                    </div>
+
+                    <!-- Back -->
+                    <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl rotate-y-180 flex flex-col items-center justify-center p-8">
+                        <button onclick="event.stopPropagation(); speakTerm()" class="absolute top-6 right-6 p-2 rounded-full bg-white text-emerald-600 hover:bg-emerald-100 shadow-sm transition-colors" title="發音">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                        <h3 id="learnCardEng" class="text-2xl font-bold text-emerald-800 mb-2 font-serif">English Term</h3>
+                        <div class="w-16 h-1 bg-emerald-400 rounded-full mb-6"></div>
+                        <p id="learnCardDesc" class="text-gray-700 text-lg leading-relaxed">Description goes here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex gap-4 mt-8 w-full justify-center">
+                <button onclick="prevCard()" class="px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-full shadow-sm hover:bg-gray-50 hover:border-gray-300 transition-all focus:outline-none w-1/3">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> 上一個
+                </button>
+                <button onclick="nextCard()" class="px-6 py-3 bg-gray-900 text-white rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl transition-all focus:outline-none w-1/3">
+                    下一個 <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            <div class="mt-4 text-sm text-gray-400">
+                提示：可使用鍵盤左右鍵切換
+            </div>
+        </div>
+
+        <!-- 3. Quiz View -->
+        <div id="quizView" class="hidden max-w-2xl mx-auto">
+            
+            <!-- Quiz Selection Screen -->
+            <div id="quizSelection" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center animate-fade-in">
+                <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">請選擇測驗模式</h2>
+                <p class="text-gray-500 mb-8">每回合將隨機抽選 5 題進行測試</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button onclick="startQuiz('translation')" class="p-6 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all group text-left">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                                <i class="fa-solid fa-language"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-800">英譯挑戰</h3>
+                        </div>
+                        <p class="text-sm text-gray-500">顯示中文詞彙，請選擇正確的英文翻譯。</p>
+                    </button>
+
+                    <button onclick="startQuiz('meaning')" class="p-6 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all group text-left">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-800">詞意測驗</h3>
+                        </div>
+                        <p class="text-sm text-gray-500">顯示定義說明，請選擇對應的英文名詞。</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Start / Question Container -->
+            <div id="quizQuestionContainer" class="hidden bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center animate-fade-in">
+                
+                <div class="mb-6 flex justify-between items-center text-sm font-medium text-gray-400">
+                    <span id="quizProgress">Question 1/5</span>
+                    <span id="quizModeBadge" class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-xs">測驗模式</span>
+                </div>
+
+                <div class="mb-8">
+                    <h2 id="quizInstruction" class="text-gray-500 text-sm mb-2 uppercase tracking-wider">請選擇正確的答案</h2>
+                    <h1 id="quizQuestionText" class="text-2xl sm:text-3xl font-bold text-gray-800 leading-snug">題目載入中...</h1>
+                </div>
+
+                <div id="quizOptions" class="grid grid-cols-1 gap-3">
+                    <!-- Options injected here -->
+                </div>
+                
+                <div id="quizFeedback" class="hidden mt-6 p-4 rounded-lg bg-gray-50 border text-left animate-fade-in">
+                    <!-- Feedback text -->
+                </div>
+
+                <button id="quizNextBtn" onclick="nextQuestion()" class="hidden mt-6 w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    下一題 <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Quiz Result Container -->
+            <div id="quizResultContainer" class="hidden bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center animate-fade-in">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">測驗完成！</h2>
+                <p class="text-gray-500 mb-6">您的最終得分</p>
+                
+                <div class="text-6xl font-black text-gray-800 mb-4" id="quizFinalScore">80</div>
+                <p id="quizComment" class="text-lg text-emerald-600 font-medium mb-8">做得很好！繼續保持！</p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 shadow-md transition-colors w-full sm:w-auto">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> 再試一次
+                    </button>
+                    <button onclick="showQuizSelection()" class="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors w-full sm:w-auto">
+                        選擇其他模式
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <div class="text-6xl text-gray-200 mb-4">
+                <i class="fa-solid fa-inbox"></i>
+            </div>
+            <p class="text-gray-500 text-lg">沒有找到相關的詞彙</p>
+            <button onclick="resetFilters()" class="mt-4 text-emerald-600 hover:text-emerald-700 font-medium">重置搜尋</button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <button onclick="goHome()" class="mb-4 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full text-sm font-medium transition-colors">
+                <i class="fa-solid fa-house mr-1"></i>回到頁首
+            </button>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95">
+               <a href="index.html" class="home-btn">公司主頁</a>
+            </button>
+            <p class="text-gray-500 text-sm">&copy; 2025 Ai FinTech Corp.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA SOURCE ---
+        const vocabData = [
+            // Environmental
+            { ch: "溫室氣體排放", en: "Greenhouse Gas Emissions (GHG)", desc: "企業排放 CO₂、CH₄ 等溫室氣體的量", cat: "Environmental" },
+            { ch: "節能效率", en: "Energy Efficiency", desc: "企業每單位產出所消耗的能源成本", cat: "Environmental" },
+            { ch: "碳足跡", en: "Carbon Footprint", desc: "營運過程中產生的碳排放總量", cat: "Environmental" },
+            { ch: "再生能源使用率", en: "Renewable Energy Usage", desc: "綠電使用比例", cat: "Environmental" },
+            { ch: "污染排放", en: "Pollution Emissions", desc: "廢棄物、水、空氣污染等排放量", cat: "Environmental" },
+            { ch: "氣候變遷風險", en: "Climate Risk", desc: "企業受極端氣候與政策變動影響程度", cat: "Environmental" },
+            { ch: "碳密集度", en: "Carbon Intensity", desc: "每單位收入或產量的碳排量", cat: "Environmental" },
+            
+            // Social
+            { ch: "勞工權益", en: "Labor Rights", desc: "工時、安全、薪資等員工保護", cat: "Social" },
+            { ch: "顧客隱私", en: "Customer Privacy", desc: "客戶資料保護程度", cat: "Social" },
+            { ch: "供應鏈管理", en: "Supply Chain Management", desc: "監督供應商 ESG 遵循度", cat: "Social" },
+            { ch: "多元與共融", en: "Diversity & Inclusion (D&I)", desc: "性別與族群多樣性", cat: "Social" },
+            { ch: "社會影響力", en: "Social Impact", desc: "企業對社會的正面貢獻", cat: "Social" },
+            { ch: "員工流動率", en: "Employee Turnover", desc: "企業人才流動健康度", cat: "Social" },
+            { ch: "社會風險暴露", en: "Social Risk Exposure", desc: "職災、抗議等風險暴露", cat: "Social" },
+            
+            // Governance
+            { ch: "董事會結構", en: "Board Structure", desc: "董事會的獨立性與透明度", cat: "Governance" },
+            { ch: "股東權益保障", en: "Shareholder Rights", desc: "保障股東決策與投票權", cat: "Governance" },
+            { ch: "企業透明度", en: "Corporate Transparency", desc: "財報與資訊揭露品質", cat: "Governance" },
+            { ch: "商業道德", en: "Business Ethics", desc: "反貪腐與反賄賂制度", cat: "Governance" },
+            { ch: "內控與稽核", en: "Internal Controls & Audit", desc: "內部稽核制度健全度", cat: "Governance" },
+
+            // ESG Quant
+            { ch: "量化因子", en: "Quantitative Factors", desc: "動能/價值/品質等因子", cat: "ESG Quant" },
+            { ch: "因子曝險", en: "Factor Exposure", desc: "組合對因子敏感度", cat: "ESG Quant" },
+            { ch: "風險調整後報酬", en: "Risk-adjusted Return", desc: "扣除風險後的收益", cat: "ESG Quant" },
+            { ch: "ESG 阿爾法", en: "ESG Alpha", desc: "ESG 是否創造超額報酬", cat: "ESG Quant" },
+            { ch: "組合最佳化", en: "Portfolio Optimization", desc: "考慮 ESG 約束之最佳化", cat: "ESG Quant" },
+            { ch: "負面篩選", en: "Negative Screening", desc: "排除高污染或爭議企業", cat: "ESG Quant" },
+            { ch: "正面篩選", en: "Positive Screening", desc: "選入高 ESG 分數企業", cat: "ESG Quant" },
+            { ch: "影響力投資", en: "Impact Investing", desc: "以社會環境改善為目標的投資", cat: "ESG Quant" },
+            { ch: "永續因子模型", en: "Sustainability Factor Model", desc: "整合 ESG 的多因子模型", cat: "ESG Quant" },
+
+            // Data
+            { ch: "定性指標", en: "Qualitative Metrics", desc: "由文字揭露數據構成", cat: "Data" },
+            { ch: "定量指標", en: "Quantitative Metrics", desc: "可量化 ESG 指標", cat: "Data" },
+            { ch: "第三方 ESG 數據", en: "Third-party ESG Data", desc: "自 MSCI 等來源的資料", cat: "Data" },
+            { ch: "自然語言處理", en: "NLP", desc: "分析報告與新聞的 ESG 資訊", cat: "Data" },
+            { ch: "曝險矩陣", en: "Exposure Matrix", desc: "公司在 ESG 的暴露程度", cat: "Data" },
+            { ch: "事件研究法", en: "Event Study Method", desc: "分析 ESG 事件的股價反應", cat: "Data" },
+            { ch: "數據標準化", en: "Data Normalization", desc: "統一不同指標尺度", cat: "Data" },
+            { ch: "權重調整模型", en: "Weighted Adjustment Model", desc: "依行業特性調整 ESG 權重", cat: "Data" },
+            { ch: "永續揭露標準", en: "Sustainability Disclosure Standards", desc: "如 GRI、SASB、TCFD", cat: "Data" },
+
+            // Quant
+            { ch: "多因子模型", en: "Multi-factor Model", desc: "價值/動能/品質等因子模型", cat: "Quant" },
+            { ch: "夏普值", en: "Sharpe Ratio", desc: "衡量報酬風險效率", cat: "Quant" },
+            { ch: "回測", en: "Backtesting", desc: "測試策略過去表現", cat: "Quant" },
+            { ch: "交易成本", en: "Transaction Costs", desc: "交易過程中產生的費用", cat: "Quant" }
+        ];
+
+        // --- MAPPINGS ---
+        const categoryMap = {
+            'Environmental': '環境 (Environmental)',
+            'Social': '社會 (Social)',
+            'Governance': '治理 (Governance)',
+            'ESG Quant': 'ESG 量化 (ESG Quant)',
+            'Data': '數據資料 (Data)',
+            'Quant': '量化分析 (Quant)',
+            'All': '全部顯示 (All)'
+        };
+
+        const categoryColors = {
+            'Environmental': 'bg-green-100 text-green-800 border-green-200',
+            'Social': 'bg-blue-100 text-blue-800 border-blue-200',
+            'Governance': 'bg-orange-100 text-orange-800 border-orange-200',
+            'ESG Quant': 'bg-purple-100 text-purple-800 border-purple-200',
+            'Data': 'bg-cyan-100 text-cyan-800 border-cyan-200',
+            'Quant': 'bg-gray-100 text-gray-800 border-gray-200',
+            'Default': 'bg-gray-100 text-gray-800 border-gray-200'
+        };
+
+        const getCategoryClass = (cat) => categoryColors[cat] || categoryColors['Default'];
+        const getCategoryName = (cat) => categoryMap[cat] || cat;
+
+        // --- STATE & UTILS ---
+        let currentData = [...vocabData];
+        let currentFilter = 'All';
+        let currentSearch = '';
+        let viewMode = 'grid'; // 'grid', 'learn', 'quiz'
+        let learnIndex = 0;
+
+        // Quiz State
+        let quizState = {
+            mode: 'translation', // 'translation' (Ch->En) or 'meaning' (Desc->En)
+            questions: [],
+            currentQIndex: 0,
+            score: 0,
+            answered: false
+        };
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            filterAndRender();
+            
+            // Search Listener
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase();
+                filterAndRender();
+            });
+
+            // Toggle Mode Listener
+            document.getElementById('toggleModeBtn').addEventListener('click', toggleViewMode);
+
+            // Keyboard Nav
+            document.addEventListener('keydown', (e) => {
+                if (viewMode === 'learn') {
+                    if (e.key === 'ArrowRight') nextCard();
+                    if (e.key === 'ArrowLeft') prevCard();
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        // Flip card on spacebar
+                        const card = document.getElementById('mainFlashcard');
+                        toggleMainCardFlip(card.parentElement);
+                    }
+                }
+            });
+        });
+
+        // --- NAVIGATION FUNCTIONS ---
+
+        function goHome() {
+            resetFilters();
+            viewMode = 'grid';
+            document.getElementById('toggleModeBtn').classList.remove('hidden');
+            document.getElementById('controlsArea').classList.remove('hidden');
+            updateModeButtonText();
+            filterAndRender();
+        }
+
+        function renderCategories() {
+            const categories = ['All', ...new Set(vocabData.map(item => item.cat))];
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                const isActive = cat === 'All';
+                btn.className = `category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium border shadow-sm transition-all ${
+                    isActive 
+                    ? 'bg-gray-900 text-white border-transparent' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`;
+                btn.textContent = getCategoryName(cat); 
+                btn.onclick = () => setCategory(cat, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function setCategory(cat, btnElement) {
+            currentFilter = cat;
+            
+            // Update UI
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.className = 'category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 transition-all';
+            });
+            btnElement.className = 'category-btn whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium bg-gray-900 text-white border-transparent shadow-sm transition-all';
+            
+            filterAndRender();
+        }
+
+        function filterAndRender() {
+            // Filter Data
+            currentData = vocabData.filter(item => {
+                const matchCat = currentFilter === 'All' || item.cat === currentFilter;
+                const matchSearch = item.ch.toLowerCase().includes(currentSearch) || 
+                                    item.en.toLowerCase().includes(currentSearch);
+                return matchCat && matchSearch;
+            });
+
+            // Logic to switch views based on current state
+            const gridEl = document.getElementById('gridView');
+            const learnEl = document.getElementById('learnView');
+            const quizEl = document.getElementById('quizView');
+            const emptyEl = document.getElementById('emptyState');
+            const controlsEl = document.getElementById('controlsArea');
+            const modeBtn = document.getElementById('toggleModeBtn');
+
+            // Reset visibilities
+            gridEl.classList.add('hidden');
+            learnEl.classList.add('hidden');
+            quizEl.classList.add('hidden');
+            emptyEl.classList.add('hidden');
+            
+            if (viewMode === 'quiz') {
+                quizEl.classList.remove('hidden');
+                controlsEl.classList.add('hidden'); 
+                modeBtn.classList.add('hidden'); 
+                return; // Quiz renders itself (managed by showQuizSelection or renderQuizQuestion)
+            }
+
+            // Restore controls for Grid/Learn
+            controlsEl.classList.remove('hidden');
+            modeBtn.classList.remove('hidden');
+
+            if (currentData.length === 0) {
+                emptyEl.classList.remove('hidden');
+            } else {
+                if (viewMode === 'grid') {
+                    renderGrid();
+                    gridEl.classList.remove('hidden');
+                } else {
+                    if (learnIndex >= currentData.length) learnIndex = 0;
+                    renderLearnCard();
+                    learnEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            currentSearch = '';
+            currentFilter = 'All';
+            renderCategories(); 
+            filterAndRender();
+        }
+
+        // --- GRID VIEW ---
+        function renderGrid() {
+            const container = document.getElementById('gridView');
+            container.innerHTML = '';
+
+            currentData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'relative perspective-1000 h-64 w-full cursor-pointer animate-fade-in group';
+                card.style.animationDelay = `${Math.min(index * 0.05, 1)}s`;
+                
+                // Fixed onclick logic: pass 'this' (the container) to toggleFlip
+                card.onclick = function() { toggleFlip(this); };
+
+                // HTML Structure for Flip Card
+                card.innerHTML = `
+                    <div class="relative w-full h-full text-center transition-transform duration-500 transform-style-3d shadow-md group-hover:shadow-lg rounded-xl">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute w-full h-full backface-hidden bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center p-6">
+                            <span class="absolute top-4 right-4 px-2 py-0.5 rounded text-xs font-semibold ${getCategoryClass(item.cat)} border">
+                                ${item.cat}
+                            </span>
+                            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4 text-emerald-600">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${item.ch}</h3>
+                            <p class="text-xs text-gray-400">點擊翻轉</p>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute w-full h-full backface-hidden bg-white border border-emerald-500 rounded-xl rotate-y-180 flex flex-col items-center justify-center p-6 shadow-inner bg-gradient-to-br from-emerald-50 to-white">
+                            <h4 class="text-lg font-bold text-gray-900 mb-2 leading-tight">${item.en}</h4>
+                            <div class="w-8 h-0.5 bg-emerald-300 mb-2"></div>
+                            <p class="text-sm text-gray-600 leading-snug line-clamp-2 mb-3">${item.desc}</p>
+                            
+                            <button onclick="event.stopPropagation(); switchToLearnMode(${index})" class="px-4 py-1.5 bg-emerald-600 text-white text-sm rounded-full shadow hover:bg-emerald-700 transition-colors">
+                                <i class="fa-solid fa-expand mr-1"></i> 進入學習模式
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleFlip(container) {
+            // Find the inner transform element (first child)
+            const inner = container.firstElementChild;
+            // Toggle rotation class on the inner element which has transform-style-3d
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        function switchToLearnMode(index) {
+            learnIndex = index;
+            viewMode = 'learn';
+            updateModeButtonText();
+            filterAndRender();
+        }
+
+        // --- LEARN VIEW ---
+        function toggleViewMode() {
+            viewMode = viewMode === 'grid' ? 'learn' : 'grid';
+            updateModeButtonText();
+            filterAndRender();
+        }
+
+        function updateModeButtonText() {
+            const btnText = document.getElementById('modeText');
+            const btnTextMobile = document.getElementById('modeTextMobile');
+            const btnIcon = document.querySelector('#toggleModeBtn i');
+            
+            if (viewMode === 'learn') {
+                btnText.textContent = "切換列表模式";
+                btnTextMobile.textContent = "列表";
+                btnIcon.className = "fa-solid fa-th";
+            } else {
+                btnText.textContent = "切換學習模式";
+                btnTextMobile.textContent = "學習";
+                btnIcon.className = "fa-solid fa-layer-group";
+            }
+        }
+
+        function renderLearnCard() {
+            if (currentData.length === 0) return;
+
+            const item = currentData[learnIndex];
+            
+            // Reset Flip State
+            const cardInner = document.getElementById('mainFlashcard');
+            cardInner.classList.remove('rotate-y-180');
+
+            setTimeout(() => {
+                document.getElementById('learnCardCategory').textContent = item.cat;
+                document.getElementById('learnCardCategory').className = `absolute top-6 right-6 px-3 py-1 rounded-full text-xs font-semibold border ${getCategoryClass(item.cat)}`;
+                
+                document.getElementById('learnCardTitle').textContent = item.ch;
+                document.getElementById('learnCardEng').textContent = item.en;
+                document.getElementById('learnCardDesc').textContent = item.desc;
+                
+                document.getElementById('currentCardIndex').textContent = `卡片 ${learnIndex + 1}`;
+                document.getElementById('totalCardCount').textContent = `/ ${currentData.length}`;
+            }, 150);
+        }
+
+        function nextCard() {
+            if (learnIndex < currentData.length - 1) {
+                learnIndex++;
+                animateCardTransition('next');
+            }
+        }
+
+        function prevCard() {
+            if (learnIndex > 0) {
+                learnIndex--;
+                animateCardTransition('prev');
+            }
+        }
+
+        function animateCardTransition(direction) {
+            const card = document.getElementById('mainFlashcard');
+            const offset = direction === 'next' ? '20px' : '-20px';
+            
+            card.style.transition = 'all 0.2s ease';
+            card.style.opacity = '0';
+            card.style.transform = `translateX(${offset})`;
+            
+            setTimeout(() => {
+                renderLearnCard();
+                card.classList.remove('rotate-y-180');
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0)';
+                setTimeout(() => card.style.transition = '', 200);
+            }, 200);
+        }
+
+        function toggleMainCardFlip(container) {
+            const inner = container.querySelector('#mainFlashcard');
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        function speakText(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            speechSynthesis.speak(utterance);
+        }
+
+        function speakTerm() {
+            if(currentData[learnIndex]) {
+                speakText(currentData[learnIndex].en);
+            }
+        }
+
+        // --- QUIZ LOGIC ---
+        function showQuizSelection() {
+            viewMode = 'quiz';
+            filterAndRender(); // Shows quizView container
+            
+            document.getElementById('quizSelection').classList.remove('hidden');
+            document.getElementById('quizQuestionContainer').classList.add('hidden');
+            document.getElementById('quizResultContainer').classList.add('hidden');
+        }
+
+        function startQuiz(mode) {
+            quizState.mode = mode;
+            restartQuiz();
+        }
+
+        function restartQuiz() {
+            // Shuffle full dataset and pick 5
+            const shuffled = [...vocabData].sort(() => 0.5 - Math.random());
+            quizState.questions = shuffled.slice(0, 5);
+            quizState.currentQIndex = 0;
+            quizState.score = 0;
+            
+            document.getElementById('quizSelection').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const container = document.getElementById('quizQuestionContainer');
+            const resultContainer = document.getElementById('quizResultContainer');
+            
+            container.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            
+            const q = quizState.questions[quizState.currentQIndex];
+            quizState.answered = false;
+
+            // Update UI based on mode
+            document.getElementById('quizProgress').textContent = `問題 ${quizState.currentQIndex + 1} / 5`;
+            document.getElementById('quizFeedback').classList.add('hidden');
+            document.getElementById('quizNextBtn').classList.add('hidden');
+
+            const instructionEl = document.getElementById('quizInstruction');
+            const questionTextEl = document.getElementById('quizQuestionText');
+            const badgeEl = document.getElementById('quizModeBadge');
+
+            if (quizState.mode === 'translation') {
+                badgeEl.textContent = '英譯挑戰';
+                instructionEl.textContent = '請選擇正確的英文翻譯';
+                questionTextEl.textContent = q.ch;
+            } else {
+                badgeEl.textContent = '詞意測驗';
+                instructionEl.textContent = '請選擇對應下列描述的英文詞彙';
+                questionTextEl.textContent = q.desc;
+            }
+
+            // Generate Options (1 correct + 3 distractors)
+            const otherItems = vocabData.filter(i => i.en !== q.en);
+            const distractors = otherItems.sort(() => 0.5 - Math.random()).slice(0, 3);
+            let options = [q, ...distractors];
+            options.sort(() => 0.5 - Math.random()); // Shuffle options
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all font-medium text-gray-700 hover:border-emerald-300';
+                
+                // For both modes, options are English terms (or could be Chinese for meaning mode, but user likely wants to practice English)
+                // Let's keep Options as English Terms for consistency in learning English
+                btn.textContent = opt.en;
+                
+                btn.onclick = () => checkAnswer(opt, q, btn, options);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct, btnElement, allOptions) {
+            if (quizState.answered) return;
+            quizState.answered = true;
+
+            const feedbackEl = document.getElementById('quizFeedback');
+            const optionsContainer = document.getElementById('quizOptions');
+            
+            // Disable all buttons
+            Array.from(optionsContainer.children).forEach(child => {
+                child.disabled = true;
+                if (child.textContent === correct.en) {
+                    child.classList.add('correct-answer');
+                } else if (child === btnElement && selected.en !== correct.en) {
+                    child.classList.add('wrong-answer');
+                }
+            });
+
+            if (selected.en === correct.en) {
+                quizState.score++;
+                feedbackEl.innerHTML = `<p class="text-emerald-700 font-bold"><i class="fa-solid fa-check-circle"></i> 正確！</p><p class="text-sm text-gray-600 mt-1">${correct.ch}<br>${correct.desc}</p>`;
+                feedbackEl.className = 'mt-6 p-4 rounded-lg bg-emerald-50 border border-emerald-100 text-left animate-fade-in block';
+                speakText("Correct!");
+            } else {
+                feedbackEl.innerHTML = `<p class="text-red-700 font-bold"><i class="fa-solid fa-times-circle"></i> 錯誤</p><p class="text-sm text-gray-600 mt-1">正確答案是：<strong>${correct.en}</strong><br>${correct.ch}<br>${correct.desc}</p>`;
+                feedbackEl.className = 'mt-6 p-4 rounded-lg bg-red-50 border border-red-100 text-left animate-fade-in block';
+                speakText("Wrong.");
+            }
+
+            document.getElementById('quizNextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            quizState.currentQIndex++;
+            if (quizState.currentQIndex < 5) {
+                renderQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quizQuestionContainer').classList.add('hidden');
+            const resultContainer = document.getElementById('quizResultContainer');
+            resultContainer.classList.remove('hidden');
+
+            const scorePercent = (quizState.score / 5) * 100;
+            document.getElementById('quizFinalScore').textContent = scorePercent;
+
+            let comment = "";
+            let color = "text-gray-600";
+            if (scorePercent === 100) {
+                comment = "太棒了！全對！ESG 專家就是你！🏆";
+                color = "text-emerald-600";
+            } else if (scorePercent >= 80) {
+                comment = "很不錯喔！掌握了大部分詞彙！✨";
+                color = "text-emerald-500";
+            } else if (scorePercent >= 60) {
+                comment = "及格了，再多練習一下會更好！📚";
+                color = "text-orange-500";
+            } else {
+                comment = "別灰心，多看幾次學習卡再來挑戰！💪";
+                color = "text-red-500";
+            }
+
+            const commentEl = document.getElementById('quizComment');
+            commentEl.textContent = comment;
+            commentEl.className = `text-lg font-medium mb-8 ${color}`;
+        }
+
+    </script>
+</body>
+</html>
