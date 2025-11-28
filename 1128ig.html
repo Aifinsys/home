@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商用圖表提示詞生成器</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 自定義捲軸樣式 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* 選中狀態的動畫效果 */
+        .chart-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1), 0 2px 4px -1px rgba(59, 130, 246, 0.06);
+            transform: translateY(-2px);
+        }
+        .chart-card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col font-sans text-slate-800">
+
+    <!-- 頁首：使用說明 -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-lg">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-3xl font-bold mb-4 flex items-center gap-3">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                商用資訊圖表提示詞生成器
+            </h1>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm border border-white/20">
+                <h2 class="font-semibold mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> 使用說明：
+                </h2>
+                <ol class="list-decimal list-inside space-y-1 text-sm md:text-base opacity-90">
+                    <li>請先在下方<strong>勾選</strong>一種您想要使用的圖表類型。</li>
+                    <li>在輸入框中<strong>輸入</strong>您的資訊內容（例如：AI 發展史、公司年度財報）。</li>
+                    <li>點擊<strong>「生成提示詞」</strong>按鈕，即可獲得 AI 繪圖專用的 Prompt。</li>
+                </ol>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側：圖表選擇區 (Step 1) -->
+        <div class="lg:col-span-7 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">STEP 1</span>
+                <h3 class="text-xl font-bold text-slate-700">勾選圖表類型</h3>
+            </div>
+            
+            <!-- 圖表列表容器 (由 JS 動態生成) -->
+            <div id="chart-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+
+        <!-- 右側：輸入與生成區 (Step 2) -->
+        <div class="lg:col-span-5 space-y-6 flex flex-col">
+            
+            <!-- 輸入區 -->
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">STEP 2</span>
+                    <h3 class="text-xl font-bold text-slate-700">輸入資訊內容</h3>
+                </div>
+                <textarea 
+                    id="user-input"
+                    placeholder="例如：2024年全球電動車銷售數據比較..."
+                    class="w-full h-32 p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-slate-700 placeholder-slate-400 bg-slate-50 transition-all"
+                ></textarea>
+            </div>
+
+            <!-- 按鍵區 -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="generatePrompt()" class="col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 shadow-md active:scale-95">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    生成提示詞
+                </button>
+                <button onclick="clearAll()" class="bg-white hover:bg-slate-100 text-slate-600 border border-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 active:scale-95">
+                    <i class="fa-regular fa-trash-can"></i>
+                    清除
+                </button>
+                <button id="copy-btn" onclick="copyToClipboard()" disabled class="font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 border bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copy-text">一鍵提取</span>
+                </button>
+            </div>
+
+            <!-- 結果顯示區 -->
+            <div class="bg-slate-800 text-slate-100 p-5 rounded-xl shadow-inner flex-grow flex flex-col relative overflow-hidden group min-h-[200px]">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">
+                    生成結果 (Prompt Output)
+                </label>
+                
+                <!-- 預設顯示 -->
+                <div id="empty-state" class="flex-grow flex flex-col items-center justify-center text-slate-500 opacity-50">
+                    <i class="fa-solid fa-arrows-rotate text-4xl mb-3"></i>
+                    <p>等待生成中...</p>
+                </div>
+
+                <!-- 生成內容顯示 -->
+                <div id="result-content" class="hidden flex-grow overflow-y-auto custom-scrollbar text-sm md:text-base leading-relaxed break-words whitespace-pre-wrap font-mono text-slate-200"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-white border-t border-slate-200 mt-auto">
+        <div class="max-w-5xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <p class="text-lg font-bold text-slate-700">Infographic Prompt Generator</p>
+                <p class="text-xs text-slate-400">Ai Fintech Corp. © 2025</p>
+            </div>
+            
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105 active:scale-95">
+               <a href="index.html" class="home-btn">回主頁</a>
+            </button>
+        </div>
+    </footer>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // --- 1. JSON 資料來源 (基於 CSV 內容) ---
+        const chartData = [
+            { "id": 1, "name": "流程圖", "engName": "Flowchart", "usage": "顯示步驟與決策路徑，如模型訓練過程", "defaultPrompt": "以箭頭與節點展示流程" },
+            { "id": 2, "name": "階層結構圖", "engName": "Hierarchy Diagram", "usage": "展示上下層級、分類或組織結構", "defaultPrompt": "用樹狀階層呈現結構" },
+            { "id": 3, "name": "桑基圖", "engName": "Sankey Diagram", "usage": "顯示能量、資源或注意力權重流向", "defaultPrompt": "以線條粗細表示流向權重" },
+            { "id": 4, "name": "雷達圖", "engName": "Radar Chart", "usage": "多維度績效或特性比較", "defaultPrompt": "比較多個維度的指標數據" },
+            { "id": 5, "name": "圓餅圖", "engName": "Pie Chart", "usage": "顯示整體比例分佈", "defaultPrompt": "顯示各部分佔整體的比例" },
+            
+            // 新增資料 (ID 7-10，來自前一個檔案)
+            { "id": 6, "name": "長條圖", "engName": "Bar Chart", "usage": "類別間數值比較", "defaultPrompt": "比較不同國家投資金額" },
+            { "id": 7, "name": "折線圖", "engName": "Line Chart", "usage": "顯示時間趨勢或變化", "defaultPrompt": "顯示訓練週期變化趨勢或長期變化趨勢" },
+            { "id": 8, "name": "面積圖", "engName": "Area Chart", "usage": "累積或重疊變化展示", "defaultPrompt": "用堆疊面積表現累積或重疊的趨勢" },
+            { "id": 9, "name": "散點圖", "engName": "Scatter Plot", "usage": "顯示兩變數間關係", "defaultPrompt": "點分佈顯示兩變數之間的關聯程度" },
+            { "id": 10, "name": "熱點圖", "engName": "Heatmap", "usage": "顯示密度或關聯矩陣", "defaultPrompt": "顏色深淺代表數據的密度或相關性強弱" },
+
+            // 現有資料 (ID 11-18)
+            { "id": 11, "name": "時間軸圖", "engName": "Timeline", "usage": "顯示事件發展順序", "defaultPrompt": "依年份或時間排列重大事件" },
+            { "id": 12, "name": "對比圖", "engName": "Comparison Layout", "usage": "對照兩組資料或概念", "defaultPrompt": "左右對照差異與優勢" },
+            { "id": 13, "name": "分層資訊圖", "engName": "Layered Infographic", "usage": "強調多層次結構與邏輯", "defaultPrompt": "由底層到上層呈現層次結構" },
+            { "id": 14, "name": "地圖資訊圖", "engName": "Geo Map", "usage": "顯示地理資料分佈", "defaultPrompt": "顯示地理熱點或區域分佈" },
+            { "id": 15, "name": "關聯圖", "engName": "Network Graph", "usage": "節點與關聯關係可視化", "defaultPrompt": "展現節點之間的連結與關聯" },
+            { "id": 16, "name": "漏斗圖", "engName": "Funnel Chart", "usage": "過程中數據流損或篩選過程", "defaultPrompt": "呈現數據逐層篩選的過程" },
+            { "id": 17, "name": "心智圖", "engName": "Mind Map", "usage": "發散性思考與核心主題關聯", "defaultPrompt": "以核心主題向外發散的結構" },
+            { "id": 18, "name": "長條圖", "engName": "Bar Chart", "usage": "比較不同類別的數據大小", "defaultPrompt": "清晰的長條對比數據高低" },
+            
+            // 新增資料 (ID 19，來自前一個檔案)
+            { "id": 19, "name": "對稱資訊圖", "engName": "Symmetrical Layout", "usage": "對照正面與負面特性", "defaultPrompt": "左右對稱結構，對照優勢與劣勢" },
+            
+            // 新增資料 (ID 20-24，來自 add1.csv)
+            { "id": 20, "name": "模組化資訊圖", "engName": "Modular Layout", "usage": "區塊化展示多主題", "defaultPrompt": "各方格區塊呈現不同的主題內容" },
+            { "id": 21, "name": "樹狀流程圖", "engName": "Tree Diagram / Mind Map", "usage": "展示知識結構或概念延伸", "defaultPrompt": "中心概念向外分支展開知識結構" },
+            { "id": 22, "name": "圖示說明式資訊圖", "engName": "Iconographic Layout", "usage": "結合圖示與文字快速說明", "defaultPrompt": "用圖示搭配簡短文字進行解說" },
+            { "id": 23, "name": "圖像比例圖", "engName": "Pictogram", "usage": "用具象圖案呈現比例", "defaultPrompt": "用具象圖案的數量或大小表示群組比例" },
+            { "id": 24, "name": "氣泡圖", "engName": "Bubble Chart", "usage": "顯示三維數據關係", "defaultPrompt": "氣泡的大小、顏色和座標展示三維數據關係" }
+        ];
+
+        // --- 2. 狀態管理 ---
+        let selectedChartId = null;
+        let generatedPrompt = "";
+
+        // --- 3. 初始化渲染圖表列表 ---
+        function renderCharts() {
+            const listContainer = document.getElementById('chart-list');
+            listContainer.innerHTML = ''; // 清空
+
+            chartData.forEach(chart => {
+                const card = document.createElement('div');
+                card.className = `chart-card relative cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-blue-300 hover:shadow-sm transition-all duration-200 group`;
+                card.onclick = () => selectChart(chart.id, card);
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start pointer-events-none">
+                        <div>
+                            <h4 class="font-bold text-slate-700 name-text transition-colors">${chart.name}</h4>
+                            <p class="text-xs text-slate-400 font-medium mb-2">${chart.engName}</p>
+                        </div>
+                        <i class="fa-solid fa-circle-check check-icon text-blue-600 text-xl opacity-0 transform scale-75 transition-all duration-200"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed pointer-events-none">
+                        ${chart.usage}
+                    </p>
+                `;
+                
+                // 標記ID以便後續操作
+                card.dataset.id = chart.id;
+                listContainer.appendChild(card);
+            });
+        }
+
+        // --- 4. 選擇圖表邏輯 ---
+        function selectChart(id) {
+            selectedChartId = id;
+            
+            // 更新 UI 樣式
+            const cards = document.querySelectorAll('.chart-card');
+            cards.forEach(card => {
+                const cardId = parseInt(card.dataset.id);
+                const nameText = card.querySelector('.name-text');
+                
+                if (cardId === id) {
+                    card.classList.add('selected');
+                    card.classList.remove('border-slate-200', 'bg-white');
+                    nameText.classList.remove('text-slate-700');
+                    nameText.classList.add('text-blue-700');
+                } else {
+                    card.classList.remove('selected');
+                    card.classList.add('border-slate-200', 'bg-white');
+                    nameText.classList.add('text-slate-700');
+                    nameText.classList.remove('text-blue-700');
+                }
+            });
+        }
+
+        // --- 5. 生成提示詞邏輯 ---
+        function generatePrompt() {
+            const inputVal = document.getElementById('user-input').value.trim();
+            
+            if (!selectedChartId) {
+                // 使用 console.warn 取代 alert
+                console.warn("請先勾選一種圖表類型！");
+                return;
+            }
+            if (!inputVal) {
+                // 使用 console.warn 取代 alert
+                console.warn("請輸入資訊內容！");
+                return;
+            }
+
+            const chart = chartData.find(c => c.id === selectedChartId);
+            
+            // 組合 Prompt
+            const prompt = `主題: ${inputVal}；比例:16:9；解像度:4K；語言:繁體中文；美術:扁平化設計風格，無陰影、強對比色塊、簡潔圖示，現代化且清爽。；圖表類型:${chart.name} (${chart.engName})；說明: ${chart.defaultPrompt}，重點在於${chart.usage}。`;
+
+            generatedPrompt = prompt;
+            
+            // 更新 UI 顯示結果
+            document.getElementById('empty-state').classList.add('hidden');
+            const resultDiv = document.getElementById('result-content');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerText = prompt;
+
+            // 啟用複製按鈕
+            updateCopyButton(false);
+        }
+
+        // --- 6. 清除邏輯 ---
+        function clearAll() {
+            selectedChartId = null;
+            generatedPrompt = "";
+            document.getElementById('user-input').value = "";
+            
+            // 重置圖表選單樣式
+            const cards = document.querySelectorAll('.chart-card');
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                card.classList.add('border-slate-200', 'bg-white');
+                const nameText = card.querySelector('.name-text');
+                nameText.classList.add('text-slate-700');
+                nameText.classList.remove('text-blue-700');
+            });
+
+            // 重置結果區
+            document.getElementById('empty-state').classList.remove('hidden');
+            document.getElementById('result-content').classList.add('hidden');
+            document.getElementById('result-content').innerText = "";
+            
+            // 禁用複製按鈕
+            const btn = document.getElementById('copy-btn');
+            btn.disabled = true;
+            btn.classList.add('bg-slate-100', 'text-slate-300', 'border-slate-200', 'cursor-not-allowed');
+            btn.classList.remove('bg-indigo-50', 'hover:bg-indigo-100', 'text-indigo-700', 'border-indigo-200', 'bg-green-100', 'text-green-700', 'border-green-300');
+            document.getElementById('copy-text').innerText = "一鍵提取";
+        }
+
+        // --- 7. 複製邏輯 (修正版：使用 execCommand 避免權限錯誤) ---
+        function copyToClipboard() {
+            if (!generatedPrompt) return;
+
+            // 創建一個隱藏的 textarea 元素
+            const textArea = document.createElement("textarea");
+            textArea.value = generatedPrompt;
+            
+            // 確保 textarea 不會影響頁面佈局，但也必須存在於 DOM 中才能被選取
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            
+            // 選取內容
+            textArea.focus();
+            textArea.select();
+
+            try {
+                // 嘗試執行傳統複製指令
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    updateCopyButton(true);
+                    setTimeout(() => updateCopyButton(false), 2000); // 2秒後恢復
+                } else {
+                    console.error('複製指令執行失敗');
+                    console.warn('複製失敗，請手動選取文字複製。');
+                }
+            } catch (err) {
+                console.error('複製時發生錯誤:', err);
+                console.warn('複製失敗，請手動選取文字複製。');
+            }
+
+            // 清理 DOM
+            document.body.removeChild(textArea);
+        }
+
+        // 輔助：更新複製按鈕樣式
+        function updateCopyButton(isCopied) {
+            const btn = document.getElementById('copy-btn');
+            const btnText = document.getElementById('copy-text');
+            const icon = btn.querySelector('i');
+
+            btn.disabled = false;
+            btn.classList.remove('bg-slate-100', 'text-slate-300', 'border-slate-200', 'cursor-not-allowed');
+
+            if (isCopied) {
+                // 成功狀態
+                btn.classList.remove('bg-indigo-50', 'hover:bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
+                btn.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+                btnText.innerText = "已複製";
+                icon.className = "fa-solid fa-check";
+            } else {
+                // 可點擊預設狀態
+                btn.classList.remove('bg-green-100', 'text-green-700', 'border-green-300');
+                btn.classList.add('bg-indigo-50', 'hover:bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
+                btnText.innerText = "一鍵提取";
+                icon.className = "fa-regular fa-copy";
+            }
+        }
+
+        // --- 執行初始化 ---
+        window.onload = renderCharts;
+
+    </script>
+</body>
+</html>
