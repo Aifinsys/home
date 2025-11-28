@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai 氣候風險情報</title>
+    <style>
+        * { box-sizing: border-box; }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f5f5f5;
+            font-family: "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .book-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* 圖片區域：關鍵修正！用 calc 留出底部空間 */
+        #content-image {
+            flex: 1;
+            max-width: 100%;
+            max-height: calc(100vh - 80px);  /* 自動扣掉底部導航高度 */
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 10px auto;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+            background: #fff;
+        }
+
+        /* 底部導航列：改用彈性高度，不再固定 60px */
+        .footer-nav {
+            min-height: 70px;
+            padding: 10px 15px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;           /* 小螢幕自動換行 */
+            box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+            border-top: 1px solid #eee;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            border-radius: 8px;
+            min-width: 80px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-1px);
+        }
+
+        /* 回主頁按鈕特別樣式 */
+        #home-btn {
+            background-color: #4CAF50 !important;
+            color: white !important;
+            border: none !important;
+            font-weight: bold;
+        }
+
+        #home-btn:hover {
+            background-color: #45a049 !important;
+        }
+
+        #page-indicator {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* 錯誤訊息 */
+        .error-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 100;
+            max-width: 90%;
+        }
+
+        /* 小螢幕優化 */
+        @media (max-width: 480px) {
+            .footer-nav {
+                gap: 10px;
+                padding: 12px 10px;
+            }
+            .nav-button, #page-indicator {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            #content-image {
+                margin: 5px auto;
+                max-height: calc(100vh - 90px); /* 手機留多一點空間 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-container">
+        <img id="content-image" src="./img/1.png" alt="課程內容載入中...">
+
+        <div id="error-msg" class="error-message">
+            <h3>無法載入圖片</h3>
+            <p>請確認 img 資料夾中是否有對應的 .png 檔案</p>
+            <p id="error-detail"></p>
+        </div>
+
+        <div class="footer-nav">
+            <button id="prev-page" class="nav-button" title="上一頁">Previous</button>
+            <div id="page-indicator">第 1 頁</div>
+            <button id="next-page" class="nav-button" title="下一頁">Next</button>
+            <a href="./index.html" class="nav-button" id="home-btn" title="返回主頁">回主頁</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageElement = document.getElementById('content-image');
+            const prevBtn = document.getElementById('prev-page');
+            const nextBtn = document.getElementById('next-page');
+            const indicator = document.getElementById('page-indicator');
+            const errorMsg = document.getElementById('error-msg');
+            const errorDetail = document.getElementById('error-detail');
+
+            let currentPage = 1;
+            const maxPage = 12;           // 請改成你的實際頁數
+            const fileExtension = '.png';
+
+            function updateDisplay() {
+                errorMsg.style.display = 'none';
+                imageElement.style.display = 'block';
+
+                const imagePath = `./img/${currentPage}${fileExtension}`;
+                console.log("載入:", imagePath);
+                
+                imageElement.src = imagePath;
+                indicator.textContent = `第 ${currentPage} 頁`;
+
+                imageElement.onerror = () => {
+                    imageElement.style.display = 'none';
+                    errorMsg.style.display = 'block';
+                    errorDetail.textContent = `找不到檔案：${imagePath}`;
+                };
+            }
+
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateDisplay();
+                } else {
+                    alert("已經是第一頁了");
+                }
+            };
+
+            nextBtn.onclick = () => {
+                if (currentPage < maxPage) {
+                    currentPage++;
+                    updateDisplay();
+                } else {
+                    alert("已經是最後一頁了");
+                }
+            };
+
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>

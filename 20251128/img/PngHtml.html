@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡易圖片瀏覽器</title>
+    <!-- 使用 Tailwind CSS 進行快速樣式設定 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 隱藏滾動條但保留功能 */
+        body {
+            overflow: hidden;
+            background-color: #0f0f0f;
+            user-select: none; /* 防止圖片被選取反白 */
+        }
+        
+        /* 圖片過渡動畫 */
+        #main-image {
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        /* 自定義隱藏 input */
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center text-white relative">
+
+    <!-- 頂部工具列 (顯示檔名) -->
+    <div id="top-bar" class="absolute top-0 left-0 w-full bg-black/60 p-2 text-center text-sm text-gray-300 z-20 hidden">
+        <span id="file-name">尚未選擇檔案</span>
+    </div>
+
+    <!-- 主要顯示區域 -->
+    <div id="viewer-container" class="flex-1 w-full h-full flex items-center justify-center relative overflow-hidden">
+        
+        <!-- 初始提示畫面 -->
+        <div id="placeholder" class="text-center p-6 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h1 class="text-xl font-bold mb-2">簡易圖片瀏覽器</h1>
+            <p class="text-gray-400 mb-6">支援 JPG, PNG, GIF, WEBP</p>
+            <button onclick="document.getElementById('file-input').click()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                選擇圖片資料夾/檔案
+            </button>
+        </div>
+
+        <!-- 圖片顯示元件 (預設隱藏) -->
+        <!-- object-contain: 保持比例並完整顯示在容器內 -->
+        <img id="main-image" src="" alt="Viewer" class="max-h-full max-w-full w-auto h-auto object-contain hidden z-10" draggable="false">
+
+        <!-- 觸控感應層 (覆蓋全螢幕以偵測滑動) -->
+        <div id="touch-layer" class="absolute inset-0 z-10 hidden"></div>
+    </div>
+
+    <!-- 底部控制列 -->
+    <div id="controls" class="absolute bottom-6 left-0 w-full flex justify-center items-center gap-4 z-30 opacity-0 hover:opacity-100 transition-opacity duration-300 p-2">
+        <div class="bg-gray-900/80 backdrop-blur-sm p-2 rounded-full flex items-center gap-4 border border-gray-700 shadow-lg">
+            
+            <!-- 上一張按鈕 -->
+            <button id="btn-prev" class="p-3 rounded-full hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <!-- 頁碼計數 -->
+            <span id="counter" class="text-sm font-mono w-24 text-center">-- / --</span>
+
+            <!-- 下一張按鈕 -->
+            <button id="btn-next" class="p-3 rounded-full hover:bg-gray-700 text-white disabled:opacity-30 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <!-- 重新選取按鈕 -->
+            <div class="border-l border-gray-600 pl-4 ml-2">
+                <button onclick="document.getElementById('file-input').click()" class="p-2 text-sm hover:text-blue-400 transition" title="開啟新檔案">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隱藏的檔案輸入框 -->
+    <input type="file" id="file-input" multiple accept="image/png, image/jpeg, image/gif, image/webp">
+
+    <script>
+        // DOM 元素選取
+        const fileInput = document.getElementById('file-input');
+        const mainImage = document.getElementById('main-image');
+        const placeholder = document.getElementById('placeholder');
+        const counter = document.getElementById('counter');
+        const fileNameDisplay = document.getElementById('file-name');
+        const topBar = document.getElementById('top-bar');
+        const controls = document.getElementById('controls');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const touchLayer = document.getElementById('touch-layer');
+
+        // 狀態變數
+        let imageFiles = [];
+        let currentIndex = 0;
+
+        // 初始化：隱藏控制項，直到載入圖片
+        function updateUIState() {
+            if (imageFiles.length > 0) {
+                placeholder.classList.add('hidden');
+                mainImage.classList.remove('hidden');
+                topBar.classList.remove('hidden');
+                touchLayer.classList.remove('hidden');
+                
+                // 讓控制列預設顯示一下，提示用戶位置
+                controls.classList.remove('opacity-0');
+                setTimeout(() => {
+                    // 如果用戶沒有 hover，3秒後淡出
+                    if(!controls.matches(':hover')) {
+                        controls.classList.add('opacity-0');
+                    }
+                }, 3000);
+            } else {
+                placeholder.classList.remove('hidden');
+                mainImage.classList.add('hidden');
+                topBar.classList.add('hidden');
+                touchLayer.classList.add('hidden');
+                controls.classList.add('opacity-0');
+            }
+        }
+
+        // 顯示圖片邏輯
+        function showImage(index) {
+            if (index < 0 || index >= imageFiles.length) return;
+
+            const file = imageFiles[index];
+            const objectUrl = URL.createObjectURL(file);
+
+            // 淡出效果
+            mainImage.style.opacity = '0';
+
+            setTimeout(() => {
+                // 更新圖片來源
+                mainImage.src = objectUrl;
+                mainImage.onload = () => {
+                    // 圖片載入完成後淡入
+                    mainImage.style.opacity = '1';
+                    // 釋放記憶體 (在更換新圖時，釋放舊圖的 URL 比較好，但在簡易版中為求流暢度，暫不立即釋放)
+                };
+
+                // 更新資訊
+                fileNameDisplay.textContent = file.name;
+                counter.textContent = `${index + 1} / ${imageFiles.length}`;
+
+                // 更新按鈕狀態
+                btnPrev.disabled = index === 0;
+                btnNext.disabled = index === imageFiles.length - 1;
+            }, 100);
+            
+            currentIndex = index;
+        }
+
+        // 檔案選擇監聽
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            
+            if (files.length === 0) return;
+
+            // 過濾非圖片檔案 (雖然 input accept 已經擋了一層，但雙重保險)
+            imageFiles = files.filter(file => file.type.startsWith('image/'));
+
+            // 按照檔名排序 (自然排序，例如 1.jpg, 2.jpg, 10.jpg)
+            imageFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+            if (imageFiles.length > 0) {
+                currentIndex = 0;
+                updateUIState();
+                showImage(currentIndex);
+            } else {
+                alert('未選擇有效的圖片檔案');
+            }
+        });
+
+        // 導航功能
+        function nextImage() {
+            if (currentIndex < imageFiles.length - 1) {
+                showImage(currentIndex + 1);
+            }
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                showImage(currentIndex - 1);
+            }
+        }
+
+        // 按鈕點擊事件
+        btnNext.addEventListener('click', nextImage);
+        btnPrev.addEventListener('click', prevImage);
+
+        // 鍵盤事件 (左右箭頭)
+        document.addEventListener('keydown', (e) => {
+            if (imageFiles.length === 0) return;
+
+            if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            }
+        });
+
+        // 觸控滑動事件 (Touch Swipe)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50; // 最小滑動距離觸發
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (imageFiles.length === 0) return;
+
+            const distance = touchEndX - touchStartX;
+
+            if (Math.abs(distance) > minSwipeDistance) {
+                if (distance < 0) {
+                    // 向左滑 (下一張)
+                    nextImage();
+                } else {
+                    // 向右滑 (上一張)
+                    prevImage();
+                }
+            }
+        }
+
+        // 處理視窗大小改變 (Tailwind 的 object-contain 自動處理，無需額外 JS)
+    </script>
+</body>
+</html>
