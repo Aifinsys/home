@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE 貼圖裁切打包工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .drop-zone { transition: all 0.3s ease; }
+        .drop-zone.dragover { border-color: #3b82f6; background-color: #eff6ff; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center py-10 px-4">
+
+    <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl p-8 mb-6">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                <i class="fa-solid fa-scissors text-green-500 mr-2"></i>LINE 6X3 貼圖裁切打包工具
+            </h1>
+            
+            <!-- 新增：使用說明區域 -->
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mt-6 text-left max-w-xl mx-auto">
+                <h2 class="font-bold text-blue-800 mb-2 text-sm flex items-center">
+                    <i class="fa-solid fa-circle-info mr-2"></i>使用說明
+                </h2>
+                <ul class="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                    <li>請準備一張包含 <strong>18張小圖</strong> (6行 x 3列) 的原始圖片。</li>
+                    <li>將圖片拖放至下方虛線區域，或點擊上傳。</li>
+                    <li>系統會自動裁切並縮放至 LINE 規範 (Max 370x320 px)。</li>
+                    <li>確認預覽無誤後，點擊「下載 ZIP」即可獲得所有檔案。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div id="dropZone" class="drop-zone border-2 border-dashed border-gray-300 rounded-xl p-10 text-center cursor-pointer mb-8 hover:border-green-400">
+            <input type="file" id="fileInput" accept="image/*" class="hidden">
+            <div id="uploadPrompt">
+                <i class="fa-solid fa-cloud-arrow-up text-5xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-medium text-gray-700 mb-1">點擊或拖放圖片至此</h3>
+                <p class="text-sm text-gray-400">支援 JPG, PNG 格式</p>
+            </div>
+            <div id="previewContainer" class="hidden">
+                <img id="sourceImage" class="max-h-64 mx-auto rounded-lg shadow-sm" alt="Source Preview">
+                <p class="text-sm text-gray-500 mt-2" id="imgInfo"></p>
+                <button id="reuploadBtn" class="mt-4 text-sm text-red-500 hover:text-red-700 underline">重新上傳</button>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div id="controls" class="hidden flex flex-col items-center gap-4">
+            <div class="grid grid-cols-2 gap-4 w-full max-w-md text-sm text-gray-600 bg-gray-100 p-4 rounded-lg">
+                <div class="flex justify-between">
+                    <span>切割模式:</span>
+                    <span class="font-bold text-gray-800">6 行 x 3 列 (18張)</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>輸出尺寸:</span>
+                    <span class="font-bold text-gray-800">Max 370x320 px</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>檔案格式:</span>
+                    <span class="font-bold text-gray-800">PNG</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>命名格式:</span>
+                    <span class="font-bold text-gray-800">01.png ~ 18.png</span>
+                </div>
+            </div>
+
+            <button id="processBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:-translate-y-1 flex items-center gap-2">
+                <i class="fa-solid fa-file-zipper"></i>
+                開始裁切並下載 ZIP
+            </button>
+            
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="w-full max-w-md hidden">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progressBar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="statusText" class="text-center text-xs text-gray-500 mt-2">準備中...</p>
+            </div>
+        </div>
+        
+        <!-- Grid Preview (Visual aid) -->
+        <div id="gridPreview" class="hidden mt-8 grid grid-cols-6 gap-1 border p-1 bg-gray-200 rounded">
+            <!-- Thumbnails will be injected here -->
+        </div>
+
+    </div>
+
+    <!-- 新增：頁尾 -->
+    <footer class="mt-auto text-center text-gray-500 pb-8 w-full max-w-3xl">
+        <p class="mb-3 font-medium text-gray-600">謝謝使用</p>
+        
+        <div class="mb-6 inline-flex items-center bg-white px-3 py-1 rounded-full shadow-sm text-xs border border-gray-200">
+            <i class="fa-solid fa-eye mr-2 text-green-500"></i>
+            <span>今日訪客數：</span>
+            <span id="visitorCount" class="font-mono font-bold ml-1 text-gray-700">Loading...</span>
+        </div>
+
+        <div>
+            <a href="index.html" class="inline-flex items-center px-5 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-all hover:shadow-md">
+                <i class="fa-solid fa-house mr-2"></i> 回主頁
+            </a>
+            <p class="text-xs text-gray-400 mt-6">© 2025 Ai Fintech Corp.</p>
+        </div>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const previewContainer = document.getElementById('previewContainer');
+        const sourceImage = document.getElementById('sourceImage');
+        const imgInfo = document.getElementById('imgInfo');
+        const controls = document.getElementById('controls');
+        const reuploadBtn = document.getElementById('reuploadBtn');
+        const processBtn = document.getElementById('processBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const statusText = document.getElementById('statusText');
+        const gridPreview = document.getElementById('gridPreview');
+
+        let loadedImage = null;
+
+        // Initialize Visitor Count (Simulated)
+        // Generate a random number between 15,000 and 20,000 for demo purposes
+        const fakeCount = Math.floor(Math.random() * 5000) + 15000;
+        document.getElementById('visitorCount').innerText = fakeCount.toLocaleString();
+
+        // Drag & Drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        dropZone.addEventListener('click', () => {
+            if(!loadedImage) fileInput.click();
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+        reuploadBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetUI();
+            fileInput.click();
+        });
+
+        function resetUI() {
+            loadedImage = null;
+            sourceImage.src = '';
+            uploadPrompt.classList.remove('hidden');
+            previewContainer.classList.add('hidden');
+            controls.classList.add('hidden');
+            gridPreview.classList.add('hidden');
+            gridPreview.innerHTML = '';
+            fileInput.value = '';
+            progressContainer.classList.add('hidden');
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('請上傳圖片檔案');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    loadedImage = img;
+                    sourceImage.src = img.src;
+                    imgInfo.textContent = `原始尺寸: ${img.width} x ${img.height} px`;
+                    
+                    uploadPrompt.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                    controls.classList.remove('hidden');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        processBtn.addEventListener('click', async () => {
+            if (!loadedImage) return;
+
+            processBtn.disabled = true;
+            processBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            progressContainer.classList.remove('hidden');
+            gridPreview.classList.remove('hidden');
+            gridPreview.innerHTML = ''; // Clear previous
+
+            const zip = new JSZip();
+            const cols = 6;
+            const rows = 3;
+            const total = cols * rows;
+            
+            // Calculate cell size
+            const cellWidth = loadedImage.width / cols;
+            const cellHeight = loadedImage.height / rows;
+
+            // LINE Sticker Max Specs
+            const MAX_W = 370;
+            const MAX_H = 320;
+
+            let processedCount = 0;
+
+            try {
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const index = r * cols + c;
+                        
+                        // Create canvas for cropping
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        // 1. Crop Logic
+                        // We want to keep aspect ratio of the cell when resizing to fit 370x320
+                        let targetW = cellWidth;
+                        let targetH = cellHeight;
+
+                        // Calculate scale factor to fit within MAX_W x MAX_H
+                        const scaleX = MAX_W / cellWidth;
+                        const scaleY = MAX_H / cellHeight;
+                        const scale = Math.min(scaleX, scaleY, 1); // Never scale up, only down (optional, but safe)
+                        
+                        // Actually, for stickers, we usually want them as big as possible within the box
+                        // So let's scale to fit exactly within 370x320 even if source is huge
+                        const fitScale = Math.min(MAX_W / cellWidth, MAX_H / cellHeight);
+
+                        canvas.width = cellWidth * fitScale;
+                        canvas.height = cellHeight * fitScale;
+
+                        // Draw cropped and resized portion
+                        // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+                        ctx.drawImage(
+                            loadedImage, 
+                            c * cellWidth, r * cellHeight, cellWidth, cellHeight, // Source
+                            0, 0, canvas.width, canvas.height // Dest
+                        );
+
+                        // Update Progress
+                        processedCount++;
+                        const percent = Math.round((processedCount / total) * 50); // First 50% is processing
+                        progressBar.style.width = `${percent}%`;
+                        statusText.textContent = `正在處理第 ${processedCount} / ${total} 張...`;
+
+                        // Add to preview grid
+                        const previewImg = document.createElement('img');
+                        previewImg.src = canvas.toDataURL('image/png');
+                        previewImg.className = "w-full h-auto border border-gray-300 bg-white";
+                        gridPreview.appendChild(previewImg);
+
+                        // Convert to blob and add to zip
+                        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                        // Filename: 01.png, 02.png...
+                        const fileName = (index + 1).toString().padStart(2, '0') + '.png';
+                        zip.file(fileName, blob);
+                    }
+                }
+
+                statusText.textContent = "正在打包壓縮檔...";
+                
+                // Generate ZIP
+                const content = await zip.generateAsync({ 
+                    type: "blob",
+                    onUpdate: function(metadata) {
+                        const percent = 50 + (metadata.percent / 2); // Last 50% is zipping
+                        progressBar.style.width = `${percent}%`;
+                    }
+                });
+
+                // Trigger Download
+                const url = window.URL.createObjectURL(content);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "line_stickers_18pack.zip";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                statusText.textContent = "下載完成！";
+                progressBar.style.width = "100%";
+                setTimeout(() => {
+                    processBtn.disabled = false;
+                    processBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }, 2000);
+
+            } catch (error) {
+                console.error(error);
+                alert("處理過程中發生錯誤，請確認圖片格式是否正確。");
+                processBtn.disabled = false;
+                processBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
+    </script>
+</body>
+</html>

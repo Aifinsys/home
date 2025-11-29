@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE 貼圖 (4x4) 提示詞生成器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        
+        /* Custom Checkbox Styling */
+        .checkbox-wrapper input:checked + div {
+            background-color: #06C755;
+            border-color: #06C755;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- 頁首：工具名稱與使用說明 -->
+    <header class="bg-[#06C755] text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-4">LINE 貼圖 (4x4) 提示詞生成器</h1>
+            
+            <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 max-w-3xl mx-auto border border-white/30">
+                <h2 class="font-bold text-lg mb-2 flex items-center gap-2 text-yellow-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    使用說明
+                </h2>
+                <ol class="list-decimal list-inside text-sm md:text-base space-y-1 opacity-95">
+                    <li>選擇角色類型（人物或寵物）並上傳參考圖（選用）。</li>
+                    <li>輸入角色外觀描述（例如：戴墨鏡的藍色貓咪）。</li>
+                    <li>勾選風格、背景、語言及貼圖情境（建議選 16 個以填滿 4x4）。</li>
+                    <li>點擊「生成提示詞」並「一鍵提取」。</li>
+                    <li>前往 AI 生圖工具，貼上提示詞並上傳您的參考圖即可。</li>
+                </ol>
+            </div>
+        </div>
+    </header>
+
+    <!-- 工作區 -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- 左側控制面板 (佔 8 等份) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- 1. 基本設定與角色 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-[#06C755] pl-3">1. 角色與風格設定</h3>
+                
+                <div class="space-y-6">
+                    
+                    <!-- 新增：角色類型與圖片上傳 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <!-- 類型選擇 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">角色類型 (Subject Type)</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded border border-gray-200 hover:border-[#06C755] transition">
+                                    <input type="radio" name="charType" value="Person/Character" checked class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>人物 (Person)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded border border-gray-200 hover:border-[#06C755] transition">
+                                    <input type="radio" name="charType" value="Pet/Animal" class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>寵物 (Pet)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 圖片上傳按鈕 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">參考圖片 (Reference Image)</label>
+                            <div class="relative">
+                                <input type="file" id="mainImgUpload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="previewImage(this)">
+                                <button class="w-full bg-white border border-gray-300 text-gray-600 font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 hover:border-[#06C755] transition">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                    <span id="uploadBtnText">點擊上傳參考圖...</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 角色描述 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">角色外觀描述 <span class="text-red-500">*</span></label>
+                        <input type="text" id="charDesc" placeholder="例：一隻穿著唐裝、戴著墨鏡的可愛 Q 版男孩" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#06C755] focus:border-transparent outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 變形風格 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">人物變形</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="style" value="Q-Version Chibi style" checked class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>Ｑ版 (Chibi)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="style" value="Original standard character style" class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>原型 (Standard)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 背景 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">背景設定</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="bg" value="Clean white background" checked class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>無背景/白底</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="bg" value="Colorful dynamic background" class="text-[#06C755] focus:ring-[#06C755]">
+                                    <span>情境背景</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 語言 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">文字語言</label>
+                            <select id="language" class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                                <option value="Traditional Chinese">繁體中文</option>
+                                <option value="English">英文</option>
+                                <option value="Japanese">日文</option>
+                                <option value="No Text">不加文字</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 表情與情境勾選 (36種) -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex justify-between items-center mb-4 border-l-4 border-[#06C755] pl-3">
+                    <h3 class="text-xl font-bold text-gray-800">2. 表情/事件內容 (建議選 16 個)</h3>
+                    <span id="selectedCount" class="text-sm font-bold text-[#06C755] bg-green-100 px-2 py-1 rounded">已選：0</span>
+                </div>
+                
+                <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3" id="emotionsGrid">
+                    <!-- JS 將自動生成 36 個選項 -->
+                </div>
+            </div>
+
+            <!-- 3. 生成與操作 -->
+            <div class="flex flex-col md:flex-row gap-4">
+                <button onclick="generatePrompt()" class="flex-1 bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    生成提示詞
+                </button>
+                <button onclick="clearForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl shadow transition">
+                    清除重置
+                </button>
+            </div>
+
+            <!-- 輸出區 -->
+            <div class="relative">
+                <label class="block text-gray-700 font-bold mb-2">生成的提示詞 (Prompt)</label>
+                <textarea id="outputPrompt" rows="6" class="w-full bg-gray-50 border-2 border-gray-300 rounded-xl p-4 font-mono text-sm focus:border-[#06C755] focus:ring-0" placeholder="點擊生成按鈕後，提示詞將顯示於此..."></textarea>
+                <button onclick="copyToClipboard()" class="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    一鍵提取
+                </button>
+            </div>
+
+        </div>
+
+        <!-- 右側預覽 (佔 4 等份) -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- 圖片預覽區 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 sticky top-6">
+                <div class="flex items-center justify-between mb-4 border-l-4 border-blue-500 pl-3">
+                    <h3 class="text-lg font-bold text-gray-800">圖片預覽</h3>
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">Preview Only</span>
+                </div>
+                
+                <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                    
+                    <div id="uploadPlaceholder" class="flex flex-col items-center justify-center text-gray-400 p-4 text-center">
+                        <svg class="w-12 h-12 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-sm font-medium">請在左側設定區<br>上傳參考圖片</span>
+                    </div>
+                    
+                    <img id="imgPreview" class="absolute inset-0 w-full h-full object-contain hidden bg-white">
+                </div>
+                
+                <!-- 提示 -->
+                <div class="mt-4 bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm text-blue-800">
+                    <p class="font-bold mb-1">💡 如何使用：</p>
+                    <p>1. 在左側「角色與風格設定」中選擇類型並上傳圖片。</p>
+                    <p>2. 此處僅供預覽，生成提示詞時請記得在 AI 工具中再次上傳此圖。</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-gray-800 text-gray-300 mt-auto py-8">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold text-[#06C755] mb-2">謝謝使用</h2>
+                <div class="inline-flex items-center gap-2 bg-gray-700 px-3 py-1 rounded-full text-sm">
+                    <span>累積訪客數：</span>
+                    <span id="visitorCount" class="font-mono text-white font-bold">Loading...</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://gemini.google.com/" target="_blank" class="px-5 py-2 rounded-full border border-gray-500 hover:border-[#06C755] hover:text-[#06C755] transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    Gemini 生圖
+                </a>
+                <a href="line4x4.html" onclick="alert('前往 LINE 4X4 貼圖裁切打包工具。')" class="px-5 py-2 rounded-full border border-gray-500 hover:border-[#06C755] hover:text-[#06C755] transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path></svg>
+                    4X4 裁切服務
+                </a>
+                 <a href="line3x6.html" onclick="alert('前往 LINE 3X6 貼圖裁切打包工具。')" class="px-5 py-2 rounded-full border border-gray-500 hover:border-[#06C755] hover:text-[#06C755] transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path></svg>
+                    3X6 裁切服務
+                </a>
+                <a href="http://www.aifinsys.com" class="px-5 py-2 rounded-full bg-[#06C755] text-white font-bold hover:bg-[#05b34c] transition shadow-lg">
+                    回首頁
+                </a>
+            </div>
+        </div>
+        <div class="text-center text-xs text-gray-500 mt-6">
+            © 2025 Ai Fintech Corp.
+        </div>
+    </footer>
+
+    <script>
+        // 36 Emotions List
+        const emotions = [
+            { id: 'hi', label: '你好/Hi', en: 'saying Hello' },
+            { id: 'bye', label: '再見/Bye', en: 'waving Goodbye' },
+            { id: 'ok', label: '好的/OK', en: 'making an OK sign' },
+            { id: 'no', label: '不要/No', en: 'crossing arms saying No' },
+            { id: 'thanks', label: '謝謝/Thanks', en: 'bowing in Thanks' },
+            { id: 'sorry', label: '抱歉/Sorry', en: 'apologizing' },
+            { id: 'love', label: '愛心/Love', en: 'holding a Heart' },
+            { id: 'laugh', label: '大笑/LOL', en: 'laughing out loud' },
+            { id: 'cry', label: '大哭/Cry', en: 'crying streams of tears' },
+            { id: 'angry', label: '生氣/Angry', en: 'angry with steam' },
+            { id: 'shock', label: '驚訝/Shock', en: 'shocked expression' },
+            { id: 'confused', label: '疑惑/???', en: 'confused with question marks' },
+            { id: 'goodmorning', label: '早安/Morning', en: 'waking up Good Morning' },
+            { id: 'goodnight', label: '晚安/Night', en: 'sleeping in bed' },
+            { id: 'tired', label: '好累/Tired', en: 'exhausted' },
+            { id: 'sick', label: '生病/Sick', en: 'wearing a mask sick' },
+            { id: 'work', label: '工作中/Work', en: 'working at computer' },
+            { id: 'study', label: '讀書/Study', en: 'studying hard' },
+            { id: 'busy', label: '好忙/Busy', en: 'running around busy' },
+            { id: 'free', label: '有空/Free', en: 'relaxing doing nothing' },
+            { id: 'eat', label: '吃貨/Eat', en: 'eating delicious food' },
+            { id: 'drink', label: '乾杯/Cheers', en: 'holding a drink cheers' },
+            { id: 'money', label: '錢/Money', en: 'holding money' },
+            { id: 'shopping', label: '購物/Buy', en: 'carrying shopping bags' },
+            { id: 'wait', label: '等待/Wait', en: 'waiting looking at watch' },
+            { id: 'hurry', label: '快點/Hurry', en: 'running fast' },
+            { id: 'bath', label: '洗澡/Bath', en: 'taking a bath' },
+            { id: 'toilet', label: '上廁所/Toilet', en: 'sitting on toilet' },
+            { id: 'idea', label: '點子/Idea', en: 'having an idea lightbulb' },
+            { id: 'secret', label: '秘密/Shh', en: 'finger on lips Shh' },
+            { id: 'fight', label: '加油/Fight', en: 'pumping fist Fighting' },
+            { id: 'congrats', label: '恭喜/Congrats', en: 'popping confetti' },
+            { id: 'scared', label: '害怕/Scared', en: 'shaking in fear' },
+            { id: 'thumbsup', label: '讚/Good', en: 'giving thumbs up' },
+            { id: 'thumbsdown', label: '爛/Bad', en: 'giving thumbs down' },
+            { id: 'care', label: '關心/Care', en: 'hugging' }
+        ];
+
+        // Render Emotions Grid
+        const grid = document.getElementById('emotionsGrid');
+        emotions.forEach(emo => {
+            const wrapper = document.createElement('label');
+            wrapper.className = 'checkbox-wrapper cursor-pointer relative group';
+            wrapper.innerHTML = `
+                <input type="checkbox" value="${emo.en}" class="peer absolute opacity-0 w-full h-full cursor-pointer" onchange="updateCount()">
+                <div class="border-2 border-gray-200 rounded-lg p-2 text-center h-full flex items-center justify-center text-sm font-medium text-gray-600 transition-all hover:border-[#06C755] peer-focus:ring-2 peer-focus:ring-[#06C755] select-none">
+                    ${emo.label}
+                </div>
+            `;
+            grid.appendChild(wrapper);
+        });
+
+        // Visitor Count Simulation
+        document.getElementById('visitorCount').innerText = Math.floor(Math.random() * 50000 + 1000).toLocaleString();
+
+        // Image Preview
+        function previewImage(input) {
+            const preview = document.getElementById('imgPreview');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const btnText = document.getElementById('uploadBtnText');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    btnText.innerText = `已選擇: ${input.files[0].name}`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Update Count
+        function updateCount() {
+            const checkboxes = document.querySelectorAll('#emotionsGrid input[type="checkbox"]:checked');
+            document.getElementById('selectedCount').innerText = `已選：${checkboxes.length}`;
+        }
+
+        // Generate Prompt
+        function generatePrompt() {
+            const charDesc = document.getElementById('charDesc').value.trim();
+            if (!charDesc) {
+                alert('請輸入角色外觀描述！');
+                document.getElementById('charDesc').focus();
+                return;
+            }
+
+            const charType = document.querySelector('input[name="charType"]:checked').value;
+            const style = document.querySelector('input[name="style"]:checked').value;
+            const bg = document.querySelector('input[name="bg"]:checked').value;
+            const lang = document.getElementById('language').value;
+            
+            const checkboxes = document.querySelectorAll('#emotionsGrid input[type="checkbox"]:checked');
+            const selectedEmotions = Array.from(checkboxes).map(cb => cb.value);
+
+            if (selectedEmotions.length === 0) {
+                alert('請至少勾選一個表情情境！');
+                return;
+            }
+
+            // Constructing the Prompt
+            let prompt = `A high-quality 4x4 grid sheet of LINE stickers. \n`;
+            prompt += `Subject: ${charType} - ${charDesc}. \n`;
+            prompt += `Style: ${style}, sticker art, expressive, clean lines. \n`;
+            prompt += `Background: ${bg}. \n`;
+            if (lang !== 'No Text') {
+                prompt += `Text: Include text in ${lang} appropriate for each scenario. \n`;
+            }
+            prompt += `Layout: 16 distinct panels (4 rows x 4 columns). \n`;
+            prompt += `The stickers should depict the following scenarios:\n`;
+            prompt += selectedEmotions.join(', ') + `. \n`;
+            prompt += `Ensure consistent character design across all panels. White border around the character for sticker cutouts.`;
+
+            document.getElementById('outputPrompt').value = prompt;
+        }
+
+        // Clear Form
+        function clearForm() {
+            document.getElementById('charDesc').value = '';
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            updateCount();
+            document.getElementById('outputPrompt').value = '';
+            // Reset image
+            const fileInput = document.getElementById('mainImgUpload');
+            fileInput.value = '';
+            document.getElementById('imgPreview').src = '';
+            document.getElementById('imgPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('uploadBtnText').innerText = '點擊上傳參考圖...';
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard() {
+            const copyText = document.getElementById("outputPrompt");
+            if (!copyText.value) return;
+            
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                alert("提示詞已複製！");
+            });
+        }
+    </script>
+</body>
+</html>
