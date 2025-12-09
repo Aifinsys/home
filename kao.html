@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"> 
+  <title>Kao88 課程資料分類瀏覽器</title>
+  <style>
+    :root{
+      --bg: #F0F4F8;
+      --card: #ffffff;
+      --primary: #4F46E5; /* Indigo */
+      --primary-hover: #4338ca;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --maxW: 1200px;
+    }
+    
+    * { box-sizing: border-box; outline: none; }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Layout Container */
+    .wrap { max-width: var(--maxW); margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Header */
+    header {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .header-info h1 { margin: 0; font-size: 1.25rem; color: var(--primary); font-weight: 700; }
+    .header-info p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+    
+    .search-box { position: relative; width: 100%; max-width: 300px; }
+    .search-box input {
+      width: 100%;
+      padding: 10px 16px;
+      padding-left: 40px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      transition: all 0.2s;
+    }
+    .search-box input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+
+    /* Main Layout */
+    .layout { display: flex; gap: 24px; flex: 1; }
+    
+    /* Sidebar */
+    nav.side {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--card);
+      padding: 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      height: fit-content;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    nav.side h3 { margin: 0 0 12px 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+    nav.side ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    nav.side li {
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav.side li:hover { background: #eff6ff; color: var(--primary); }
+    nav.side li.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    nav.side li .badge { 
+      opacity: 0.8; 
+      font-size: 0.75em; 
+      background: rgba(255,255,255,0.2); 
+      padding: 2px 6px; 
+      border-radius: 99px; 
+      color: inherit;
+    }
+    nav.side li:not(.active) .badge {
+      background: #f3f4f6;
+      color: var(--muted);
+    }
+
+    /* Main Content */
+    main { flex: 1; min-width: 0; }
+    
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .cat-title { font-weight: 700; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    
+    /* Admin Panel (Hidden by default) */
+    #adminPanel {
+      background: white;
+      border: 2px dashed var(--primary);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      display: none; /* Toggled via JS */
+      position: relative;
+    }
+    #adminPanel.show { display: block; animation: slideDown 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-grid.full { grid-template-columns: 1fr; }
+
+    .export-zone {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border);
+      background: #f0fdf4;
+      margin: 20px -20px -20px -20px;
+      padding: 15px 20px;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      border: 1px solid transparent;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #e5e7eb; }
+    
+    .card-body { padding: 16px; flex: 1; display: flex; gap: 12px; }
+    
+    /* Image Handling */
+    .card-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #f3f4f6; }
+    .emoji-icon { display: flex; align-items: center; justify-content: center; font-size: 32px; background: #f3f4f6; cursor: default; }
+
+    .card-content { flex: 1; min-width: 0; }
+    .card-content h4 { margin: 0 0 4px; font-size: 1rem; color: var(--text); font-weight: 700; line-height: 1.3; }
+    .card-content p { margin: 0; font-size: 0.85rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+    
+    .card-foot {
+      padding: 12px 16px;
+      background: #f9fafb;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary-hover); }
+    .btn.success { background: var(--success); color: #fff; }
+    .btn.success:hover { background: #059669; }
+    .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn.ghost:hover { border-color: var(--muted); color: var(--text); background: white; }
+    .btn.danger { background: #fee2e2; color: var(--danger); }
+    .btn.danger:hover { background: #fecaca; }
+
+    /* Inputs */
+    input.form-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; }
+
+    /* Checkbox for delete */
+    .del-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      display: none; /* Hidden unless in admin mode */
+      accent-color: var(--danger);
+      z-index: 10;
+    }
+    body.admin-mode .del-check { display: block; }
+    body.admin-mode .card { border: 1px dashed var(--primary); }
+
+    /* Footer */
+    footer { margin-top: auto; padding-top: 40px; text-align: center; color: var(--muted); font-size: 0.9rem; padding-bottom: 20px;}
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      nav.side { 
+        width: 100%; 
+        max-height: none; 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        overflow-x: auto; 
+        padding-bottom: 12px;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+      }
+      nav.side h3 { display: none; }
+      nav.side ul { 
+        flex-direction: row; 
+        flex: 1; 
+        gap: 8px;
+        padding-bottom: 4px; /* for scrollbar spacing */
+      }
+      nav.side li { 
+        white-space: nowrap; 
+        flex-shrink: 0; 
+        background: var(--card);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        border: 1px solid var(--border);
+      }
+      nav.side li.active {
+        border-color: var(--primary);
+      }
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: none; }
+      .export-zone { flex-direction: column; gap: 10px; text-align: center; }
+      
+      /* Make toolbar buttons stack better on small screens */
+      .toolbar { gap: 12px; flex-direction: column; align-items: stretch; }
+      .toolbar > div:last-child { justify-content: space-between; width: 100%; }
+      .cat-title { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- Header -->
+  <header>
+    <div class="header-info">
+      <h1>Kao88 課程資料分類瀏覽器</h1>
+      <p>集中管理網站資源，支援快速搜尋與自訂擴充。</p>
+    </div>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="globalSearch" type="text" placeholder="搜尋網站名稱或說明..." aria-label="搜尋">
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar Navigation -->
+    <nav class="side">
+      <h3>資源分類</h3>
+      <ul id="categoryList">
+        <!-- Categories injected via JS -->
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <div class="toolbar">
+        <div class="cat-title" id="categoryTitle">載入中...</div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn ghost btn-sm" id="btnToggleAdmin"></button>
+          <button class="btn ghost btn-sm" id="btnReset" title="重設回原始真實資料"></button>
+        </div>
+      </div>
+
+      <!-- Admin Panel (Add New Item) -->
+      <section id="adminPanel">
+        <h4 style="margin:0 0 12px 0; color:var(--primary);">新增項目至此分類</h4>
+        <div class="form-grid">
+          <input id="newTitle" class="form-input" placeholder="網站標題 (必填)">
+          <input id="newUrl" class="form-input" placeholder="網址 URL (必填)">
+        </div>
+        <div class="form-grid full">
+          <input id="newDesc" class="form-input" placeholder="簡短描述">
+        </div>
+        <div class="form-grid full">
+          <input id="newThumb" class="form-input" placeholder="縮圖網址或 Emoji (例如: 🔗)">
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:12px;">
+          <button class="btn danger btn-sm" id="btnDeleteSelected">🗑️ 刪除勾選項目</button>
+          <button class="btn primary" id="btnAdd">＋ 確認新增</button>
+        </div>
+
+        <!-- Export Zone -->
+        <div class="export-zone">
+          <div style="font-size:0.9rem; color:#065f46;">
+            <strong>🚀 一鍵打包：</strong><br>
+            新增完畢後，點擊此按鈕可生成包含最新資料的獨立 HTML 檔。
+          </div>
+          <button class="btn success" id="btnExportHtml">📥 匯出獨立 HTML</button>
+        </div>
+      </section>
+
+      <!-- Cards Area -->
+      <div id="cardGrid" class="grid">
+        <!-- Cards injected via JS -->
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Kao88 課程資料分類系統 V1.0 </p>
+  </footer>
+</div>
+
+<script>
+  /* -------------------------------------------
+     1. Data Structure & Initialization
+     ------------------------------------------- */
+  // 改名 Key 以避免與舊版本資料格式衝突
+  const STORAGE_KEY = 'course_browser_real_data_v3_fixed';
+  
+  // 原始真實資料 (完整整合 CSV 內容)
+  // 注意：請勿移除下方的 [[DATA_START]] 和 [[DATA_END]] 註解，這是匯出功能的重要標記
+  const REAL_DATA_SOURCE = /* [[DATA_START]] */ {
+    "Web App": [
+        {
+            "title": "財經詞彙互動教學",
+            "url": "https://aifinsys.com/1127",
+            "desc": "「財經詞彙互動教學」的互動式教學與工具平台。",
+            "thumb": "img/1.png"
+        },
+        {
+            "title": "ESG 詞彙學習網",
+            "url": "https://aifinsys.com/1127esg",
+            "desc": "「ESG 詞彙學習網」的互動式教學與工具平台。",
+            "thumb": "img/2.png"
+        },
+        {
+            "title": "台指期戰情室",
+            "url": "https://aifinsys.com/1126v2",
+            "desc": "「台指期戰情室」的互動式教學與工具平台。",
+            "thumb": "img/3.png"
+        },
+        {
+            "title": "微觀噪音與過度擬合對量化策略的致命影響",
+            "url": "https://aifinsys.com/1126wp1",
+            "desc": "「微觀噪音與過度擬合對量化策略的致命影響」的互動式教學與工具平台。",
+            "thumb": "img/4.png"
+        },
+        {
+            "title": "量化策略抗噪框架與回測驗證系統 v2.0",
+            "url": "https://aifinsys.com/1127wpp",
+            "desc": "「量化策略抗噪框架與回測驗證系統 v2.0」的互動式教學與工具平台。",
+            "thumb": "img/5.png"
+        },
+        {
+            "title": "投資因子量化分析與台股實戰",
+            "url": "https://aifinsys.com/1124",
+            "desc": "「投資因子量化分析與台股實戰」的互動式教學與工具平台。",
+            "thumb": "img/6.png"
+        },
+        {
+            "title": "台指期策略模擬實驗室(Netlify)",
+            "url": "https://aifinsys.com/1123",
+            "desc": "「台指期策略模擬實驗室」的互動式教學與工具平台。",
+            "thumb": "img/7.png"
+        },
+        {
+            "title": "量化投資策略儀表板",
+            "url": "https://aifinsys.com/1120a",
+            "desc": "「量化投資策略儀表板」的互動式教學與工具平台。",
+            "thumb": "img/8.png"
+        },
+        {
+            "title": "經典K線型態 1-18 完整圖解",
+            "url": "https://aifinsys.com/1118a",
+            "desc": "「經典K線型態 1-18 完整圖解」的互動式教學與工具平台。",
+            "thumb": "img/9.png"
+        },
+        {
+            "title": "小型台指期貨 2:1 盈虧比 (Collar) 策略",
+            "url": "https://aifinsys.com/qa/Collar",
+            "desc": "「小型台指期貨 2:1 盈虧比 (Collar) 策略」的互動式教學與工具平台。",
+            "thumb": "img/10.png"
+        },
+        {
+            "title": "Markdown 2 PDF",
+            "url": "https://aifinsys.com/md2pdf/",
+            "desc": "「Markdown 2 PDF」的互動式教學與工具平台。",
+            "thumb": "img/11.png"
+        },
+        {
+            "title": "七線突破/跌破 智能診斷系統",
+            "url": "https://gemini.google.com/share/e60de0ea2766",
+            "desc": "「七線突破/跌破 智能診斷系統」的互動式教學與工具平台。",
+            "thumb": "img/12.png"
+        },
+        {
+            "title": "台灣股票數據下載器 (Web版)",
+            "url": "https://gemini.google.com/share/4d3c0dfcd951",
+            "desc": "「台灣股票數據下載器 (Web版)」的互動式教學與工具平台。",
+            "thumb": "img/13.png"
+        },
+        {
+            "title": "AlphaEngine: 多因子投資組合實驗室",
+            "url": "https://gemini.google.com/share/162284e72094",
+            "desc": "「AlphaEngine: 多因子投資組合實驗室」的互動式教學與工具平台。",
+            "thumb": "img/14.png"
+        }
+    ],
+    "提示詞生成器": [
+        
+        {
+            "title": "量化策略生成器(A+B+C+D) 框架 ",
+            "url": "https://aifinsys.com/q900",
+            "desc": "「量化策略生成器(A+B+C+D) 框架 」的互動式教學與工具平台。",
+            "thumb": "img/15.png"
+        },
+        {
+            "title": "另類因子 (Smart Beta) 量化策略分析",
+            "url": "https://aifinsys.com/q1117a",
+            "desc": "「另類因子 (Smart Beta) 量化策略分析」的互動式教學與工具平台。",
+            "thumb": "img/16.png"
+        },
+        {
+            "title": "AiFinTech 量化 - 全方位風險雷達生成器",
+            "url": "https://aifinsys.com/q1116",
+            "desc": "「AiFinTech 量化 - 全方位風險雷達生成器」的互動式教學與工具平台。",
+            "thumb": "img/17.png"
+        },
+        {
+            "title": "彼得·林區 (Peter Lynch) 選股分析",
+            "url": "https://aifinsys.com/pl1117",
+            "desc": "「彼得·林區 (Peter Lynch) 選股分析」的互動式教學與工具平台。",
+            "thumb": "img/18.png"
+        },
+        {
+            "title": "葛拉漢 (Benjamin Graham) 價值投資分析",
+            "url": "https://aifinsys.com/bg1117",
+            "desc": "「葛拉漢 (Benjamin Graham) 價值投資分析」的互動式教學與工具平台。",
+            "thumb": "img/19.png"
+        },
+        {
+            "title": "巴菲特 (Warren Buffett) 價值投資分析",
+            "url": "https://aifinsys.com/bu1117",
+            "desc": "「巴菲特 (Warren Buffett) 價值投資分析」的互動式教學與工具平台。",
+            "thumb": "img/20.png"
+        },
+        {
+            "title": "LINE 貼圖 (4x4) 提示詞生成器",
+            "url": "https://aifinsys.com/linep",
+            "desc": "「勾選風格、背景、語言及貼圖情境，點擊「生成提示詞」並「一鍵提取」。",
+            "thumb": "img/48.png"
+        },
+        {
+            "title": "商用資訊圖表提示詞生成器",
+            "url": "https://aifinsys.com/1128ig",
+            "desc": "24 種最常用也最實用的資訊圖表排版類型（layout structures），並附上統一可用的 提示框架模板。",
+            "thumb": "img/21.png"
+        }
+    ],
+    "HTML PPT": [
+        
+        {
+            "title": "HTML瀏覽器",
+            "url": "https://aifinsys.com/",
+            "desc": "「HTML瀏覽器」的互動式教學與工具平台。",
+            "thumb": "img/22.png"
+        },
+        {
+            "title": "奇點降臨：AI驅動的次世代量化投資革命",
+            "url": "https://aifinsys.com/251012/",
+            "desc": "「奇點降臨：AI驅動的次世代量化投資革命」的互動式教學與工具平台。",
+            "thumb": "img/23.png"
+        },
+        {
+            "title": "機器學習因子在量化交易中的核心演算法",
+            "url": "https://aifinsys.com/251017/",
+            "desc": "「機器學習因子在量化交易中的核心演算法」的互動式教學與工具平台。",
+            "thumb": "img/24.png"
+        },
+        {
+            "title": "AI量化交易新紀元：從零到一的策略革命",
+            "url": "https://aifinsys.com/20251031/",
+            "desc": "「AI量化交易新紀元：從零到一的策略革命」的互動式教學與工具平台。",
+            "thumb": "img/25.png"
+        },
+        {
+            "title": "AI驅動的智慧選股流程",
+            "url": "https://aifinsys.com/20251105/",
+            "desc": "「AI驅動的智慧選股流程」的互動式教學與工具平台。",
+            "thumb": "img/26.png"
+        },
+        {
+            "title": "Ai 氣候風險情報",
+            "url": "https://aifinsys.com/20251128/",
+            "desc": "「AI 氣候風險情報分析策略」的互動式教學與工具平台。",
+            "thumb": "img/33.png"
+        },
+        {
+            "title": "量化投資:從經驗到數據的投資革命",
+            "url": "https://aifinsys.com/20251106/",
+            "desc": "「量化投資:從經驗到數據的投資革命」的互動式教學與工具平台。",
+            "thumb": "img/27.png"
+        }
+    ],
+    "Colab 運行器": [
+       
+        {
+            "title": "全方位個股分析儀表板 (Expert Ver.)",
+            "url": "https://colab.research.google.com/drive/1XUCg6cdyEbuTpMtu-ZceodFgkK6voj2h",
+            "desc": "「全方位個股分析儀表板 (Expert Ver.)」的互動式教學與工具平台。",
+            "thumb": "img/28.png"
+        },
+        {
+            "title": "OpenBB自動化的技術指標計算與繪圖。",
+            "url": "https://colab.research.google.com/drive/1Hdf_J-CKLaDw32EoJVAmtQO66IOzfQuP",
+            "desc": "「OpenBB自動化的技術指標計算與繪圖。」的互動式教學與工具平台。",
+            "thumb": "img/29.png"
+        },
+        {
+            "title": "「保守獲利推算」與「棄息保價」",
+            "url": "https://colab.research.google.com/drive/1CSyGaOEWFyL507xQmHp2oDG7hjIEWhG8",
+            "desc": "「「保守獲利推算」與「棄息保價」」的互動式教學與工具平台。",
+            "thumb": "img/30.png"
+        },
+        {
+            "title": "台美股票爬蟲",
+            "url": "https://colab.research.google.com/drive/14GqVze482eWO-2bM-9OMpYYFpSZ8S-yH",
+            "desc": "「台美股票爬蟲」的互動式教學與工具平台。",
+            "thumb": "img/31.png"
+        },
+        {
+            "title": "中國A股爬蟲",
+            "url": "https://colab.research.google.com/drive/14vu2_n_dsdsLEba0DN9ZnERyx81lVTk6",
+            "desc": "「中國A股爬蟲」的互動式教學與工具平台。",
+            "thumb": "img/32.png"
+        }
+    ],
+    "課程測驗中心": [
+        {
+            "title": "永續發展能力題庫",
+            "url": "https://aifinsys.com/ESGC1/",
+            "desc": "「永續發展能力題庫」的互動式教學與工具平台。",
+            "thumb": "img/33.png"
+        },
+        {
+            "title": "高賀學習歷程菁英班 學員 DISC 測驗",
+            "url": "https://aifinsys.com/aic/",
+            "desc": "「高賀學習歷程菁英班 學員 DISC 測驗」的互動式教學與工具平台。",
+            "thumb": "img/34.png"
+        },
+        {
+            "title": "115 學測英文 字彙挑戰",
+            "url": "https://www.aimealo.com/gsateng",
+            "desc": "「115 學測英文 字彙挑戰」的互動式教學與工具平台。",
+            "thumb": "img/35.png"
+        },
+        {
+            "title": "大學備審資料服務中心",
+            "url": "https://www.aimealo.com/115a01",
+            "desc": "「大學備審資料服務中心」的互動式教學與工具平台。",
+            "thumb": "img/36.png"
+        }
+    ],
+    "課程資料影片": [
+        {
+            "title": "AI 應用策略大公開：釋放 GPT 與 Gemini 的真正力量",
+            "url": "https://youtu.be/pD0OGKuUmuQ",
+            "desc": "「AI 應用策略大公開：釋放 GPT 與 Gemini 的真正力量」的互動式教學與工具平台。",
+            "thumb": "img/37.png"
+        },
+        {
+            "title": "量化科學：我們世界的共通語言",
+            "url": "https://youtu.be/PcwR_HTD0kk",
+            "desc": "「量化科學：我們世界的共通語言」的互動式教學與工具平台。",
+            "thumb": "img/38.png"
+        },
+        {
+            "title": "AI 量化交易：「江恩理論」與人工智慧",
+            "url": "https://youtu.be/5xWLroEwF7Y",
+            "desc": "「AI 量化交易：「江恩理論」與人工智慧」的互動式教學與工具平台。",
+            "thumb": "img/39.png"
+        },
+        {
+            "title": "AI 驅動的量化交易：新金融革命",
+            "url": "https://youtu.be/rLZFUQsEUmA",
+            "desc": "「AI 驅動的量化交易：新金融革命」的互動式教學與工具平台。",
+            "thumb": "img/40.png"
+        },
+        {
+            "title": "量化基金五大核心演算法",
+            "url": "https://youtu.be/UP62in7S_LY",
+            "desc": "「量化基金五大核心演算法」的互動式教學與工具平台。",
+            "thumb": "img/41.png"
+        },
+        {
+            "title": "透視交易市場的內部秘密",
+            "url": "https://youtu.be/qwioLg447Pw",
+            "desc": "「透視交易市場的內部秘密」的互動式教學與工具平台。",
+            "thumb": "img/50.png"
+        },
+        {
+            "title": "股市獲取超額收益策略 ：『滑價捕獲』",
+            "url": "https://youtu.be/AkZYPfUz75U",
+            "desc": "「股市獲取超額收益策略 ：『滑價捕獲』」的互動式教學與工具平台。",
+            "thumb": "img/51.png"
+        },
+        {
+            "title": "Collar策略：如何保護你的股票獲利",
+            "url": "https://youtu.be/EwuBAz_j61I",
+            "desc": "「Collar策略：如何保護你的股票獲利」的互動式教學與工具平台。",
+            "thumb": "img/42.png"
+        }
+    ],
+    "資料遊戲總覽": [
+        {
+            "title": "未來AI量化投資理論",
+            "url": "https://aifinsys.com/er/aiq/",
+            "desc": "「未來AI量化投資理論」的互動式教學與工具平台。",
+            "thumb": "img/43.png"
+        },
+        {
+            "title": "量化投資理論演進與未來趨勢分析報告",
+            "url": "https://aifinsys.com/er/qon/",
+            "desc": "「量化投資理論演進與未來趨勢分析報告」的互動式教學與工具平台。",
+            "thumb": "img/44.png"
+        },
+        {
+            "title": "全球資本紀元（Capital Epoch）- Web Game",
+            "url": "https://aifinsys.com/g1/",
+            "desc": "「全球資本紀元（Capital Epoch）- Web Game」的互動式教學與工具平台。",
+            "thumb": "img/45.png"
+        },
+        {
+            "title": "淨零賽局：綠色併購 - Web Game",
+            "url": "https://aifinsys.com/gesg/",
+            "desc": "「淨零賽局：綠色併購 - Web Game」的互動式教學與工具平台。",
+            "thumb": "img/46.png"
+        },
+        {
+            "title": "操盤大師 - Web Game",
+            "url": "https://aifinsys.com/g2/b1",
+            "desc": "「操盤大師 - Web Game」的互動式教學與工具平台。",
+            "thumb": "img/47.png"
+        }
+    ]
+} /* [[DATA_END]] */;
+
+  let DATA = {};
+  let currentCategory = "";
+  let isAdminMode = false;
+
+  // 初始化：從 LocalStorage 讀取或使用原始資料
+  function initData() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    let valid = false;
+
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        // 強制檢查資料結構：必須是物件，且不是陣列，且有資料
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && Object.keys(parsed).length > 0) {
+          DATA = parsed;
+          valid = true;
+        } else {
+          console.warn("偵測到快取資料結構損毀或版本不符，將重置。");
+        }
+      } catch(e) {
+        console.error("資料解析失敗，將重置。", e);
+      }
+    } 
+
+    if (!valid) {
+      resetToSource();
+    }
+    
+    // 確保 currentCategory 有效
+    const keys = Object.keys(DATA);
+    if (!DATA[currentCategory] || !keys.includes(currentCategory)) {
+      currentCategory = keys[0] || ""; // 若完全無資料則為空字串
+    }
+  }
+
+  // 重置為原始真實資料
+  function resetToSource() {
+    DATA = JSON.parse(JSON.stringify(REAL_DATA_SOURCE)); // Deep copy
+    saveData();
+  }
+
+  // 儲存至 LocalStorage
+  function saveData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  }
+
+  /* -------------------------------------------
+     2. Rendering Logic
+     ------------------------------------------- */
+  const categoryListEl = document.getElementById('categoryList');
+  const cardGridEl = document.getElementById('cardGrid');
+  const categoryTitleEl = document.getElementById('categoryTitle');
+  const adminPanelEl = document.getElementById('adminPanel');
+
+  // 渲染側邊欄分類
+  function renderCategories() {
+    categoryListEl.innerHTML = '';
+    Object.keys(DATA).forEach(cat => {
+      const count = DATA[cat].length;
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${cat}</span> <span class="badge">${count}</span>`;
+      if (cat === currentCategory) li.classList.add('active');
+      
+      li.addEventListener('click', () => {
+        currentCategory = cat;
+        // 清除搜尋框
+        document.getElementById('globalSearch').value = '';
+        renderCategories(); // Re-render to update active class
+        renderCards(DATA[cat]);
+        
+        // Mobile UX: Scroll to active item (optional, basic logic)
+        if(window.innerWidth < 900) {
+          li.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+      categoryListEl.appendChild(li);
+    });
+  }
+
+  // 渲染卡片
+  function renderCards(list, isSearchResult = false) {
+    cardGridEl.innerHTML = '';
+    
+    // Safety check for null/undefined list
+    if (!list) list = [];
+
+    const titleText = isSearchResult 
+      ? `搜尋結果（共 ${list.length} 項）` 
+      : `${currentCategory || '未選擇分類'}（共 ${list.length} 項）`;
+    categoryTitleEl.textContent = titleText;
+
+    if (list.length === 0) {
+      cardGridEl.innerHTML = `<div class="muted" style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted);">
+        ${isSearchResult ? '找不到符合的資料。' : '此分類目前沒有項目。'}
+        <br>${isAdminMode ? '請使用上方表單新增。' : (isSearchResult ? '' : '切換至「管理模式」可新增資料。')}
+      </div>`;
+      return;
+    }
+
+    list.forEach((item, index) => {
+      // 處理縮圖顯示邏輯
+      const isUrl = item.thumb && (
+        item.thumb.startsWith('http') ||
+        item.thumb.startsWith('img/') ||
+        item.thumb.startsWith('./img/') ||
+        item.thumb.startsWith('data:image')
+      );
+      let imgHtml = '';
+      if (isUrl) {
+        // 使用 onerror 提供圖片載入失敗時的後備 Emoji
+        imgHtml = `<img class="card-img" src="${item.thumb}" alt="icon" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                   <div class="card-img emoji-icon" style="display:none">📄</div>`;
+      } else {
+        imgHtml = `<div class="card-img emoji-icon">${item.thumb || '📄'}</div>`;
+      }
+      
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      const checkboxHtml = (!isSearchResult) 
+        ? `<input type="checkbox" class="del-check" data-idx="${index}">` 
+        : '';
+
+      const categoryTag = isSearchResult ? `<span style="font-size:0.75em; color:var(--primary); background:#eff6ff; padding:2px 6px; border-radius:4px; margin-left:6px;">${item.category}</span>` : '';
+
+      card.innerHTML = `
+        ${checkboxHtml}
+        <div class="card-body">
+          ${imgHtml}
+          <div class="card-content">
+            <h4>${item.title}${categoryTag}</h4>
+            <p>${item.desc || '無描述'}</p>
+          </div>
+        </div>
+        <div class="card-foot">
+          <button class="btn primary" style="flex:1" onclick="window.open('${item.url}','_blank')">前往</button>
+          <button class="btn ghost" onclick="copyToClipboard('${item.url}')">複製</button>
+        </div>
+      `;
+      cardGridEl.appendChild(card);
+    });
+  }
+
+  /* -------------------------------------------
+     3. Interactions & Features
+     ------------------------------------------- */
+  
+  // 複製連結
+  function copyToClipboard(text) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => alert('連結已複製！')).catch(err => prompt('請手動複製', text));
+    } else {
+      prompt('請手動複製', text);
+    }
+  }
+
+  // 搜尋功能
+  document.getElementById('globalSearch').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    
+    // 如果搜尋為空，回復顯示當前分類
+    if (!q) {
+      renderCategories();
+      renderCards(DATA[currentCategory]);
+      return;
+    }
+
+    // 跨分類搜尋
+    let results = [];
+    Object.keys(DATA).forEach(cat => {
+      // Safety check: DATA[cat] must be array
+      if(Array.isArray(DATA[cat])) {
+        DATA[cat].forEach(item => {
+          if ((item.title + item.desc).toLowerCase().includes(q)) {
+            results.push({ ...item, category: cat });
+          }
+        });
+      }
+    });
+    
+    document.querySelectorAll('nav.side li').forEach(li => li.classList.remove('active'));
+    renderCards(results, true);
+  });
+
+  // 切換管理模式
+  document.getElementById('btnToggleAdmin').addEventListener('click', () => {
+    isAdminMode = !isAdminMode;
+    document.body.classList.toggle('admin-mode', isAdminMode);
+    
+    const btn = document.getElementById('btnToggleAdmin');
+    if (isAdminMode) {
+      btn.classList.add('active');
+      btn.style.background = '#e0e7ff';
+      btn.style.color = 'var(--primary)';
+      adminPanelEl.classList.add('show');
+      document.getElementById('globalSearch').value = '';
+      renderCategories();
+      renderCards(DATA[currentCategory]);
+    } else {
+      btn.classList.remove('active');
+      btn.style.background = '';
+      btn.style.color = '';
+      adminPanelEl.classList.remove('show');
+    }
+  });
+
+  // 新增項目
+  document.getElementById('btnAdd').addEventListener('click', () => {
+    const title = document.getElementById('newTitle').value.trim();
+    const url = document.getElementById('newUrl').value.trim();
+    const desc = document.getElementById('newDesc').value.trim();
+    const thumb = document.getElementById('newThumb').value.trim();
+
+    if (!title || !url) {
+      alert('「標題」與「網址」為必填欄位！');
+      return;
+    }
+
+    if (!DATA[currentCategory]) DATA[currentCategory] = [];
+
+    DATA[currentCategory].unshift({ 
+      title: title,
+      url: url,
+      desc: desc || '自訂新增項目',
+      thumb: thumb
+    });
+
+    saveData();
+    renderCategories();
+    renderCards(DATA[currentCategory]);
+    
+    // 清空輸入框
+    document.getElementById('newTitle').value = '';
+    document.getElementById('newUrl').value = '';
+    document.getElementById('newDesc').value = '';
+    document.getElementById('newThumb').value = '';
+  });
+
+  // 刪除勾選項目
+  document.getElementById('btnDeleteSelected').addEventListener('click', () => {
+    const checks = document.querySelectorAll('.del-check:checked');
+    if (checks.length === 0) {
+      alert('請先勾選要刪除的卡片 (需在管理模式下)');
+      return;
+    }
+    
+    if (!confirm(`確定要刪除這 ${checks.length} 個項目嗎？`)) return;
+
+    const indicesToDelete = Array.from(checks).map(c => parseInt(c.dataset.idx)).sort((a, b) => b - a);
+    
+    indicesToDelete.forEach(idx => {
+      DATA[currentCategory].splice(idx, 1);
+    });
+
+    saveData();
+    renderCategories();
+    renderCards(DATA[currentCategory]);
+  });
+
+  // 重設資料
+  document.getElementById('btnReset').addEventListener('click', () => {
+    if (confirm('確定要清除所有自訂資料，重置為系統原始完整資料嗎？\n此動作將清除您新增的項目。')) {
+      resetToSource();
+      renderCategories();
+      renderCards(DATA[currentCategory]);
+      if(isAdminMode) document.getElementById('btnToggleAdmin').click(); // Exit admin mode
+    }
+  });
+
+  // ★★★ 一鍵生成獨立 HTML 功能 ★★★
+  document.getElementById('btnExportHtml').addEventListener('click', () => {
+    if (!confirm('即將生成一個包含目前所有資料（含您剛新增的）的全新 HTML 檔案。\n\n下載後，該檔案將內建最新資料，不需依賴瀏覽器暫存。')) return;
+
+    const currentDataJson = JSON.stringify(DATA, null, 2);
+    let htmlContent = document.documentElement.outerHTML;
+
+    // 清理動態產生的 DOM
+    htmlContent = htmlContent.replace(/<ul id="categoryList">[\s\S]*?<\/ul>/, '<ul id="categoryList"></ul>');
+    htmlContent = htmlContent.replace(/<div id="cardGrid" class="grid">[\s\S]*?<\/div>/, '<div id="cardGrid" class="grid"></div>');
+
+    // 清理 UI 狀態
+    htmlContent = htmlContent.replace(/class="[^"]*admin-mode[^"]*"/, '');
+    htmlContent = htmlContent.replace(/id="adminPanel" class="[^"]*show[^"]*"/, 'id="adminPanel"');
+    
+    // 替換真實資料
+    const dataRegex = /\/\* \[\[DATA_START\]\] \*\/[\s\S]*?\/\* \[\[DATA_END\]\] \*\//;
+    const newDataBlock = `/* [[DATA_START]] */ ${currentDataJson} /* [[DATA_END]] */`;
+    
+    htmlContent = htmlContent.replace(dataRegex, newDataBlock);
+
+    // 觸發下載
+    const blob = new Blob([htmlContent], {type: 'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '課程資料分類瀏覽器_Fixed.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  /* -------------------------------------------
+     4. Boot
+     ------------------------------------------- */
+  window.addEventListener('DOMContentLoaded', () => {
+    initData();
+    renderCategories();
+    renderCards(DATA[currentCategory]);
+  });
+
+</script>
+</body>
+</html>
