@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>馬丁格爾策略趨勢濾網 回測系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .log-entry { font-family: monospace; font-size: 0.85rem; border-bottom: 1px solid #eee; padding: 4px 0; }
+        .log-entry.tp { color: #16a34a; }
+        .log-entry.sl { color: #dc2626; }
+
+        /* --- 頁尾 --- */
+    .footer {text-align:center; padding:30px 40px 40px 40px; color:#666; font-size:15px; line-height: 1.8;}
+    .footer p { margin: 0; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-blue-600 p-6 text-white">
+            <h1 class="text-2xl font-bold">馬丁格爾策略趨勢濾網 回測系統</h1>
+            <p class="text-blue-100 text-sm mt-1">針對 K_twi.html 格式設計的即時回測工具</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="p-6 border-b bg-gray-50">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <!-- File Upload -->
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">1. 上傳資料 (K_twi.html)</label>
+                    <input type="file" id="fileInput" accept=".html,.htm" class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                    "/>
+                </div>
+                
+                <!-- Run Button -->
+                <div class="col-span-1 md:col-span-2 flex items-end">
+                    <button id="runBtn" disabled class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed transition">
+                        開始回測
+                    </button>
+                </div>
+            </div>
+
+            <!-- Parameters -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+                <div>
+                    <label class="block text-gray-600 mb-1">初始資金</label>
+                    <input type="number" id="paramCapital" value="500000" class="w-full border rounded px-2 py-1">
+                </div>
+                <div>
+                    <label class="block text-gray-600 mb-1">獲利目標 (點)</label>
+                    <input type="number" id="paramBuffer" value="100" class="w-full border rounded px-2 py-1">
+                </div>
+                <div>
+                    <label class="block text-gray-600 mb-1">ATR 係數</label>
+                    <input type="number" id="paramK" value="0.8" step="0.1" class="w-full border rounded px-2 py-1">
+                </div>
+                <div>
+                    <label class="block text-gray-600 mb-1">最小間距 (點)</label>
+                    <input type="number" id="paramMinStep" value="100" class="w-full border rounded px-2 py-1">
+                </div>
+                <div>
+                    <label class="block text-gray-600 mb-1">單筆最大虧損 (元)</label>
+                    <input type="number" id="paramMaxLoss" value="22500" class="w-full border rounded px-2 py-1">
+                </div>
+                <div>
+                    <label class="block text-gray-600 mb-1">最大層數</label>
+                    <input type="number" id="paramLayers" value="5" class="w-full border rounded px-2 py-1">
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Summary -->
+        <div id="resultsArea" class="hidden p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <div class="text-xs text-blue-500 font-bold uppercase">最終權益</div>
+                    <div class="text-2xl font-bold text-gray-800" id="resFinalCapital">-</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                    <div class="text-xs text-green-500 font-bold uppercase">總報酬率</div>
+                    <div class="text-2xl font-bold text-gray-800" id="resReturn">-</div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                    <div class="text-xs text-red-500 font-bold uppercase">最大回撤 (MDD)</div>
+                    <div class="text-2xl font-bold text-gray-800" id="resMDD">-</div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                    <div class="text-xs text-yellow-600 font-bold uppercase">交易勝率</div>
+                    <div class="text-2xl font-bold text-gray-800" id="resWinRate">-</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">權益曲線 (Equity Curve)</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="equityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">市場趨勢與信號 (Price & Trends)</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Trade Log -->
+            <div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">風控與交易紀錄</h3>
+                <div class="bg-gray-900 text-gray-300 p-4 rounded-lg h-48 overflow-y-auto text-xs font-mono" id="tradeLog">
+                    等待執行...
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+      <p> AI Fintech Corp. 2025 ©，僅供金融決策學習使用。</p>
+      <a href="https://www.aifinsys.com" class="back-to-top" target="_blank"製作。> 回到首頁</a>
+    </div>
+    </div>
+
+    <script>
+        // 全域變數
+        let rawData = [];
+        let processedData = [];
+        let equityChartInstance = null;
+        let priceChartInstance = null;
+
+        // 監聽檔案上傳
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                try {
+                    rawData = parseHTML(content);
+                    if (rawData.length === 0) {
+                        alert("讀取失敗：未找到有效資料，請確認是否為 Goodinfo K_twi.html 格式");
+                        return;
+                    }
+                    document.getElementById('runBtn').disabled = false;
+                    document.getElementById('runBtn').textContent = `資料讀取成功 (${rawData.length} 筆)，點擊開始`;
+                    document.getElementById('runBtn').classList.remove('bg-blue-600');
+                    document.getElementById('runBtn').classList.add('bg-green-600');
+                } catch (err) {
+                    alert('解析失敗: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // 監聽執行按鈕
+        document.getElementById('runBtn').addEventListener('click', function() {
+            if (rawData.length === 0) return;
+            runBacktest();
+        });
+
+        // 解析 HTML (Goodinfo 格式)
+        function parseHTML(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const table = doc.querySelector('table#tblDetail');
+            
+            if (!table) throw new Error("找不到 ID 為 'tblDetail' 的表格");
+
+            const rows = table.querySelectorAll('tr');
+            const data = [];
+
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td');
+                if (cols.length < 5) return;
+
+                try {
+                    // 日期處理 '25/12/11 -> 2025-12-11
+                    let dateStr = cols[0].innerText.trim().replace(/'/g, '');
+                    const yearPrefix = "20"; // 假設
+                    const fullDateStr = `${yearPrefix}${dateStr}`;
+                    const dateParts = fullDateStr.split('/');
+                    // Goodinfo 格式通常是 YYYY/MM/DD 或 YY/MM/DD
+                    const date = new Date(`${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`);
+
+                    const open = parseFloat(cols[1].innerText.replace(/,/g, ''));
+                    const high = parseFloat(cols[2].innerText.replace(/,/g, ''));
+                    const low = parseFloat(cols[3].innerText.replace(/,/g, ''));
+                    const close = parseFloat(cols[4].innerText.replace(/,/g, ''));
+
+                    // 檢查資料有效性
+                    if (!isNaN(close) && !isNaN(date.getTime())) {
+                        data.push({ date, open, high, low, close });
+                    }
+                } catch (e) {
+                    console.warn("Row parse error", e);
+                }
+            });
+
+            // 按日期升序排列 (舊 -> 新)
+            return data.sort((a, b) => a.date - b.date);
+        }
+
+        // 計算技術指標 (EMA, ATR)
+        function calculateIndicators(data) {
+            // FIX: 不使用 JSON.parse(JSON.stringify(data))，因為會破壞 Date 物件
+            // 改用 map 進行淺拷貝，保留 Date 物件參考
+            let df = data.map(item => ({ ...item }));
+            
+            const periodATR = 14;
+            
+            // Helper: EMA
+            function calculateEMA(values, period) {
+                const k = 2 / (period + 1);
+                let emaArray = [];
+                let ema = values[0];
+                emaArray.push(ema);
+                for (let i = 1; i < values.length; i++) {
+                    ema = values[i] * k + ema * (1 - k);
+                    emaArray.push(ema);
+                }
+                return emaArray;
+            }
+
+            const closes = df.map(d => d.close);
+            const ema50 = calculateEMA(closes, 50);
+            const ema20 = calculateEMA(closes, 20);
+
+            // Helper: TR
+            let trs = [];
+            for(let i=0; i<df.length; i++) {
+                if(i===0) {
+                    trs.push(df[i].high - df[i].low);
+                } else {
+                    const hl = df[i].high - df[i].low;
+                    const hpc = Math.abs(df[i].high - df[i-1].close);
+                    const lpc = Math.abs(df[i].low - df[i-1].close);
+                    trs.push(Math.max(hl, hpc, lpc));
+                }
+            }
+
+            // Helper: ATR
+            let atrs = [];
+            for(let i=0; i<df.length; i++) {
+                if(i < periodATR - 1) {
+                    atrs.push(null);
+                } else {
+                    let sum = 0;
+                    for(let j=0; j<periodATR; j++) sum += trs[i-j];
+                    atrs.push(sum / periodATR);
+                }
+            }
+
+            // 將指標合併回資料
+            for(let i=0; i<df.length; i++) {
+                df[i].ema50 = ema50[i];
+                df[i].ema20 = ema20[i];
+                df[i].atr = atrs[i];
+                // 為了對齊，標記無效資料
+                df[i].valid = (i >= 50); // EMA50 需要一些時間穩定，這裡簡單設 50
+            }
+
+            return df;
+        }
+
+        // 核心策略邏輯
+        function runBacktest() {
+            // 讀取參數
+            const capital = parseFloat(document.getElementById('paramCapital').value);
+            const profitBuffer = parseFloat(document.getElementById('paramBuffer').value);
+            const kAtr = parseFloat(document.getElementById('paramK').value);
+            const minStep = parseFloat(document.getElementById('paramMinStep').value);
+            const maxLoss = parseFloat(document.getElementById('paramMaxLoss').value);
+            const maxLayers = parseInt(document.getElementById('paramLayers').value);
+            
+            const contractValue = 50; // 小台
+            const baseSize = 1;
+            const addSequence = [1, 1, 2, 3, 5];
+            const transactionCost = 200; // 單邊
+
+            // 準備資料
+            const df = calculateIndicators(rawData);
+            
+            let currentCapital = capital;
+            let equityCurve = [];
+            let positions = []; // {price, size}
+            let tradeLog = [];
+            let stopTradingDays = 0;
+            let slPoints = []; // 用於繪圖
+
+            // 清空 Log UI
+            const logEl = document.getElementById('tradeLog');
+            logEl.innerHTML = '';
+
+            function log(msg, type='') {
+                const div = document.createElement('div');
+                div.className = `log-entry ${type}`;
+                div.innerText = msg;
+                logEl.prepend(div); // 新的在上面
+                tradeLog.push(msg);
+            }
+
+            // 開始逐日回測
+            // 從第1筆開始 (index 1)，以便有 prev row
+            for(let i=1; i<df.length; i++) {
+                const curr = df[i];
+                const prev = df[i-1];
+                
+                // 安全檢查：確保 date 是有效的 Date 物件
+                let dateStr = "Unknown Date";
+                if (curr.date instanceof Date && !isNaN(curr.date)) {
+                    dateStr = curr.date.toISOString().split('T')[0];
+                } else {
+                    console.warn("Invalid date encountered at index", i);
+                    continue;
+                }
+
+                // 0. 更新權益
+                let avgCost = 0;
+                let totalSize = 0;
+                if(positions.length > 0) {
+                    let costSum = 0;
+                    positions.forEach(p => { costSum += p.price * p.size; totalSize += p.size; });
+                    avgCost = costSum / totalSize;
+                }
+
+                let floatingPnl = 0;
+                if(totalSize > 0) {
+                    floatingPnl = (curr.close - avgCost) * totalSize * contractValue;
+                }
+                equityCurve.push({ date: curr.date, value: currentCapital + floatingPnl });
+
+                // 檢查是否有足夠資料計算指標
+                if(!prev.valid || !curr.atr) continue;
+
+                // 冷靜期
+                if(stopTradingDays > 0) {
+                    stopTradingDays--;
+                    // 若有倉位強制平倉 (通常應該已平，這裡是雙重保險)
+                    if(positions.length > 0) {
+                        // Close Logic
+                        let pnl = (curr.open - avgCost) * totalSize * contractValue;
+                        currentCapital += pnl - (transactionCost * totalSize);
+                        positions = [];
+                        log(`[${dateStr}] 冷靜期強制平倉, PnL: ${Math.round(pnl)}`, 'sl');
+                    }
+                    continue;
+                }
+
+                // 1. 趨勢濾網
+                // Bull: Close > EMA50 && EMA20 > EMA50
+                // Bear: Close < EMA50 && EMA20 < EMA50
+                let trend = 'range';
+                if(prev.close > prev.ema50 && prev.ema20 > prev.ema50) trend = 'bull';
+                else if(prev.close < prev.ema50 && prev.ema20 < prev.ema50) trend = 'bear';
+
+                const allowEntry = (trend !== 'bear');
+
+                // 2. 交易邏輯
+                
+                // A. 空手 -> 進場
+                if(positions.length === 0) {
+                    if(allowEntry) {
+                        positions.push({ price: curr.open, size: baseSize });
+                        currentCapital -= transactionCost * baseSize;
+                        // log(`[${dateStr}] 建立首單 ${baseSize}口 @ ${curr.open}`);
+                    }
+                } 
+                // B. 持倉 -> 止盈 / 加碼 / 風控
+                else {
+                    // 更新成本
+                    let costSum = 0; totalSize = 0;
+                    positions.forEach(p => { costSum += p.price * p.size; totalSize += p.size; });
+                    avgCost = costSum / totalSize;
+
+                    // 參數計算
+                    const atr = prev.atr;
+                    const step = Math.max(minStep, Math.round(kAtr * atr));
+
+                    // B1. 止盈 (Take Profit)
+                    const targetPrice = avgCost + profitBuffer;
+                    if(curr.high >= targetPrice) {
+                        const pnl = (targetPrice - avgCost) * totalSize * contractValue;
+                        currentCapital += pnl - (transactionCost * totalSize);
+                        log(`[${dateStr}] 止盈出場! 層數:${positions.length}, 獲利:${Math.round(pnl)}`, 'tp');
+                        positions = [];
+                        continue;
+                    }
+
+                    // B2. 加碼 (Add Position)
+                    const lastEntryPrice = positions[positions.length - 1].price;
+                    const nextAddPrice = lastEntryPrice - step;
+                    const currentLayerIdx = positions.length;
+
+                    if(curr.low <= nextAddPrice && currentLayerIdx < maxLayers) {
+                        const seqIdx = Math.min(currentLayerIdx, addSequence.length - 1);
+                        const addQty = addSequence[seqIdx];
+                        
+                        // 執行加碼
+                        positions.push({ price: nextAddPrice, size: addQty });
+                        currentCapital -= transactionCost * addQty;
+                        // log(`[${dateStr}] 加碼第${currentLayerIdx}層, ${addQty}口 @ ${nextAddPrice} (Step:${step})`);
+                        
+                        // 重新計算成本給風控用
+                        costSum = 0; totalSize = 0;
+                        positions.forEach(p => { costSum += p.price * p.size; totalSize += p.size; });
+                        avgCost = costSum / totalSize;
+                    }
+
+                    // B3. 硬性風控 (Hard Stop Loss)
+                    // 最差情況浮動損益
+                    const worstPnl = (curr.low - avgCost) * totalSize * contractValue;
+                    
+                    if(worstPnl <= -maxLoss) {
+                        // 計算觸發價
+                        const stopPrice = avgCost - (maxLoss / (totalSize * contractValue));
+                        const realizedLoss = -maxLoss;
+                        
+                        currentCapital += realizedLoss - (transactionCost * totalSize);
+                        log(`[${dateStr}] 風控觸發! 虧損:${realizedLoss}, 層數:${positions.length}`, 'sl');
+                        
+                        positions = [];
+                        stopTradingDays = 1;
+                        slPoints.push({ x: curr.date, y: stopPrice }); // 記錄風控點
+                    }
+                }
+            }
+
+            updateUI(equityCurve, df, slPoints, currentCapital, capital, tradeLog.length);
+        }
+
+        function updateUI(equityCurve, df, slPoints, finalCapital, initCapital, totalLogs) {
+            document.getElementById('resultsArea').classList.remove('hidden');
+
+            // 1. 績效計算
+            const totalReturn = ((finalCapital - initCapital) / initCapital) * 100;
+            
+            // MDD
+            let peak = -Infinity;
+            let maxDd = 0;
+            equityCurve.forEach(item => {
+                if(item.value > peak) peak = item.value;
+                const dd = (peak - item.value) / peak;
+                if(dd > maxDd) maxDd = dd;
+            });
+
+            // Win Rate (Simplified parsing from log)
+            const logs = document.getElementById('tradeLog').innerText;
+            const wins = (logs.match(/止盈/g) || []).length;
+            const losses = (logs.match(/風控/g) || []).length;
+            const totalTrades = wins + losses;
+            const winRate = totalTrades > 0 ? (wins / totalTrades * 100) : 0;
+
+            // DOM Updates
+            document.getElementById('resFinalCapital').innerText = Math.round(finalCapital).toLocaleString();
+            document.getElementById('resReturn').innerText = totalReturn.toFixed(2) + '%';
+            document.getElementById('resReturn').className = `text-2xl font-bold ${totalReturn >= 0 ? 'text-green-600' : 'text-red-600'}`;
+            document.getElementById('resMDD').innerText = (maxDd * 100).toFixed(2) + '%';
+            document.getElementById('resWinRate').innerText = winRate.toFixed(1) + '%';
+
+            // 2. 繪圖
+            drawCharts(equityCurve, df, slPoints);
+        }
+
+        function drawCharts(equityCurve, df, slPoints) {
+            // Helper to safe date string
+            const safeDateStr = (d) => (d instanceof Date ? d.toISOString().split('T')[0] : '');
+
+            // Prepare Data
+            const labels = equityCurve.map(e => safeDateStr(e.date));
+            const equityData = equityCurve.map(e => e.value);
+            
+            // Slice DF to match equity curve length (started from index 1)
+            const dfMap = {};
+            df.forEach(d => {
+                if(d.date instanceof Date) dfMap[safeDateStr(d.date)] = d;
+            });
+            
+            const closeData = labels.map(d => dfMap[d]?.close);
+            const ema50Data = labels.map(d => dfMap[d]?.ema50);
+            const ema20Data = labels.map(d => dfMap[d]?.ema20);
+
+            // Chart 1: Equity
+            const ctx1 = document.getElementById('equityChart').getContext('2d');
+            if(equityChartInstance) equityChartInstance.destroy();
+            
+            equityChartInstance = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '帳戶權益 (TWD)',
+                        data: equityData,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                    scales: { x: { display: false } }
+                }
+            });
+
+            // Chart 2: Price & Indicators
+            const ctx2 = document.getElementById('priceChart').getContext('2d');
+            if(priceChartInstance) priceChartInstance.destroy();
+            
+            priceChartInstance = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '收盤價',
+                            data: closeData,
+                            borderColor: '#374151',
+                            borderWidth: 1.5,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'EMA 50 (趨勢)',
+                            data: ema50Data,
+                            borderColor: '#f59e0b',
+                            borderWidth: 1.5,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'EMA 20 (短期)',
+                            data: ema20Data,
+                            borderColor: '#10b981',
+                            borderWidth: 1,
+                            borderDash: [5, 5],
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    elements: { point: { radius: 0 } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
