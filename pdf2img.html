@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF 2 IMG </title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI","Noto Sans TC",sans-serif;
+  background: #ffffff;
+  color: #1f2937;
+}
+header {
+  background: linear-gradient(90deg,#2563eb,#4f46e5);
+  color: white;
+  padding: 22px;
+  text-align: center;
+  font-size: 26px;
+}
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+.panel {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+}
+.instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.8;
+}
+.drop-zone {
+  border: 2px dashed #2563eb;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  background: white;
+}
+.drop-zone.dragover {
+  background: #eff6ff;
+}
+.file-name {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #2563eb;
+}
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+select,button {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+button {
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+button.secondary {
+  background: #6b7280;
+}
+button:disabled {
+  background: #9ca3af;
+}
+.progress {
+  margin-top: 15px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 12px;
+  width: 0%;
+  background: linear-gradient(90deg,#60a5fa,#6366f1);
+}
+.preview {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+  gap: 12px;
+}
+.preview img {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
+footer button {
+  margin-top: 8px;
+}
+</style>
+</head>
+
+<body>
+<header>PDF檔 轉圖檔 引擎</header>
+
+<div class="container">
+
+  <!-- 使用說明 -->
+  <div class="panel instructions">
+    <strong>使用說明：</strong>
+    <ol>
+      <li>上傳或拖曳 PDF 檔案</li>
+      <li>選擇解析度與圖片格式</li>
+      <li>點擊一鍵轉換並預覽</li>
+      <li>下載壓縮檔</li>
+    </ol>
+  </div>
+
+  <!-- 操作區 -->
+  <div class="panel">
+    <div class="drop-zone" id="dropZone">
+      拖曳 PDF 檔案至此或點擊選擇
+      <div class="file-name" id="fileName"></div>
+      <input type="file" id="fileInput" accept="application/pdf" hidden>
+    </div>
+
+    <div class="controls">
+      <select id="dpiSelect">
+        <option value="1.5">150 DPI</option>
+        <option value="2">200 DPI</option>
+        <option value="3">300 DPI</option>
+      </select>
+
+      <select id="formatSelect">
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG</option>
+        <option value="image/webp">WebP</option>
+      </select>
+
+      <button id="convertBtn">轉換</button>
+      <button class="secondary" onclick="resetAll()">清除</button>
+      <button id="downloadBtn" disabled>下載壓縮檔</button>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="preview" id="preview"></div>
+  </div>
+</div>
+
+<footer>
+  <button onclick="window.location.href='http://www.aifinsys.com'">回主頁</button>
+  <br>Ai Fintech Corp. 2025 ©
+</footer>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+ "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+let pdfFile = null;
+let zip = new JSZip();
+let originalName = "";
+
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+const fileNameLabel = document.getElementById("fileName");
+const progressBar = document.getElementById("progressBar");
+const preview = document.getElementById("preview");
+const downloadBtn = document.getElementById("downloadBtn");
+
+dropZone.onclick = () => fileInput.click();
+fileInput.onchange = e => setFile(e.target.files[0]);
+
+dropZone.ondragover = e => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+};
+dropZone.ondragleave = () => dropZone.classList.remove("dragover");
+dropZone.ondrop = e => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+  setFile(e.dataTransfer.files[0]);
+};
+
+function setFile(file) {
+  pdfFile = file;
+  originalName = file.name.replace(/\.pdf$/i,"");
+  fileNameLabel.textContent = "已選擇：" + file.name;
+}
+
+convertBtn.onclick = async () => {
+  if (!pdfFile) return alert("請上傳 PDF");
+
+  zip = new JSZip();
+  preview.innerHTML = "";
+  progressBar.style.width = "0%";
+  downloadBtn.disabled = true;
+
+  const scale = parseFloat(dpiSelect.value);
+  const format = formatSelect.value;
+  const pdf = await pdfjsLib.getDocument(await pdfFile.arrayBuffer()).promise;
+
+  for (let i=1;i<=pdf.numPages;i++){
+    const page = await pdf.getPage(i);
+    const viewport = page.getViewport({ scale });
+    const canvas = document.createElement("canvas");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+
+    const blob = await new Promise(r=>canvas.toBlob(r,format,0.92));
+    zip.file(`page-${i}.${format.split("/")[1]}`,blob);
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(blob);
+    preview.appendChild(img);
+
+    progressBar.style.width = `${(i/pdf.numPages)*100}%`;
+  }
+  downloadBtn.disabled = false;
+};
+
+downloadBtn.onclick = async () => {
+  saveAs(await zip.generateAsync({type:"blob"}),`${originalName}+IMG.zip`);
+};
+
+function resetAll(){
+  pdfFile=null;
+  originalName="";
+  preview.innerHTML="";
+  fileNameLabel.textContent="";
+  progressBar.style.width="0%";
+  downloadBtn.disabled=true;
+}
+</script>
+</body>
+</html>
