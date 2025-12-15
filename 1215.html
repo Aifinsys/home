@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Alpha Factory | 頂級分析師思維量化系統 | 長島老炮</title>
+    <meta name="description" content="將頂級分析師的決策思維轉化為量化投資策略。Alpha Factory 提供五大 Alpha 引擎：現金流、產業趨勢、商業模型、產業週期與結構風險思維。">
+    <meta name="author" content="長島老炮 (OG with Algorithm)">
+    <meta name="keywords" content="量化投資, Alpha, 分析師思維, 演算法, 股票分析, 系統化投資">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Alpha Factory | 頂級分析師思維量化系統">
+    <meta property="og:description" content="不寫盤勢，不報明牌，拆解頂級分析師如何思考，量化投資如何複製。">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* 自定義動畫類別 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 網格背景動畫 */
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+        .animate-shimmer {
+            background: linear-gradient(45deg, transparent 25%, rgba(68,107,158,0.1) 50%, transparent 75%, transparent 100%);
+            background-size: 250% 250%;
+            animation: shimmer 3s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="bg-blue-600 p-1.5 rounded-lg text-white">
+                        <i data-lucide="brain" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-wide text-slate-900">ALPHA FACTORY</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-bold text-slate-500">
+                    <a href="#structure" class="hover:text-blue-600 transition-colors">思維結構</a>
+                    <a href="#engines" class="hover:text-blue-600 transition-colors">五大引擎</a>
+                    <a href="#author" class="hover:text-blue-600 transition-colors">長島老炮</a>
+                </nav>
+                
+                <!-- View Counter -->
+                <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+                    <i data-lucide="eye" class="w-4 h-4 text-slate-500"></i>
+                    <span class="text-slate-500 text-sm font-mono">
+                        瀏覽人次: <span id="view-counter" class="text-slate-900 font-bold">12,845</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative z-10 pt-24 pb-32 overflow-hidden bg-white">
+            <!-- Background Decorations -->
+            <div class="absolute inset-0 opacity-30 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%221%22/%3E%3C/svg%3E');"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative fade-in-up" id="hero-content">
+                <!-- Tagline -->
+                <div class="inline-flex items-center space-x-2 bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8 border border-slate-200 shadow-sm">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-600"></i>
+                    <span>OG with Algorithm Presents</span>
+                </div>
+                
+                <!-- Main Title -->
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight mb-8 leading-[1.1]">
+                    把頂級分析師的大腦<br />
+                    <span class="relative inline-block mt-2">
+                        變成一座 <br><span class="text-blue-600">Alpha Factory</span>
+                        <!-- SVG Underline -->
+                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-blue-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                            <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" />
+                        </svg>
+                    </span>
+                </h1>
+                
+                <p class="mt-8 max-w-2xl mx-auto text-xl text-slate-600 leading-relaxed font-medium">
+                    量化投資的終點不是預測價格，而是<strong class="text-slate-900">複製決策思維</strong>。
+                    <br />
+                    不寫盤勢，不報明牌，拆解頂級思維結構。
+                </p>
+                
+                <!-- Visual Diagram -->
+                <div class="mt-20 relative max-w-4xl mx-auto">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-3 shadow-2xl relative">
+                        <div class="aspect-[21/9] bg-slate-50 rounded-2xl flex items-center justify-center relative overflow-hidden group border border-slate-100">
+                            <div class="text-center z-10 w-full">
+                                <div class="flex justify-center items-center space-x-4 md:space-x-12 mb-6 opacity-90">
+                                    
+                                    <!-- Step 1 -->
+                                    <div class="flex flex-col items-center group/item">
+                                        <div class="w-20 h-20 bg-white rounded-2xl border-2 border-slate-200 flex items-center justify-center shadow-lg group-hover/item:border-slate-400 transition-all">
+                                            <i data-lucide="search" class="w-8 h-8 text-slate-600"></i>
+                                        </div>
+                                        <span class="mt-3 text-sm font-bold text-slate-600">市場資訊</span>
+                                    </div>
+
+                                    <i data-lucide="arrow-right" class="text-slate-300 w-6 h-6"></i>
+
+                                    <!-- Step 2 -->
+                                    <div class="flex flex-col items-center group/item">
+                                        <div class="w-24 h-24 bg-blue-600 rounded-2xl flex items-center justify-center shadow-blue-200 shadow-xl scale-110 relative z-10">
+                                            <i data-lucide="brain" class="w-10 h-10 text-white"></i>
+                                        </div>
+                                        <span class="mt-3 text-sm font-bold text-blue-700">思維濾鏡</span>
+                                    </div>
+
+                                    <i data-lucide="arrow-right" class="text-slate-300 w-6 h-6"></i>
+
+                                    <!-- Step 3 -->
+                                    <div class="flex flex-col items-center group/item">
+                                        <div class="w-20 h-20 bg-white rounded-2xl border-2 border-emerald-500/30 flex items-center justify-center shadow-lg group-hover/item:border-emerald-500 transition-all">
+                                            <i data-lucide="trending-up" class="w-8 h-8 text-emerald-600"></i>
+                                        </div>
+                                        <span class="mt-3 text-sm font-bold text-emerald-700">投資決策</span>
+                                    </div>
+
+                                </div>
+                                <p class="text-sm font-mono text-slate-400 uppercase tracking-widest">System Architecture</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <article id="structure" class="relative z-10 py-24 bg-slate-50 border-y border-slate-200">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-center mb-16 fade-in-up">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">為什麼模型會失效？</h2>
+                    <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Bad Way -->
+                    <section class="bg-white p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow fade-in-up">
+                        <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 mb-6">
+                            <i data-lucide="activity" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">錯誤的複製</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">大多數人複製的是「價格行為」，而價格只是結果。當市場環境改變，過去的價格模式就會崩潰。</p>
+                    </section>
+                    
+                    <!-- Good Way -->
+                    <section class="bg-white p-10 rounded-3xl border border-blue-200 shadow-lg ring-1 ring-blue-100 fade-in-up">
+                        <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-blue-200 shadow-lg">
+                            <i data-lucide="brain" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">正確的解法</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">真正的 Alpha 來自「決策思維」。將頂級分析師問問題的方式，拆解成可量化的思維濾鏡。</p>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <!-- The 5 Engines Section -->
+        <section id="engines" class="relative z-10 py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50">
+            <div class="text-center mb-20 fade-in-up">
+                <h2 class="text-4xl font-bold text-slate-900 mb-6">五種思維，五種 Alpha 引擎</h2>
+                <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+                    我們將分析師的大腦拆解為五個核心模組，這些模組構成了 Analyst Mindset Alpha Factory 的基礎架構。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <article class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 fade-in-up">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-emerald-500">
+                        <i data-lucide="dollar-sign" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 rounded-xl mb-4 bg-emerald-500 bg-opacity-10">
+                            <i data-lucide="dollar-sign" class="w-8 h-8 text-emerald-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">穩定現金流思維</h3>
+                        <p class="text-slate-500 text-sm mb-5 font-medium border-l-2 border-slate-200 pl-3">長期覆蓋大型科技股的分析師</p>
+                        <div class="space-y-3">
+                            <div class="h-px w-full bg-slate-100 mb-3"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-emerald-600"></i><span class="font-medium">營收與現金流的穩定性</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-emerald-600"></i><span class="font-medium">ROIC 的一致性</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-emerald-600"></i><span class="font-medium">毛利與現金轉換率</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-emerald-600"></i><span class="font-medium">投資組合的地基</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 fade-in-up">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-blue-500">
+                        <i data-lucide="trending-up" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 rounded-xl mb-4 bg-blue-500 bg-opacity-10">
+                            <i data-lucide="trending-up" class="w-8 h-8 text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">產業趨勢型思維</h3>
+                        <p class="text-slate-500 text-sm mb-5 font-medium border-l-2 border-slate-200 pl-3">AI、資安、雲端的早期擁護者</p>
+                        <div class="space-y-3">
+                            <div class="h-px w-full bg-slate-100 mb-3"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-blue-600"></i><span class="font-medium">公司成長率是否持續領先產業</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-blue-600"></i><span class="font-medium">預算佔比是否提升</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-blue-600"></i><span class="font-medium">技術敘事是否加速擴散</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-blue-600"></i><span class="font-medium">高波動，高報酬</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 fade-in-up">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-purple-500">
+                        <i data-lucide="layers" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 rounded-xl mb-4 bg-purple-500 bg-opacity-10">
+                            <i data-lucide="layers" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">商業模型型思維</h3>
+                        <p class="text-slate-500 text-sm mb-5 font-medium border-l-2 border-slate-200 pl-3">工程師最容易共鳴的一派</p>
+                        <div class="space-y-3">
+                            <div class="h-px w-full bg-slate-100 mb-3"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-purple-600"></i><span class="font-medium">營運槓桿效應</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-purple-600"></i><span class="font-medium">毛利率擴張結構</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-purple-600"></i><span class="font-medium">客戶擴張效率</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-purple-600"></i><span class="font-medium">不靠情緒，靠結構工程</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 fade-in-up">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-orange-500">
+                        <i data-lucide="refresh-cw" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 rounded-xl mb-4 bg-orange-500 bg-opacity-10">
+                            <i data-lucide="refresh-cw" class="w-8 h-8 text-orange-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">產業週期型思維</h3>
+                        <p class="text-slate-500 text-sm mb-5 font-medium border-l-2 border-slate-200 pl-3">半導體與硬體世界的生存法則</p>
+                        <div class="space-y-3">
+                            <div class="h-px w-full bg-slate-100 mb-3"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-orange-600"></i><span class="font-medium">Capex (資本支出) 加速度</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-orange-600"></i><span class="font-medium">庫存變化與週轉</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-orange-600"></i><span class="font-medium">毛利率的拐點</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-orange-600"></i><span class="font-medium">時間型 Alpha</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 5 -->
+                <article class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 fade-in-up">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-rose-500">
+                        <i data-lucide="shield-alert" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex p-3 rounded-xl mb-4 bg-rose-500 bg-opacity-10">
+                            <i data-lucide="shield-alert" class="w-8 h-8 text-rose-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">結構風險型思維</h3>
+                        <p class="text-slate-500 text-sm mb-5 font-medium border-l-2 border-slate-200 pl-3">負責「不要死」的風控派</p>
+                        <div class="space-y-3">
+                            <div class="h-px w-full bg-slate-100 mb-3"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-rose-600"></i><span class="font-medium">現金燒錢率 (Burn Rate)</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-rose-600"></i><span class="font-medium">獲客成本壓力</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-rose-600"></i><span class="font-medium">估值脆弱度</span></li>
+                                <li class="flex items-start space-x-3 text-sm text-slate-700"><i data-lucide="target" class="w-4 h-4 mt-0.5 shrink-0 text-rose-600"></i><span class="font-medium">這不是進攻，是救命</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Summary Card -->
+                <article class="group relative overflow-hidden rounded-2xl bg-slate-900 p-8 border border-slate-800 flex flex-col justify-center items-center text-center shadow-2xl fade-in-up">
+                   <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
+                   <div class="relative z-10">
+                     <div class="mb-6 bg-white/10 p-5 rounded-full inline-block backdrop-blur-sm">
+                        <i data-lucide="brain" class="w-12 h-12 text-white"></i>
+                     </div>
+                     <h3 class="text-2xl font-bold text-white mb-4">量化的終點很人性</h3>
+                     <p class="text-slate-300 text-base leading-relaxed">
+                       「現在這個市場，哪一種思考方式最有用？」<br/>
+                       最好的策略來自多種思維的動態共存。
+                     </p>
+                   </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="author" class="relative z-10 bg-white border-t border-slate-200 pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mb-10">
+                <div class="inline-block p-4 bg-slate-50 rounded-full mb-4">
+                    <i data-lucide="cpu" class="w-8 h-8 text-slate-800"></i>
+                </div>
+                <h3 class="text-3xl font-black text-slate-900 mb-2">長島老炮</h3>
+                <p class="text-blue-600 font-mono font-bold tracking-wider">OG with Algorithm</p>
+            </div>
+            <p class="text-slate-500 max-w-2xl mx-auto mb-12 text-lg">
+                2025 年 12 月・Long Island. <span class="text-slate-900 font-bold">Alpha Factory</span>
+            </p>
+            
+            <div class="flex justify-center items-center space-x-6 text-slate-400 text-sm font-medium">
+                <span>© 2025 Ai Fintech Corp. All rights reserved.</span>
+                <span>•</span>
+                <span class="flex items-center text-emerald-600"><i data-lucide="activity" class="w-3.5 h-3.5 mr-1"></i> System Active</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // 1. 初始化圖標
+        lucide.createIcons();
+
+        // 2. 瀏覽計數器邏輯
+        function updateCounter() {
+            const counterElement = document.getElementById('view-counter');
+            let count = localStorage.getItem('alphaFactoryViews');
+            
+            // 如果沒有紀錄或非數字，設定初始值
+            if (!count) {
+                count = 12845;
+            } else {
+                count = parseInt(count);
+            }
+            
+            // 增加計數
+            count++;
+            
+            // 儲存並更新介面
+            localStorage.setItem('alphaFactoryViews', count);
+            counterElement.textContent = count.toLocaleString();
+        }
+
+        // 3. 頁面滾動動畫 (Intersection Observer)
+        function setupAnimations() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // 動畫只播放一次
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.fade-in-up');
+            animatedElements.forEach(el => observer.observe(el));
+            
+            // Hero section 初始動畫
+            setTimeout(() => {
+                document.getElementById('hero-content').classList.add('visible');
+            }, 100);
+        }
+
+        // 執行初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCounter();
+            setupAnimations();
+        });
+    </script>
+</body>
+</html>
