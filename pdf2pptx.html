@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF 2 PPTx 引擎</title>
+    
+    <!-- Tailwind CSS (用於快速佈局與美化) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 必要的 JavaScript 函式庫 -->
+    <!-- PDF.js: 解析 PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <!-- PptxGenJS: 產生 PPTX -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <!-- JSZip: 壓縮檔案 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- FileSaver: 儲存檔案 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(14, 165, 233, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #ffffff;
+            color: #334155;
+        }
+        
+        /* 科技感微細節 */
+        .tech-border {
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .tech-border:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #0ea5e9;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 隱藏原生 input */
+        #file-input {
+            display: none;
+        }
+
+        /* 預覽視窗滾動條 */
+        .preview-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .preview-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .preview-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .preview-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- 頁首 -->
+    <header class="w-full border-b border-gray-100 bg-white sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-tech-500 rounded-lg flex items-center justify-center text-white shadow-glow">
+                    <i class="fa-solid fa-file-powerpoint text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-gray-900">PDF 2 PPTx <span class="text-tech-500">引擎</span></h1>
+            </div>
+            <div class="text-xs font-mono text-gray-400 border border-gray-200 px-2 py-1 rounded">V 1.0.0 RELEASE</div>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="flex-grow flex flex-col items-center w-full max-w-4xl mx-auto px-6 py-8 space-y-8">
+
+        <!-- 使用說明欄 -->
+        <section class="w-full bg-tech-50 rounded-xl p-6 border border-tech-100">
+            <h2 class="text-tech-900 font-semibold mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i> 使用說明
+            </h2>
+            <ol class="list-decimal list-inside text-sm text-gray-600 space-y-1 ml-1">
+                <li>協助 NotebookLM 簡報下載的 PDF 檔 轉譯成 PPTx 檔。</li>
+                <li>將您的 PDF 檔案拖曳至下方區塊，或點擊上傳。</li>
+                <li>確認檔案名稱正確後，點擊「一鍵轉換」。</li>
+                <li>系統將自動解析頁面並生成預覽。</li>
+                <li>轉換完成後，點擊下載按鈕獲取 ZIP 壓縮檔（內含 PPTx）。</li>
+            </ol>
+        </section>
+
+        <!-- 檔案上傳區 -->
+        <div id="drop-area" class="w-full h-48 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-colors hover:bg-gray-50 hover:border-tech-500 relative group bg-white">
+            <input type="file" id="file-input" accept="application/pdf">
+            
+            <!-- 初始狀態 -->
+            <div id="upload-placeholder" class="text-center transition-all duration-300">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-tech-500">
+                    <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                </div>
+                <p class="text-lg font-medium text-gray-700">點擊或拖曳 PDF 檔案至此</p>
+                <p class="text-sm text-gray-400 mt-1">支援單一 PDF 檔案上傳</p>
+            </div>
+
+            <!-- 檔案已選定狀態 (預設隱藏) -->
+            <div id="file-info" class="hidden flex-col items-center animate-pulse">
+                <i class="fa-solid fa-file-pdf text-4xl text-red-500 mb-2"></i>
+                <p id="filename-display" class="text-lg font-bold text-gray-800 max-w-md truncate px-4"></p>
+                <p class="text-xs text-gray-500 mt-1">準備就緒</p>
+            </div>
+        </div>
+
+        <!-- 操作按鈕區 -->
+        <div class="flex gap-4 w-full justify-center">
+            <button id="convert-btn" class="px-8 py-3 bg-tech-500 hover:bg-tech-600 text-white rounded-lg font-semibold shadow-lg shadow-tech-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2" disabled>
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 一鍵轉換
+            </button>
+            
+            <button id="clear-btn" class="px-8 py-3 bg-white border border-gray-200 hover:border-red-200 hover:bg-red-50 text-gray-600 hover:text-red-500 rounded-lg font-medium transition-all flex items-center gap-2">
+                <i class="fa-regular fa-trash-can"></i> 清除
+            </button>
+        </div>
+
+        <!-- 進度條 (隱藏) -->
+        <div id="progress-container" class="w-full hidden">
+            <div class="flex justify-between text-xs text-gray-500 mb-1">
+                <span id="progress-status">正在處理...</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                <div id="progress-bar" class="bg-tech-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- 瀏覽視窗 & 下載區 (隱藏) -->
+        <section id="result-area" class="w-full hidden space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                <h3 class="text-lg font-bold text-gray-800">瀏覽視窗 <span id="page-count" class="text-sm font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded ml-2">0 頁</span></h3>
+                
+                <button id="download-btn" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm font-bold shadow transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-file-zipper"></i> 下載壓縮檔案
+                </button>
+            </div>
+
+            <!-- 預覽網格 -->
+            <div id="preview-grid" class="preview-scroll grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto p-2 border border-gray-100 rounded-lg bg-gray-50">
+                <!-- Javascript will populate this -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="mt-auto border-t border-gray-100 py-8 bg-gray-50">
+        <div class="max-w-4xl mx-auto text-center space-y-4">
+            <div class="flex flex-col items-center gap-2">
+                <p class="text-gray-600 font-medium">謝謝使用</p>
+                <div class="w-12 h-1 bg-tech-500 rounded-full opacity-20"></div>
+            </div>
+            
+            <a href="http://www.aifinsys.com" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-tech-500 transition-colors">
+                <i class="fa-solid fa-house"></i> 回主頁
+            </a>
+            
+            <div class="text-xs text-gray-300 mt-4">
+                &copy; 2025 Ai Fintech Corp.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 邏輯腳本 -->
+    <script>
+        // 設定 PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        // DOM 元素
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('file-input');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+        const fileInfo = document.getElementById('file-info');
+        const filenameDisplay = document.getElementById('filename-display');
+        const convertBtn = document.getElementById('convert-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const progressStatus = document.getElementById('progress-status');
+        const resultArea = document.getElementById('result-area');
+        const previewGrid = document.getElementById('preview-grid');
+        const pageCountLabel = document.getElementById('page-count');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // 狀態變數
+        let currentFile = null;
+        let generatedPptx = null;
+        let originalFileName = "";
+
+        // --- 事件監聽器 ---
+
+        // 點擊上傳
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        // 檔案選擇變更
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // 拖曳效果
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add('bg-blue-50', 'border-tech-500'));
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove('bg-blue-50', 'border-tech-500'));
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                if (files[0].type === 'application/pdf') {
+                    handleFile(files[0]);
+                } else {
+                    alert('請上傳 PDF 檔案格式');
+                }
+            }
+        });
+
+        // 處理檔案邏輯
+        function handleFile(file) {
+            currentFile = file;
+            // 移除副檔名，保留檔名
+            originalFileName = file.name.replace(/\.[^/.]+$/, "");
+            
+            // 更新 UI
+            uploadPlaceholder.classList.add('hidden');
+            fileInfo.classList.remove('hidden');
+            fileInfo.classList.add('flex');
+            filenameDisplay.textContent = file.name;
+            
+            convertBtn.disabled = false;
+            convertBtn.classList.add('animate-bounce');
+            setTimeout(() => convertBtn.classList.remove('animate-bounce'), 1000);
+            
+            // 重置之前的結果
+            resetResults();
+        }
+
+        // 清除按鈕
+        clearBtn.addEventListener('click', () => {
+            currentFile = null;
+            fileInput.value = '';
+            originalFileName = "";
+            
+            uploadPlaceholder.classList.remove('hidden');
+            fileInfo.classList.add('hidden');
+            fileInfo.classList.remove('flex');
+            
+            convertBtn.disabled = true;
+            resetResults();
+        });
+
+        function resetResults() {
+            resultArea.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            previewGrid.innerHTML = '';
+            generatedPptx = null;
+        }
+
+        // --- 核心轉換邏輯 ---
+
+        convertBtn.addEventListener('click', async () => {
+            if (!currentFile) return;
+
+            // UI 狀態更新
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<div class="loader mr-2"></div> 處理中...';
+            progressContainer.classList.remove('hidden');
+            resultArea.classList.remove('hidden'); // 先顯示區域，但內容是空的
+            previewGrid.innerHTML = '';
+            
+            try {
+                // 讀取 PDF
+                const arrayBuffer = await currentFile.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                const totalPages = pdf.numPages;
+                
+                pageCountLabel.textContent = `${totalPages} 頁`;
+
+                // 初始化 PPTX
+                let pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9'; // 預設 16:9
+                pptx.title = originalFileName;
+
+                // 逐頁處理
+                for (let i = 1; i <= totalPages; i++) {
+                    // 更新進度條
+                    const percent = Math.round(((i - 1) / totalPages) * 100);
+                    progressBar.style.width = `${percent}%`;
+                    progressPercent.textContent = `${percent}%`;
+                    progressStatus.textContent = `正在解析第 ${i} / ${totalPages} 頁...`;
+
+                    // 取得頁面
+                    const page = await pdf.getPage(i);
+                    
+                    // 設定渲染比例 (Scale 2 for better quality)
+                    const viewport = page.getViewport({ scale: 2 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // 渲染至 Canvas
+                    await page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise;
+
+                    // 轉為圖片數據 (Data URL)
+                    const imgData = canvas.toDataURL('image/jpeg', 0.8);
+
+                    // 1. 添加到預覽網格
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'flex flex-col gap-2 p-2 bg-white rounded shadow-sm border border-gray-200';
+                    previewItem.innerHTML = `
+                        <div class="relative w-full pt-[56.25%] bg-gray-200 overflow-hidden rounded">
+                            <img src="${imgData}" class="absolute top-0 left-0 w-full h-full object-contain">
+                        </div>
+                        <span class="text-xs text-center text-gray-400">Page ${i}</span>
+                    `;
+                    previewGrid.appendChild(previewItem);
+
+                    // 2. 添加到 PPTX
+                    // 使用 100% 寬高填滿投影片
+                    let slide = pptx.addSlide();
+                    slide.addImage({ 
+                        data: imgData, 
+                        x: 0, 
+                        y: 0, 
+                        w: '100%', 
+                        h: '100%' 
+                    });
+                }
+
+                // 完成
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                progressStatus.textContent = '轉換完成！準備下載';
+                generatedPptx = pptx;
+                
+                // 恢復按鈕
+                convertBtn.innerHTML = '<i class="fa-solid fa-check"></i> 完成';
+                convertBtn.classList.remove('bg-tech-500');
+                convertBtn.classList.add('bg-green-500', 'border-green-500');
+                
+            } catch (error) {
+                console.error(error);
+                alert('轉換過程中發生錯誤: ' + error.message);
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> 一鍵轉換';
+            }
+        });
+
+        // 下載 ZIP 邏輯
+        downloadBtn.addEventListener('click', async () => {
+            if (!generatedPptx) return;
+
+            downloadBtn.innerHTML = '<div class="loader mr-2 border-white border-t-transparent"></div> 壓縮中...';
+            downloadBtn.disabled = true;
+
+            try {
+                // 1. 生成 PPTX Blob
+                const pptxBlob = await generatedPptx.write("blob");
+
+                // 2. 建立 ZIP
+                const zip = new JSZip();
+                
+                // 設定壓縮檔內的 PPTX 檔名
+                // 這裡可以選擇是否保留原始檔名，題目要求下載時 zip 檔名要改，
+                // 但 zip 內部的 pptx 檔名通常維持原檔名較為直觀，這裡我設定 pptx 檔名為原檔名
+                const pptxFileName = `${originalFileName}.pptx`;
+                zip.file(pptxFileName, pptxBlob);
+
+                // 3. 產生 ZIP Blob
+                const zipContent = await zip.generateAsync({ type: "blob" });
+
+                // 4. 下載，檔名格式：原上傳檔名+pptx.zip
+                const zipFileName = `${originalFileName}pptx.zip`;
+                saveAs(zipContent, zipFileName);
+
+                downloadBtn.innerHTML = '<i class="fa-solid fa-file-zipper"></i> 下載壓縮檔案';
+                downloadBtn.disabled = false;
+
+            } catch (error) {
+                console.error(error);
+                alert('打包下載失敗');
+                downloadBtn.innerHTML = '<i class="fa-solid fa-file-zipper"></i> 重試下載';
+                downloadBtn.disabled = false;
+            }
+        });
+
+    </script>
+</body>
+</html>
