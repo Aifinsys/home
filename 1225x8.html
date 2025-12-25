@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尾盤選股策略系統 V1.0 </title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: "Noto Sans TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #475569;
+            margin-top: 25px;
+        }
+
+        p, li {
+            font-size: 1.05rem;
+        }
+
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            color: #d63384;
+        }
+
+        pre {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+        }
+        
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        blockquote {
+            background-color: #eff6ff;
+            border-left: 5px solid var(--primary-color);
+            margin: 20px 0;
+            padding: 15px 20px;
+            color: #1e40af;
+        }
+
+        /* Colab Button Style */
+        .colab-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f9ab00; /* Google Colab Orange/Yellow */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .colab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #e39b00;
+        }
+
+        .colab-icon {
+            margin-right: 10px;
+            font-size: 1.4em;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        thead tr {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Footer Styles */
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #64748b;
+            padding-bottom: 40px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>尾盤選股策略系統 V1.0 </h1>
+        <p>自動化量化分析 | Yahoo Finance 串接 | Excel 報表生成</p>
+        
+        <!-- Colab Button Area -->
+        <a href="https://colab.research.google.com/drive/1CM5XuJN8YWwjdc70KGzOS_oF5oseaAph?usp=sharing" target="_blank" class="colab-btn" title="在 Google Colab 中開啟程式碼">
+            <span class="colab-icon">Google Colab</span></a>
+        <h3><p style="font-size: 0.9rem; color: #d99c4c;">點擊按鈕 執行 !</p></h3>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>1. 系統簡介</h2>
+            <p><strong>尾盤選股策略系統 V1.0</strong> 是一套自動化的量化分析工具，專為台股投資人設計。本系統透過 Python 程式串接 Yahoo Finance 股票『上市公司』數據，自動執行經典的「尾盤選股八大步驟」。</p>
+            <p>系統能協助投資人在收盤前（或盤後複盤時），快速從觀察名單中篩選出具備「動能強、籌碼穩、型態好」的潛力標的，並自動生成 Excel 分析報告。</p>
+        </section>
+
+        <section id="requirements">
+            <h2>2. 環境需求與安裝</h2>
+            <p>在執行本程式之前，請確保您的電腦已安裝以下環境：</p>
+            <ul>
+                <li><strong>程式語言</strong>：Python 3.8 或以上版本</li>
+                <li><strong>必要套件</strong>：
+                    <ul>
+                        <li><code>yfinance</code> (獲取股價數據)</li>
+                        <li><code>pandas</code> (數據分析核心)</li>
+                        <li><code>openpyxl</code> (輸出 Excel 報表)</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><strong>安裝指令：</strong><br>開啟終端機 (Terminal) 或 CMD，輸入以下指令：</p>
+            <pre><code>pip install yfinance pandas openpyxl</code></pre>
+        </section>
+
+        <section id="quick-start">
+            <h2>3. 快速操作指南</h2>
+            
+            <h3>步驟一：啟動程式</h3>
+            <p>執行 <code>late_day_strategy_v1.py</code> 檔案。</p>
+            <pre><code>python late_day_strategy_v1.py</code></pre>
+
+            <h3>步驟二：輸入觀察名單</h3>
+            <p>程式啟動後，會提示您輸入『上市公司』股票代碼。</p>
+            <ul>
+                <li><strong>輸入方式</strong>：直接輸入數字代碼（如 <code>2330</code>），程式會自動判斷並加上 <code>.TW</code>。</li>
+                <li><strong>連續輸入</strong>：輸入完一檔按 Enter，可繼續輸入下一檔。</li>
+                <li><strong>開始分析</strong>：當名單輸入完畢後，輸入 <code>run</code> 並按 Enter 開始執行。</li>
+            </ul>
+            <blockquote>
+                <strong>操作範例：</strong><br>
+                股票代碼 #1: 2330<br>
+                &nbsp;&nbsp;&nbsp;已加入: 2330.TW<br>
+                股票代碼 #2: 2603<br>
+                &nbsp;&nbsp;&nbsp;已加入: 2603.TW<br>
+                股票代碼 #3: run
+            </blockquote>
+
+            <h3>步驟三：等待分析結果</h3>
+            <p>系統將自動執行以下動作：</p>
+            <ol>
+                <li>下載大盤指數（加權指數）數據。</li>
+                <li>下載您輸入個股的歷史與即時數據。</li>
+                <li>逐一過濾八大策略條件（螢幕會顯示每一關剩餘的檔數）。</li>
+            </ol>
+
+            <h3>步驟四：查看報告</h3>
+            <ul>
+                <li><strong>螢幕顯示</strong>：程式會直接列出最終符合條件的股票清單。</li>
+                <li><strong>檔案輸出</strong>：程式會在同一資料夾下產生 Excel 檔案，檔名格式為 <code>Strategy_Report_YYYYMMDD_HHMMSS.xlsx</code>。</li>
+            </ul>
+        </section>
+
+        <section id="logic">
+            <h2>4. 八大策略邏輯詳解</h2>
+            <p>本系統採用「漏斗式篩選」，股票必須同時符合以下所有條件才會被留存：</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>步驟</th>
+                        <th>策略名稱</th>
+                        <th>篩選條件</th>
+                        <th>投資邏輯</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>漲幅初篩</td>
+                        <td>漲幅介於 <strong>3% ~ 5%</strong></td>
+                        <td>剔除漲幅過小（無動能）或漲幅過大（已漲停或風險高）的股票，鎖定起漲階段。</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>量比過濾</td>
+                        <td>量比 <strong>≥ 1.0</strong></td>
+                        <td>確認今日成交量大於過去 5 日均量，代表有資金進場推升。</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>換手率</td>
+                        <td>換手率 <strong>5% ~ 10%</strong></td>
+                        <td>5% 以下人氣不足，10% 以上籌碼可能鬆動。此區間代表主力控盤穩定且交投熱絡。</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>市值篩選</td>
+                        <td>市值 <strong>50億 ~ 200億</strong></td>
+                        <td>鎖定中型成長股。剔除股本過大（牛皮股）或過小（易被操弄）的標的。</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>成交量趨勢</td>
+                        <td>連續 <strong>3日</strong> 溫和放量</td>
+                        <td><code>今日量 > 昨日量 > 前日量</code>。確認攻擊量能是連續的，而非一日行情。</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>均線多頭</td>
+                        <td><strong>60MA向上</strong> 且 <strong>短均>長均</strong></td>
+                        <td>確認季線（生命線）趨勢向上，且短天期均線在長天期之上，屬於多頭排列。</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>相對強度</td>
+                        <td>個股漲幅 <strong>></strong> 大盤漲幅</td>
+                        <td>挑選強於大盤的個股，確保在大盤震盪時具有抗跌或領漲能力。</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>尾盤信號</td>
+                        <td>收盤價 <strong>創新高</strong> 且 <strong>有支撐</strong></td>
+                        <td>1. 收在今日最高價附近 (99%區間)。<br>2. 收盤價高於今日分時均價 (VWAP)。<br>確認尾盤主力作價意願強烈。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="report-info">
+            <h2>5. 輸出報表說明</h2>
+            <p>生成的 Excel 檔案包含兩個分頁：</p>
+            <h3>分頁 1: 篩選結果 (Results)</h3>
+            <p>僅列出<strong>完全符合</strong>上述八大條件的股票。這是您的重點關注名單。</p>
+            <ul>
+                <li><strong>Symbol</strong>: 股票代碼</li>
+                <li><strong>Change_Pct</strong>: 今日漲跌幅</li>
+                <li><strong>Volume_Ratio</strong>: 量比</li>
+                <li><strong>Turnover_Rate</strong>: 換手率</li>
+                <li><strong>Price</strong>: 目前價格</li>
+            </ul>
+
+            <h3>分頁 2: 原始數據 (Raw Data)</h3>
+            <p>列出所有您輸入的股票及其詳細指標。</p>
+            <ul>
+                <li><strong>用途</strong>：如果您輸入了 10 檔股票，最後結果卻是 0 檔，您可以查看此分頁，檢視是哪一個指標不符合（例如：漲幅只有 2%、或是量比不足）。</li>
+            </ul>
+        </section>
+
+        <section id="faq">
+            <h2>6. 常見問題與注意事項</h2>
+            <p><strong>Q1: 為什麼篩選結果經常是空的？</strong><br>
+            <strong>A</strong>: 這是一套非常嚴格的策略（尤其是「連續3日增量」和「市值區間」）。若當日盤勢不佳，沒有股票符合是正常的。建議您可以先在程式碼中放寬部分條件（如 <code>step_1</code> 漲幅改為 1%-5%）進行測試。</p>
+
+            <p><strong>Q2: 數據是即時的嗎？</strong><br>
+            <strong>A</strong>: 程式使用 Yahoo Finance 免費數據源。<br>
+            &nbsp;&nbsp;&nbsp;• <strong>台股數據</strong>：盤中通常有 15-20 分鐘延遲，收盤後約 14:00~15:00 更新完整日線。<br>
+            &nbsp;&nbsp;&nbsp;• <strong>建議使用時間</strong>：盤後（14:30 後）做功課，或尾盤（13:10）做預判（需注意延遲）。</p>
+
+            <p><strong>Q3: 為什麼有些股票抓不到數據？</strong><br>
+            <strong>A</strong>: 可能是剛上市櫃的新股（歷史數據不足 60 天，無法計算季線），或是 Yahoo Finance 該時段連線不穩。程式會自動跳過並在畫面上顯示錯誤訊息。</p>
+        </section>
+
+        <section id="disclaimer" style="margin-top: 40px; padding: 15px; background-color: #fef2f2; border: 1px solid #ef4444; border-radius: 8px; color: #b91c1c;">
+            <h3 style="margin-top: 0; color: #b91c1c;">7. 免責聲明</h3>
+            <p style="margin-bottom: 0;">本程式僅供技術分析與策略研究使用，所有數據源自公開網路資訊。程式篩選結果不代表買賣建議，使用者應自行判斷投資風險，盈虧自負。</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Ai Fintech Corp. 2026 © | 尾盤選股策略 V1.0</p>
+        <div class="footer-links">
+            <a href="http://www.aifinsys.com">回主頁</a>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
