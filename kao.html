@@ -2,8 +2,30 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1"> 
-  <title>Kao88 課程資料分類瀏覽器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <!-- SEO Meta Tags for Google Search & AI -->
+  <title>Kao88 課程資料分類瀏覽器 | 財經量化與AI教學資源中心</title>
+  <meta name="description" content="Kao88 課程資料分類瀏覽器，集中管理財經詞彙、量化交易策略、AI提示詞生成及Python爬蟲教學資源。提供一站式搜尋與互動式工具連結，助您快速掌握金融科技新知。">
+  <meta name="keywords" content="Kao88, 量化交易, 財經教學, AI提示詞, Python爬蟲, Colab教學, 投資策略, 金融科技, 課程資料庫">
+  <meta name="author" content="Kao88">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook (Social Media Optimization) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aifinsys.com/">
+  <meta property="og:title" content="Kao88 課程資料分類瀏覽器">
+  <meta property="og:description" content="整合財經、量化交易與AI學習資源的互動式導航平台。">
+  <meta property="og:image" content="https://aifinsys.com/img/share_cover.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kao88 課程資料分類瀏覽器">
+  <meta name="twitter:description" content="整合財經、量化交易與AI學習資源的互動式導航平台。">
+
+  <!-- Favicon (Optional) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+
   <style>
     :root{
       --bg: #F0F4F8;
@@ -45,41 +67,44 @@
       justify-content: space-between;
       margin-bottom: 24px;
     }
-    .header-info h1 { margin: 0; font-size: 1.25rem; color: var(--primary); font-weight: 700; }
-    .header-info p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+    .header-info h1 { margin: 0; font-size: 1.5rem; color: var(--primary); font-weight: 700; letter-spacing: -0.025em; }
+    .header-info p { margin: 4px 0 0; color: var(--muted); font-size: 0.95rem; }
     
     .search-box { position: relative; width: 100%; max-width: 300px; }
     .search-box input {
       width: 100%;
-      padding: 10px 16px;
-      padding-left: 40px;
+      padding: 12px 16px;
+      padding-left: 44px;
       border-radius: 99px;
       border: 1px solid var(--border);
       background: #f9fafb;
       transition: all 0.2s;
+      font-size: 1rem;
     }
     .search-box input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
 
     /* Main Layout */
     .layout { display: flex; gap: 24px; flex: 1; }
     
     /* Sidebar */
     nav.side {
-      width: 240px;
+      width: 260px;
       flex-shrink: 0;
       background: var(--card);
       padding: 16px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       height: fit-content;
-      max-height: 80vh;
+      max-height: 85vh;
       overflow-y: auto;
+      position: sticky;
+      top: 20px;
     }
     nav.side h3 { margin: 0 0 12px 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
-    nav.side ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    nav.side ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
     nav.side li {
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: 8px;
       cursor: pointer;
       color: var(--text);
@@ -92,10 +117,10 @@
     nav.side li:hover { background: #eff6ff; color: var(--primary); }
     nav.side li.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
     nav.side li .badge { 
-      opacity: 0.8; 
+      opacity: 0.9; 
       font-size: 0.75em; 
-      background: rgba(255,255,255,0.2); 
-      padding: 2px 6px; 
+      background: rgba(255,255,255,0.25); 
+      padding: 2px 8px; 
       border-radius: 99px; 
       color: inherit;
     }
@@ -113,21 +138,21 @@
       align-items: center;
       justify-content: space-between;
       background: var(--card);
-      padding: 12px 20px;
+      padding: 16px 24px;
       border-radius: var(--radius);
       margin-bottom: 20px;
       box-shadow: var(--shadow);
       flex-wrap: wrap;
       gap: 12px;
     }
-    .cat-title { font-weight: 700; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .cat-title { font-weight: 700; font-size: 1.25rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
     
     /* Admin Panel (Hidden by default) */
     #adminPanel {
       background: white;
       border: 2px dashed var(--primary);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 24px;
       margin-bottom: 24px;
       display: none; /* Toggled via JS */
       position: relative;
@@ -135,16 +160,16 @@
     #adminPanel.show { display: block; animation: slideDown 0.3s ease-out; }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .form-grid.full { grid-template-columns: 1fr; }
 
     .export-zone {
-      margin-top: 20px;
+      margin-top: 24px;
       padding-top: 20px;
       border-top: 1px dashed var(--border);
       background: #f0fdf4;
-      margin: 20px -20px -20px -20px;
-      padding: 15px 20px;
+      margin: 24px -24px -24px -24px;
+      padding: 16px 24px;
       border-bottom-left-radius: var(--radius);
       border-bottom-right-radius: var(--radius);
       display: flex;
@@ -153,7 +178,7 @@
     }
 
     /* Cards Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
     
     .card {
       background: var(--card);
@@ -165,25 +190,26 @@
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
       border: 1px solid transparent;
+      height: 100%;
     }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #e5e7eb; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1); border-color: #e5e7eb; }
     
-    .card-body { padding: 16px; flex: 1; display: flex; gap: 12px; }
+    .card-body { padding: 20px; flex: 1; display: flex; gap: 16px; align-items: flex-start; }
     
     /* Image Handling */
-    .card-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #f3f4f6; }
-    .emoji-icon { display: flex; align-items: center; justify-content: center; font-size: 32px; background: #f3f4f6; cursor: default; }
+    .card-img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #f3f4f6; }
+    .emoji-icon { display: flex; align-items: center; justify-content: center; font-size: 36px; background: #f3f4f6; cursor: default; }
 
     .card-content { flex: 1; min-width: 0; }
-    .card-content h4 { margin: 0 0 4px; font-size: 1rem; color: var(--text); font-weight: 700; line-height: 1.3; }
-    .card-content p { margin: 0; font-size: 0.85rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+    .card-content h4 { margin: 0 0 6px; font-size: 1.05rem; color: var(--text); font-weight: 700; line-height: 1.4; }
+    .card-content p { margin: 0; font-size: 0.9rem; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
     
     .card-foot {
-      padding: 12px 16px;
+      padding: 12px 20px;
       background: #f9fafb;
       border-top: 1px solid var(--border);
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
 
     /* Buttons */
@@ -192,10 +218,11 @@
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 500;
       transition: all 0.2s;
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      font-family: inherit;
     }
     .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
     .btn.primary { background: var(--primary); color: #fff; }
@@ -208,13 +235,14 @@
     .btn.danger:hover { background: #fecaca; }
 
     /* Inputs */
-    input.form-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; }
+    input.form-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
+    input.form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
     /* Checkbox for delete */
     .del-check {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       width: 20px;
       height: 20px;
       cursor: pointer;
@@ -242,6 +270,7 @@
         background: transparent;
         box-shadow: none;
         padding: 0;
+        position: static;
       }
       nav.side h3 { display: none; }
       nav.side ul { 
@@ -256,22 +285,24 @@
         background: var(--card);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         border: 1px solid var(--border);
+        padding: 8px 12px;
       }
       nav.side li.active {
         border-color: var(--primary);
       }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
     }
     @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
-      header { flex-direction: column; align-items: stretch; }
+      header { flex-direction: column; align-items: stretch; gap: 16px; }
       .search-box { max-width: none; }
-      .export-zone { flex-direction: column; gap: 10px; text-align: center; }
+      .export-zone { flex-direction: column; gap: 12px; text-align: center; }
       
       /* Make toolbar buttons stack better on small screens */
-      .toolbar { gap: 12px; flex-direction: column; align-items: stretch; }
+      .toolbar { gap: 16px; flex-direction: column; align-items: stretch; }
       .toolbar > div:last-child { justify-content: space-between; width: 100%; }
       .cat-title { justify-content: center; }
+      .header-info { text-align: center; }
     }
   </style>
 </head>
@@ -281,8 +312,8 @@
   <!-- Header -->
   <header>
     <div class="header-info">
-      <h1>Kao88 課程資料分類瀏覽器</h1>
-      <p>集中管理網站資源，支援快速搜尋與自訂擴充。</p>
+      <h1>Kao88 課程資料瀏覽器</h1>
+      <p>金融演算量化分析：AI教學資源平台</p>
     </div>
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -292,7 +323,7 @@
 
   <div class="layout">
     <!-- Sidebar Navigation -->
-    <nav class="side">
+    <nav class="side" role="navigation">
       <h3>資源分類</h3>
       <ul id="categoryList">
         <!-- Categories injected via JS -->
@@ -300,38 +331,39 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main role="main">
       <div class="toolbar">
         <div class="cat-title" id="categoryTitle">載入中...</div>
         <div style="display:flex; gap:8px;">
-          <button class="btn ghost btn-sm" id="btnToggleAdmin"></button>
+          <button class="btn ghost btn-sm" id="btnToggleAdmin" title="開啟編輯模式"></button>
           <button class="btn ghost btn-sm" id="btnReset" title="重設回原始真實資料"></button>
         </div>
       </div>
 
       <!-- Admin Panel (Add New Item) -->
       <section id="adminPanel">
-        <h4 style="margin:0 0 12px 0; color:var(--primary);">新增項目至此分類</h4>
+        <h4 style="margin:0 0 16px 0; color:var(--primary); font-size: 1.1rem;">新增項目至此分類</h4>
         <div class="form-grid">
           <input id="newTitle" class="form-input" placeholder="網站標題 (必填)">
           <input id="newUrl" class="form-input" placeholder="網址 URL (必填)">
         </div>
         <div class="form-grid full">
-          <input id="newDesc" class="form-input" placeholder="簡短描述">
+          <input id="newDesc" class="form-input" placeholder="簡短描述 (SEO描述)">
         </div>
         <div class="form-grid full">
           <input id="newThumb" class="form-input" placeholder="縮圖網址或 Emoji (例如: 🔗)">
         </div>
-        <div style="display:flex; justify-content:space-between; margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; margin-top:16px;">
           <button class="btn danger btn-sm" id="btnDeleteSelected">🗑️ 刪除勾選項目</button>
           <button class="btn primary" id="btnAdd">＋ 確認新增</button>
         </div>
 
         <!-- Export Zone -->
         <div class="export-zone">
-          <div style="font-size:0.9rem; color:#065f46;">
-            <strong>🚀 一鍵打包：</strong><br>
-            新增完畢後，點擊此按鈕可生成包含最新資料的獨立 HTML 檔。
+          <div style="font-size:0.95rem; color:#065f46; line-height: 1.6;">
+            <strong>🚀 一鍵打包 (SEO Friendly)：</strong><br>
+            新增完畢後，點擊此按鈕可生成包含最新資料的獨立 HTML 檔。<br>
+            <span style="font-size:0.85em; color:var(--success);">* 新檔案將自動包含 Schema.org 結構化數據，提升 Google 搜尋排名。</span>
           </div>
           <button class="btn success" id="btnExportHtml">📥 匯出獨立 HTML</button>
         </div>
@@ -345,7 +377,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 Kao88 課程資料分類系統 V1.0 </p>
+    <p>&copy; 2025 Kao88 課程資料分類系統 V2.0 (SEO Optimized)</p>
   </footer>
 </div>
 
@@ -353,11 +385,9 @@
   /* -------------------------------------------
      1. Data Structure & Initialization
      ------------------------------------------- */
-  // 改名 Key 以避免與舊版本資料格式衝突
   const STORAGE_KEY = 'course_browser_real_data_v3_fixed';
   
   // 原始真實資料 (完整整合 CSV 內容)
-  // 注意：請勿移除下方的 [[DATA_START]] 和 [[DATA_END]] 註解，這是匯出功能的重要標記
   const REAL_DATA_SOURCE = /* [[DATA_START]] */ {
     "Web App": [
         {
@@ -419,6 +449,12 @@
             "url": "https://aifinsys.com/1120a",
             "desc": "「量化投資策略儀表板」的互動式教學與工具平台。",
             "thumb": "img/8.png"
+        },
+        {
+            "title": "多智能體決策系統",
+            "url": "https://aifinsys.com/1227",
+            "desc": "「多智能體決策系統」的互動式教學與工具平台。",
+            "thumb": "img/60.png"
         },
         {
             "title": "經典K線型態 1-18 完整圖解",
@@ -736,46 +772,84 @@
   let currentCategory = "";
   let isAdminMode = false;
 
-  // 初始化：從 LocalStorage 讀取或使用原始資料
+  // 初始化：★★★ 修改處：強制清除舊緩存，優先使用真實代碼數據 ★★★
   function initData() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    let valid = false;
-
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        // 強制檢查資料結構：必須是物件，且不是陣列，且有資料
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && Object.keys(parsed).length > 0) {
-          DATA = parsed;
-          valid = true;
-        } else {
-          console.warn("偵測到快取資料結構損毀或版本不符，將重置。");
-        }
-      } catch(e) {
-        console.error("資料解析失敗，將重置。", e);
-      }
-    } 
-
-    if (!valid) {
-      resetToSource();
+    // 1. 強制清除舊有的 localStorage，確保每次開啟都是乾淨的狀態
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        console.log("Cache cleared per user request.");
+    } catch(e) {
+        console.warn("Unable to clear local storage:", e);
     }
+
+    // 2. 直接載入原始資料
+    // 我們使用 Deep copy 確保編輯時不會直接修改到 REAL_DATA_SOURCE 常數
+    DATA = JSON.parse(JSON.stringify(REAL_DATA_SOURCE));
     
-    // 確保 currentCategory 有效
+    // 3. 確保 currentCategory 有效
     const keys = Object.keys(DATA);
     if (!DATA[currentCategory] || !keys.includes(currentCategory)) {
-      currentCategory = keys[0] || ""; // 若完全無資料則為空字串
+      currentCategory = keys[0] || ""; 
     }
+
+    // 4. ★★★ SEO 關鍵：動態生成 Google 結構化數據 ★★★
+    generateJsonLd(DATA);
   }
 
   // 重置為原始真實資料
   function resetToSource() {
-    DATA = JSON.parse(JSON.stringify(REAL_DATA_SOURCE)); // Deep copy
-    saveData();
+    DATA = JSON.parse(JSON.stringify(REAL_DATA_SOURCE)); 
+    // 注意：因為現在預設就是不存 LocalStorage (除非使用者在本次 Session 有編輯)
+    // 但為了讓編輯功能在「本次瀏覽」有效，我們還是可以暫存一下，或者單純更新記憶體
+    saveData(); // 這裡的 save 只是更新到當前瀏覽器的記憶體狀態 (如果 initData 清除了，這裡 save 會重新建立，但在下次 F5 會再次被清除)
+    renderCategories();
+    renderCards(DATA[currentCategory]);
   }
 
-  // 儲存至 LocalStorage
+  // 儲存至 LocalStorage (僅供本次 Session 暫存，下次重新整理會被 initData 清除)
   function saveData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  }
+
+  // ★★★ SEO Helper: 生成 JSON-LD 結構化數據 ★★★
+  // 這會告訴 Google 這些是「課程列表」或「學習資源」
+  function generateJsonLd(data) {
+    const itemList = [];
+    let position = 1;
+
+    Object.keys(data).forEach(category => {
+        data[category].forEach(item => {
+            itemList.push({
+                "@type": "ListItem",
+                "position": position++,
+                "item": {
+                    "@type": "Course",
+                    "name": item.title,
+                    "description": item.desc || item.title,
+                    "provider": {
+                        "@type": "Organization",
+                        "name": "Kao88",
+                        "sameAs": "https://aifinsys.com/"
+                    },
+                    "url": item.url
+                }
+            });
+        });
+    });
+
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": itemList,
+        "name": "Kao88 課程資料資源列表",
+        "description": "包含量化交易、財經詞彙、AI教學工具等豐富資源。"
+    };
+
+    const script = document.createElement('script');
+    script.type = "application/ld+json";
+    script.text = JSON.stringify(schema);
+    document.head.appendChild(script);
+    console.log("SEO JSON-LD Generated.");
   }
 
   /* -------------------------------------------
@@ -786,7 +860,6 @@
   const categoryTitleEl = document.getElementById('categoryTitle');
   const adminPanelEl = document.getElementById('adminPanel');
 
-  // 渲染側邊欄分類
   function renderCategories() {
     categoryListEl.innerHTML = '';
     Object.keys(DATA).forEach(cat => {
@@ -794,15 +867,14 @@
       const li = document.createElement('li');
       li.innerHTML = `<span>${cat}</span> <span class="badge">${count}</span>`;
       if (cat === currentCategory) li.classList.add('active');
+      li.setAttribute('role', 'button');
+      li.setAttribute('aria-label', `檢視 ${cat} 分類，共 ${count} 個項目`);
       
       li.addEventListener('click', () => {
         currentCategory = cat;
-        // 清除搜尋框
         document.getElementById('globalSearch').value = '';
-        renderCategories(); // Re-render to update active class
+        renderCategories();
         renderCards(DATA[cat]);
-        
-        // Mobile UX: Scroll to active item (optional, basic logic)
         if(window.innerWidth < 900) {
           li.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
@@ -811,11 +883,8 @@
     });
   }
 
-  // 渲染卡片
   function renderCards(list, isSearchResult = false) {
     cardGridEl.innerHTML = '';
-    
-    // Safety check for null/undefined list
     if (!list) list = [];
 
     const titleText = isSearchResult 
@@ -832,7 +901,6 @@
     }
 
     list.forEach((item, index) => {
-      // 處理縮圖顯示邏輯
       const isUrl = item.thumb && (
         item.thumb.startsWith('http') ||
         item.thumb.startsWith('img/') ||
@@ -841,8 +909,7 @@
       );
       let imgHtml = '';
       if (isUrl) {
-        // 使用 onerror 提供圖片載入失敗時的後備 Emoji
-        imgHtml = `<img class="card-img" src="${item.thumb}" alt="icon" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        imgHtml = `<img class="card-img" src="${item.thumb}" alt="${item.title} 縮圖" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                    <div class="card-img emoji-icon" style="display:none">📄</div>`;
       } else {
         imgHtml = `<div class="card-img emoji-icon">${item.thumb || '📄'}</div>`;
@@ -852,7 +919,7 @@
       card.className = 'card';
       
       const checkboxHtml = (!isSearchResult) 
-        ? `<input type="checkbox" class="del-check" data-idx="${index}">` 
+        ? `<input type="checkbox" class="del-check" data-idx="${index}" aria-label="選取刪除">` 
         : '';
 
       const categoryTag = isSearchResult ? `<span style="font-size:0.75em; color:var(--primary); background:#eff6ff; padding:2px 6px; border-radius:4px; margin-left:6px;">${item.category}</span>` : '';
@@ -868,7 +935,7 @@
         </div>
         <div class="card-foot">
           <button class="btn primary" style="flex:1" onclick="window.open('${item.url}','_blank')">前往</button>
-          <button class="btn ghost" onclick="copyToClipboard('${item.url}')">複製</button>
+          <button class="btn ghost" onclick="copyToClipboard('${item.url}')">複製連結</button>
         </div>
       `;
       cardGridEl.appendChild(card);
@@ -878,8 +945,6 @@
   /* -------------------------------------------
      3. Interactions & Features
      ------------------------------------------- */
-  
-  // 複製連結
   function copyToClipboard(text) {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(() => alert('連結已複製！')).catch(err => prompt('請手動複製', text));
@@ -888,21 +953,15 @@
     }
   }
 
-  // 搜尋功能
   document.getElementById('globalSearch').addEventListener('input', (e) => {
     const q = e.target.value.trim().toLowerCase();
-    
-    // 如果搜尋為空，回復顯示當前分類
     if (!q) {
       renderCategories();
       renderCards(DATA[currentCategory]);
       return;
     }
-
-    // 跨分類搜尋
     let results = [];
     Object.keys(DATA).forEach(cat => {
-      // Safety check: DATA[cat] must be array
       if(Array.isArray(DATA[cat])) {
         DATA[cat].forEach(item => {
           if ((item.title + item.desc).toLowerCase().includes(q)) {
@@ -911,12 +970,10 @@
         });
       }
     });
-    
     document.querySelectorAll('nav.side li').forEach(li => li.classList.remove('active'));
     renderCards(results, true);
   });
 
-  // 切換管理模式
   document.getElementById('btnToggleAdmin').addEventListener('click', () => {
     isAdminMode = !isAdminMode;
     document.body.classList.toggle('admin-mode', isAdminMode);
@@ -938,7 +995,6 @@
     }
   });
 
-  // 新增項目
   document.getElementById('btnAdd').addEventListener('click', () => {
     const title = document.getElementById('newTitle').value.trim();
     const url = document.getElementById('newUrl').value.trim();
@@ -963,71 +1019,59 @@
     renderCategories();
     renderCards(DATA[currentCategory]);
     
-    // 清空輸入框
     document.getElementById('newTitle').value = '';
     document.getElementById('newUrl').value = '';
     document.getElementById('newDesc').value = '';
     document.getElementById('newThumb').value = '';
   });
 
-  // 刪除勾選項目
   document.getElementById('btnDeleteSelected').addEventListener('click', () => {
     const checks = document.querySelectorAll('.del-check:checked');
     if (checks.length === 0) {
       alert('請先勾選要刪除的卡片 (需在管理模式下)');
       return;
     }
-    
     if (!confirm(`確定要刪除這 ${checks.length} 個項目嗎？`)) return;
-
     const indicesToDelete = Array.from(checks).map(c => parseInt(c.dataset.idx)).sort((a, b) => b - a);
-    
     indicesToDelete.forEach(idx => {
       DATA[currentCategory].splice(idx, 1);
     });
-
     saveData();
     renderCategories();
     renderCards(DATA[currentCategory]);
   });
 
-  // 重設資料
   document.getElementById('btnReset').addEventListener('click', () => {
-    if (confirm('確定要清除所有自訂資料，重置為系統原始完整資料嗎？\n此動作將清除您新增的項目。')) {
+    if (confirm('確定要清除所有自訂資料，重置為系統原始完整資料嗎？')) {
       resetToSource();
-      renderCategories();
-      renderCards(DATA[currentCategory]);
-      if(isAdminMode) document.getElementById('btnToggleAdmin').click(); // Exit admin mode
+      if(isAdminMode) document.getElementById('btnToggleAdmin').click();
     }
   });
 
-  // ★★★ 一鍵生成獨立 HTML 功能 ★★★
   document.getElementById('btnExportHtml').addEventListener('click', () => {
-    if (!confirm('即將生成一個包含目前所有資料（含您剛新增的）的全新 HTML 檔案。\n\n下載後，該檔案將內建最新資料，不需依賴瀏覽器暫存。')) return;
+    if (!confirm('即將生成獨立 HTML 檔案。\n該檔案已針對 Google AI Search 進行結構化數據優化。')) return;
 
     const currentDataJson = JSON.stringify(DATA, null, 2);
     let htmlContent = document.documentElement.outerHTML;
 
-    // 清理動態產生的 DOM
     htmlContent = htmlContent.replace(/<ul id="categoryList">[\s\S]*?<\/ul>/, '<ul id="categoryList"></ul>');
     htmlContent = htmlContent.replace(/<div id="cardGrid" class="grid">[\s\S]*?<\/div>/, '<div id="cardGrid" class="grid"></div>');
-
-    // 清理 UI 狀態
     htmlContent = htmlContent.replace(/class="[^"]*admin-mode[^"]*"/, '');
     htmlContent = htmlContent.replace(/id="adminPanel" class="[^"]*show[^"]*"/, 'id="adminPanel"');
     
-    // 替換真實資料
+    // 移除當前頁面生成的動態 script (避免重複堆疊)
+    htmlContent = htmlContent.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, '');
+
     const dataRegex = /\/\* \[\[DATA_START\]\] \*\/[\s\S]*?\/\* \[\[DATA_END\]\] \*\//;
     const newDataBlock = `/* [[DATA_START]] */ ${currentDataJson} /* [[DATA_END]] */`;
     
     htmlContent = htmlContent.replace(dataRegex, newDataBlock);
 
-    // 觸發下載
     const blob = new Blob([htmlContent], {type: 'text/html'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = '課程資料分類瀏覽器_Fixed.html';
+    a.download = 'Kao88_課程資料_SEO版.html';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1042,7 +1086,6 @@
     renderCategories();
     renderCards(DATA[currentCategory]);
   });
-
 </script>
 </body>
 </html>
