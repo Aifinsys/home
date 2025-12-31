@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>傅立葉級數與金融量化分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        .canvas-container {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -6px; 
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #475569;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="p-6 border-b border-slate-700 bg-slate-850 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-white tracking-wider">
+                    <span class="text-blue-400">Fourier</span> Quant Analysis
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">傅立葉級數在金融市場週期的視覺化應用</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-4">
+                <button onclick="presetTrend()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition">牛市趨勢</button>
+                <button onclick="presetVolatile()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition">高頻震盪</button>
+                <button onclick="presetCycle()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition">雙重週期</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col max-w-7xl mx-auto w-full p-4 gap-8">
+        
+        <!-- Visualization Section -->
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Left: Visualization Canvas -->
+            <div class="lg:w-2/3 flex flex-col gap-4">
+                <div class="canvas-container relative w-full aspect-video rounded-xl border border-slate-700 overflow-hidden">
+                    <svg id="fourierCanvas" class="w-full h-full" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 500">
+                        <!-- Grid Lines -->
+                        <defs>
+                            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#334155" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        
+                        <!-- Visualization Elements will be injected here via JS -->
+                        <g id="circlesGroup" transform="translate(200, 250)"></g>
+                        <path id="connectorLine" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4" fill="none"></path>
+                        <path id="wavePath" stroke="#38bdf8" stroke-width="3" fill="none" filter="drop-shadow(0 0 5px #0ea5e9)"></path>
+                        <circle id="penPoint" r="4" fill="#ffffff"></circle>
+                        
+                        <!-- Axis Labels -->
+                        <text x="950" y="480" fill="#64748b" font-size="12" text-anchor="end">時間 (t)</text>
+                        <text x="20" y="20" fill="#64748b" font-size="12">價格 (Price)</text>
+                    </svg>
+
+                    <div class="absolute top-4 right-4 bg-slate-900/80 p-3 rounded border border-slate-700 backdrop-blur-sm text-xs">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span> 長期趨勢 (Trend)
+                        </div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span> 中期週期 (Cycle)
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500"></span> 市場雜訊 (Noise)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-lg font-semibold text-white mb-2">量化分析視角：分解市場</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        金融市場的時間序列資料（如股價）通常由多個不同頻率的訊號疊加而成。
+                        <br><br>
+                        公式： <code class="bg-slate-900 px-2 py-1 rounded text-yellow-400">P(t) = Σ Aₙ * sin(nωt + φₙ)</code>
+                        <br><br>
+                        透過 <strong>快速傅立葉變換 (FFT)</strong>，量化交易員可以過濾掉高頻雜訊（紅線），找出潛在的市場週期（綠線）或長期趨勢（藍線），從而制定均值回歸或趨勢跟隨策略。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="lg:w-1/3 flex flex-col gap-4">
+                
+                <!-- Component 1: Trend -->
+                <div class="bg-slate-800 p-5 rounded-xl border-l-4 border-blue-500 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-blue-400">1. 長期趨勢 (低頻)</h3>
+                        <span class="text-xs text-slate-400">基本面/宏觀經濟</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>振幅 (權重)</span>
+                            <span id="val-amp-0">80</span>
+                        </label>
+                        <input type="range" min="0" max="150" value="80" class="w-full" oninput="updateHarmonic(0, 'amp', this.value)">
+                    </div>
+                    <div>
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>頻率 (週期速度)</span>
+                            <span id="val-freq-0">1.0</span>
+                        </label>
+                        <input type="range" min="0" max="5" step="0.1" value="1.0" class="w-full" oninput="updateHarmonic(0, 'freq', this.value)">
+                    </div>
+                </div>
+
+                <!-- Component 2: Cycle -->
+                <div class="bg-slate-800 p-5 rounded-xl border-l-4 border-emerald-500 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-emerald-400">2. 中期週期 (中頻)</h3>
+                        <span class="text-xs text-slate-400">行業輪動/季節性</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>振幅 (波動性)</span>
+                            <span id="val-amp-1">40</span>
+                        </label>
+                        <input type="range" min="0" max="100" value="40" class="w-full" oninput="updateHarmonic(1, 'amp', this.value)">
+                    </div>
+                    <div>
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>頻率 (週期速度)</span>
+                            <span id="val-freq-1">3.0</span>
+                        </label>
+                        <input type="range" min="0" max="10" step="0.1" value="3.0" class="w-full" oninput="updateHarmonic(1, 'freq', this.value)">
+                    </div>
+                </div>
+
+                <!-- Component 3: Noise -->
+                <div class="bg-slate-800 p-5 rounded-xl border-l-4 border-rose-500 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-rose-400">3. 市場雜訊 (高頻)</h3>
+                        <span class="text-xs text-slate-400">情緒/隨機交易</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>振幅 (雜訊強度)</span>
+                            <span id="val-amp-2">20</span>
+                        </label>
+                        <input type="range" min="0" max="80" value="20" class="w-full" oninput="updateHarmonic(2, 'amp', this.value)">
+                    </div>
+                    <div>
+                        <label class="flex justify-between text-sm text-slate-300 mb-1">
+                            <span>頻率 (變化速度)</span>
+                            <span id="val-freq-2">8.0</span>
+                        </label>
+                        <input type="range" min="5" max="20" step="0.5" value="8.0" class="w-full" oninput="updateHarmonic(2, 'freq', this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanatory Section -->
+        <div class="grid md:grid-cols-2 gap-6 bg-slate-800/50 p-6 rounded-xl border border-slate-700">
+            <div>
+                <h2 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">應用程式介紹</h2>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    這是一個名為「傅立葉量化分析 (Fourier Quant Analysis)」的互動式網頁應用。核心目的是將抽象的訊號處理數學公式，轉化為直觀的金融市場模型。
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    在量化金融領域中，我們常假設價格走勢並非隨機，而是由多種不同頻率的驅動力（如宏觀經濟、商業循環、投資人情緒）疊加而成。本程式讓您親手調整這些參數，體驗數學如何拆解市場結構。
+                </p>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">核心視覺化邏輯</h2>
+                <ul class="space-y-3 text-sm text-slate-300">
+                    <li class="flex gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs text-white font-bold">1</span>
+                        <div>
+                            <strong class="text-blue-300">左側圓周運動 (Phasors)：</strong>
+                            <p class="mt-1 text-slate-400">顯示三個旋轉向量的疊加。藍色大圓代表「長期趨勢」，綠色中圓代表圍繞趨勢旋轉的「中期週期」，紅色小圓則是圍繞週期旋轉的「市場雜訊」。</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs text-white font-bold">2</span>
+                        <div>
+                            <strong class="text-blue-300">右側波形圖 (Waveform)：</strong>
+                            <p class="mt-1 text-slate-400">這條亮藍色的線即是「模擬股價走勢」。它是由左側所有向量垂直分量加總後，隨時間推移所繪製出的軌跡，展示了複雜市場波動背後的簡潔數學結構。</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-slate-500 text-sm font-medium">
+                © 2026 <span class="mx-2 text-slate-700">|</span> Ai Fintech Corp.
+            </div>
+            <a href="http://www.aifinsys.com" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 text-sm transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                回首頁
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const config = {
+            svgWidth: 1000,
+            svgHeight: 500,
+            centerX: 250,
+            centerY: 250,
+            waveStartX: 450,
+            speed: 0.02,
+            maxPoints: 600
+        };
+
+        // Harmonic Data Structure (State)
+        let harmonics = [
+            { amp: 80, freq: 1.0, phase: 0, color: '#3b82f6', label: 'Trend' },  // Blue
+            { amp: 40, freq: 3.0, phase: 0, color: '#10b981', label: 'Cycle' },  // Green
+            { amp: 20, freq: 8.0, phase: 0, color: '#ef4444', label: 'Noise' }   // Red
+        ];
+
+        let time = 0;
+        let wave = []; // Stores the y values
+        let animationId;
+
+        // DOM Elements
+        const circlesGroup = document.getElementById('circlesGroup');
+        const connectorLine = document.getElementById('connectorLine');
+        const wavePath = document.getElementById('wavePath');
+        const penPoint = document.getElementById('penPoint');
+
+        // Initialization
+        function init() {
+            updateInputs();
+            animate();
+        }
+
+        // Animation Loop
+        function animate() {
+            // Calculate Phasors (Circles)
+            let x = 0;
+            let y = 0;
+            
+            // Clear previous circles rendered dynamically
+            circlesGroup.innerHTML = '';
+            
+            harmonics.forEach((h, index) => {
+                let prevX = x;
+                let prevY = y;
+
+                // Calculate tip of this harmonic vector
+                x += h.amp * Math.cos(h.freq * time + h.phase);
+                y += h.amp * Math.sin(h.freq * time + h.phase);
+
+                // Draw Circle
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', prevX);
+                circle.setAttribute('cy', prevY);
+                circle.setAttribute('r', h.amp);
+                circle.setAttribute('stroke', h.color);
+                circle.setAttribute('stroke-width', '1.5');
+                circle.setAttribute('stroke-opacity', '0.6');
+                circle.setAttribute('fill', 'none');
+                circlesGroup.appendChild(circle);
+
+                // Draw Radius Vector (Line from center to tip)
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', prevX);
+                line.setAttribute('y1', prevY);
+                line.setAttribute('x2', x);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#ffffff');
+                line.setAttribute('stroke-width', '1');
+                line.setAttribute('stroke-opacity', '0.5');
+                circlesGroup.appendChild(line);
+
+                // Draw Dot at tip
+                const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                dot.setAttribute('cx', x);
+                dot.setAttribute('cy', y);
+                dot.setAttribute('r', 2);
+                dot.setAttribute('fill', h.color);
+                circlesGroup.appendChild(dot);
+            });
+
+            // The final Y value is what we plot on the graph
+            // Adjust relative to SVG center coordinates
+
+            // 1. Draw Connector Line (from last circle to start of wave)
+            connectorLine.setAttribute('d', `M ${x + 200} ${y + 250} L ${config.waveStartX} ${y + 250}`);
+            
+            // 2. Draw Pen Point (The "current price")
+            penPoint.setAttribute('cx', config.waveStartX);
+            penPoint.setAttribute('cy', y + 250);
+
+            // 3. Update Wave Data
+            // We push the raw Y offset
+            wave.unshift(y);
+            if (wave.length > config.maxPoints) {
+                wave.pop();
+            }
+
+            // 4. Draw Wave Path
+            // Map the wave array to SVG path commands
+            let pathD = `M ${config.waveStartX} ${wave[0] + 250}`;
+            for (let i = 1; i < wave.length; i++) {
+                pathD += ` L ${config.waveStartX + i} ${wave[i] + 250}`;
+            }
+            wavePath.setAttribute('d', pathD);
+
+            // Increment Time
+            time += config.speed;
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // UI Interactions
+        function updateHarmonic(index, type, value) {
+            harmonics[index][type] = parseFloat(value);
+            document.getElementById(`val-${type}-${index}`).textContent = value;
+        }
+
+        function updateInputs() {
+            harmonics.forEach((h, i) => {
+                const ampInput = document.querySelector(`input[oninput="updateHarmonic(${i}, 'amp', this.value)"]`);
+                const freqInput = document.querySelector(`input[oninput="updateHarmonic(${i}, 'freq', this.value)"]`);
+                
+                if(ampInput) {
+                    ampInput.value = h.amp;
+                    document.getElementById(`val-amp-${i}`).textContent = h.amp;
+                }
+                if(freqInput) {
+                    freqInput.value = h.freq;
+                    document.getElementById(`val-freq-${i}`).textContent = h.freq;
+                }
+            });
+        }
+
+        // Presets
+        function presetTrend() {
+            harmonics[0] = { ...harmonics[0], amp: 100, freq: 0.5 };
+            harmonics[1] = { ...harmonics[1], amp: 20, freq: 5.0 };
+            harmonics[2] = { ...harmonics[2], amp: 5, freq: 15.0 };
+            updateInputs();
+        }
+
+        function presetVolatile() {
+            harmonics[0] = { ...harmonics[0], amp: 30, freq: 0.2 };
+            harmonics[1] = { ...harmonics[1], amp: 60, freq: 2.5 };
+            harmonics[2] = { ...harmonics[2], amp: 50, freq: 8.0 };
+            updateInputs();
+        }
+
+        function presetCycle() {
+            harmonics[0] = { ...harmonics[0], amp: 60, freq: 1.0 };
+            harmonics[1] = { ...harmonics[1], amp: 60, freq: 2.0 };
+            harmonics[2] = { ...harmonics[2], amp: 10, freq: 10.0 };
+            updateInputs();
+        }
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>
