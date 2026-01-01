@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- ================= 基礎 Meta ================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KaoX.AI 金融演算量化分析 × AI 教學資源平台</title>
+    <meta name="description" content="KaoX.AI 專注於金融演算量化分析與 AI 人工智慧的專業教學資源平台，提供 Python 量化策略、AI 模型與回測實戰內容。">
+
+    <!-- ================= AIO SEO 等級控制 ================= -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="KaoX.AI 金融量化團隊">
+    <meta name="publisher" content="KaoX.AI">
+    <link rel="canonical" href="https://aifinsys.com/kao.html">
+
+    <!-- ================= Open Graph ================= -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:site_name" content="KaoX.AI 金融演算量化分析">
+    <meta property="og:title" content="KaoX.AI｜金融演算量化分析 × AI 教學資源平台">
+    <meta property="og:description" content="量化交易、Python 金融演算法、AI 模型與回測實戰教學整合平台。">
+    <meta property="og:url" content="https://aifinsys.com/kao.html">
+    <meta property="og:image" content="https://aifinsys.com/assets/kaoxai-og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- ================= Twitter / X ================= -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="KaoX.AI｜金融量化 × AI 教學資源平台">
+    <meta name="twitter:description" content="專為量化交易者與 AI 金融學習者打造的專業教學平台。">
+    <meta name="twitter:image" content="https://aifinsys.com/assets/kaoxai-og.jpg">
+
+    <!-- ================= Fonts & UI ================= -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- ================= Tailwind 設定 ================= -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ================= Schema.org（SEOPress 級）================= -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "KaoX.AI 金融演算量化分析平台",
+      "url": "https://aifinsys.com/kao.html",
+      "logo": "https://aifinsys.com/assets/logo.png",
+      "description": "專注於量化交易、AI 金融模型與 Python 演算法教學的專業學習平台。",
+      "sameAs": [
+        "https://github.com/",
+        "https://www.youtube.com/",
+        "https://www.facebook.com/"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "TWD"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+<!-- ==================== 原本頁面內容（完整保留） ==================== -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaoX.Ai 金融演算量化分析 | 教學資源平台</title>
+    <meta name="description" content="Kao88 課程資料分類瀏覽器 - 專注於金融演算量化分析與 AI 人工智慧的專業教學資源中心。提供 Python 策略代碼、機器學習模型與回測數據下載。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9', // Sky blue
+                            600: '#0284c7',
+                            800: '#075985',
+                            900: '#0c4a6e', // Deep blue
+                            dark: '#0f172a', // Slate 900
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-pattern {
+            background-color: #0f172a;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-preview {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                        K
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-900 tracking-tight leading-none">KaoX<span class="text-brand-500">.AI</span></span>
+                        <span class="text-xs text-slate-500 font-medium tracking-wide">FINANCIAL ANALYTICS</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">平台特色</a>
+                    <a href="#resources" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">課程資源</a>
+                    <a href="#pathway" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">學習路徑</a>
+                    <a href="https://aifinsys.com/kao.html" target="_blank" class="px-6 py-2.5 bg-brand-600 text-white rounded-full font-medium hover:bg-brand-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="fas fa-sign-in-alt"></i> 進入系統
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-slate-600 hover:text-brand-600 focus:outline-none p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#features" class="block px-3 py-3 text-slate-600 hover:bg-brand-50 hover:text-brand-600 rounded-lg font-medium">平台特色</a>
+                <a href="#resources" class="block px-3 py-3 text-slate-600 hover:bg-brand-50 hover:text-brand-600 rounded-lg font-medium">課程資源</a>
+                <a href="#pathway" class="block px-3 py-3 text-slate-600 hover:bg-brand-50 hover:text-brand-600 rounded-lg font-medium">學習路徑</a>
+                <a href="https://aifinsys.com/kao.html" target="_blank" class="block mt-4 text-center px-6 py-3 bg-brand-600 text-white rounded-lg font-medium">進入系統</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-pattern">
+        <!-- Background Glow -->
+        <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/80 border border-slate-700 text-white text-sm font-medium mb-8 backdrop-blur-md animate-fade-in-up shadow-lg">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                <a href="https://kaoshi.win" target="_blank">KaoShi×AI 全新上線｜事件驅動 X量化交易系統</a>
+                
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-8 leading-tight">
+                金融演算量化分析<br>
+                <span class="gradient-text">AI 教學資源整合平台</span>
+            </h1>
+            
+            <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
+                KaoX.Ai 致力於打破金融與科技的藩籬。我們整合了 Python 演算法、深度學習模型與實戰交易策略，為您打造一個結構化、可檢索且易於分享的專業知識庫瀏覽器。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://aifinsys.com/kao.html" target="_blank" class="px-8 py-4 bg-brand-600 text-white rounded-full font-bold text-lg hover:bg-brand-500 transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] flex items-center justify-center gap-2 group">
+                    <i class="fas fa-rocket group-hover:animate-pulse"></i>
+                    立即開始探索
+                </a>
+                <a href="#features" class="px-8 py-4 bg-slate-800/50 text-white border border-slate-700 rounded-full font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 backdrop-blur-sm hover:border-slate-500">
+                    <i class="fas fa-info-circle"></i>
+                    深入了解
+                </a>
+            </div>
+
+            <!-- Dashboard Mockup -->
+            <div class="mt-20 relative max-w-6xl mx-auto transform hover:scale-[1.01] transition-transform duration-500 group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-purple-500 to-brand-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <div class="relative bg-slate-900 rounded-xl border border-slate-700 shadow-2xl overflow-hidden">
+                    <!-- Fake Browser Header -->
+                    <div class="h-10 bg-slate-800 border-b border-slate-700 flex items-center px-4 space-x-2 justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="px-4 py-1 bg-slate-950 rounded text-xs text-slate-400 font-mono w-96 text-center border border-slate-700/50 flex items-center justify-center gap-2">
+                            <i class="fas fa-lock text-[10px]"></i> aifinsys.com/kao.html
+                        </div>
+                        <div class="w-10"></div>
+                    </div>
+                    <!-- Mock Content -->
+                    <div class="flex h-[450px] bg-slate-900 text-left">
+                        <!-- Sidebar -->
+                        <div class="hidden md:block w-64 border-r border-slate-800 p-4 bg-slate-900/50">
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Project Explorer</div>
+                            <div class="space-y-3 font-mono text-sm">
+                                <div class="flex items-center gap-2 text-brand-400 bg-slate-800/50 p-2 rounded cursor-pointer border-l-2 border-brand-500">
+                                    <i class="fas fa-folder-open"></i>
+                                    <span>Quant_Strategies</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400 pl-4 hover:text-slate-200 cursor-pointer transition-colors">
+                                    <i class="fab fa-python"></i>
+                                    <span>moving_avg.py</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400 pl-4 hover:text-slate-200 cursor-pointer transition-colors">
+                                    <i class="fab fa-python"></i>
+                                    <span>rsi_breakout.py</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400 pl-4 hover:text-slate-200 cursor-pointer transition-colors">
+                                    <i class="fab fa-python"></i>
+                                    <span>lstm_model_v2.py</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-500 mt-4 cursor-pointer hover:text-slate-300">
+                                    <i class="fas fa-folder"></i>
+                                    <span>Data_Sets</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-500 mt-2 cursor-pointer hover:text-slate-300">
+                                    <i class="fas fa-folder"></i>
+                                    <span>Backtest_Results</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Main Area -->
+                        <div class="flex-1 p-6 overflow-hidden relative">
+                            <!-- Floating Elements -->
+                            <div class="absolute top-6 right-6 flex gap-2">
+                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-xs rounded border border-green-500/20">Running</span>
+                                <span class="px-3 py-1 bg-brand-500/10 text-brand-400 text-xs rounded border border-brand-500/20">Python 3.9</span>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-200 mb-2 font-mono">lstm_model_v2.py <span class="text-slate-500 text-sm font-normal ml-2">- Last edited 2 mins ago</span></h3>
+                            
+                            <!-- Code Block -->
+                            <div class="bg-slate-950 rounded-lg p-4 border border-slate-800 font-mono text-sm text-slate-300 h-full overflow-hidden shadow-inner">
+                                <div class="flex gap-4">
+                                    <div class="text-slate-600 select-none text-right pr-2 border-r border-slate-800">
+                                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10
+                                    </div>
+                                    <div class="code-preview">
+                                        <span class="text-purple-400">import</span> tensorflow <span class="text-purple-400">as</span> tf<br>
+                                        <span class="text-purple-400">import</span> numpy <span class="text-purple-400">as</span> np<br>
+                                        <br>
+                                        <span class="text-slate-500"># 定義 LSTM 模型架構</span><br>
+                                        <span class="text-blue-400">def</span> <span class="text-yellow-400">build_model</span>(input_shape):<br>
+                                        &nbsp;&nbsp;model = tf.keras.Sequential([<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;tf.keras.layers.LSTM(<span class="text-orange-400">50</span>, return_sequences=<span class="text-purple-400">True</span>),<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;tf.keras.layers.Dropout(<span class="text-orange-400">0.2</span>),<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;tf.keras.layers.Dense(<span class="text-orange-400">1</span>)<br>
+                                        &nbsp;&nbsp;])<br>
+                                        &nbsp;&nbsp;<span class="text-purple-400">return</span> model
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-800 flex justify-between items-center">
+                                    <div class="text-xs text-slate-500">Console Output:</div>
+                                    <div class="text-xs text-green-400">Build Success (0.4s)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <span class="text-brand-600 font-bold tracking-wider uppercase text-sm">Platform Features</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-2 mb-6">為什麼選擇 KaoX.ai 平台？</h2>
+                <div class="w-24 h-1.5 bg-brand-500 mx-auto rounded-full"></div>
+                <p class="mt-6 text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+                    我們不僅僅是一個資料瀏覽器，更是一個動態生長的知識生態系統。專為量化交易者、資料科學家與金融開發者設計，提供從入門到精通的全方位支持。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="group p-8 rounded-2xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-brand-200 transition-all duration-300 shadow-sm hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-brand-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center text-brand-600 text-3xl mb-8 relative z-10 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">結構化分類管理</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        面對海量的金融數據與程式碼，我們提供直觀的樹狀分類介面。您可以輕鬆管理數百個量化策略代碼、AI 模型參數與教學文檔，支持自定義標籤與版本控制概念，讓知識庫井井有條。
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group p-8 rounded-2xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-brand-200 transition-all duration-300 shadow-sm hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-purple-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center text-purple-600 text-3xl mb-8 relative z-10 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">智能檢索系統</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        內建針對程式碼優化的搜尋引擎，能夠快速定位所需的 API 文檔、歷史回測數據或特定算法範例。支援模糊搜尋與關鍵字高亮，大幅縮短開發與除錯時間，提升學習效率。
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group p-8 rounded-2xl bg-slate-50 hover:bg-white border border-slate-100 hover:border-brand-200 transition-all duration-300 shadow-sm hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-green-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center text-green-600 text-3xl mb-8 relative z-10 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">SEO 獨立封裝</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        獨家「一鍵打包」技術，可將整理好的資料匯出為獨立 HTML 檔案。系統會自動注入 Schema.org 結構化數據，不僅便於離線瀏覽與分享，更對 Google 搜尋排名極度友善，極大化您的內容曝光。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Pathway Section (New) -->
+    <section id="pathway" class="py-20 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900">系統化學習路徑</h2>
+                <p class="mt-4 text-slate-600">從基礎到進階，我們為您規劃了清晰的成長路線</p>
+            </div>
+            
+            <div class="relative">
+                <!-- Connecting Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 text-center relative hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-slate-50">1</div>
+                        <h4 class="font-bold text-lg mb-2">基礎建置</h4>
+                        <p class="text-sm text-slate-500">Python 環境架設<br>Pandas 資料處理<br>API 串接基礎</p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 text-center relative hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-slate-50">2</div>
+                        <h4 class="font-bold text-lg mb-2">量化分析</h4>
+                        <p class="text-sm text-slate-500">技術指標計算<br>統計套利模型<br>回測系統開發</p>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 text-center relative hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-slate-50">3</div>
+                        <h4 class="font-bold text-lg mb-2">AI 賦能</h4>
+                        <p class="text-sm text-slate-500">機器學習預測<br>深度學習應用<br>特徵工程優化</p>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 text-center relative hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-slate-50">4</div>
+                        <h4 class="font-bold text-lg mb-2">實戰部署</h4>
+                        <p class="text-sm text-slate-500">雲端自動化交易<br>風險控管模組<br>即時監控儀表板</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Preview Section -->
+    <section id="resources" class="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-30"></div>
+        <div class="absolute bottom-0 right-0 w-1/3 h-full bg-gradient-to-l from-slate-800 to-transparent opacity-20 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                <div>
+                    <span class="text-brand-400 font-bold tracking-wider uppercase text-sm">Curriculum</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">核心課程資源涵蓋</h2>
+                    <p class="text-slate-400 mt-4 max-w-2xl">我們提供經過整理、可立即執行的代碼庫與資料集，節省您 80% 的前置作業時間。</p>
+                </div>
+                <a href="https://aifinsys.com/kao.html" target="_blank" class="hidden md:flex items-center gap-2 text-brand-400 hover:text-brand-300 transition-colors font-medium group px-6 py-3 border border-brand-500/30 rounded-full hover:bg-brand-500/10">
+                    查看所有類別 <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-brand-500/50 transition-all hover:-translate-y-2 group">
+                    <div class="w-12 h-12 bg-brand-900/50 rounded-lg flex items-center justify-center text-brand-400 text-2xl mb-6 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Python 金融編程</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">建立紮實的程式基礎，掌握金融數據清洗與分析的核心技能。</p>
+                    <ul class="text-slate-400 text-sm space-y-2 border-t border-slate-700 pt-4">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500 text-xs"></i> Pandas 時間序列處理</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500 text-xs"></i> NumPy 矩陣運算優化</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500 text-xs"></i> RESTful API 即時串接</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-brand-500/50 transition-all hover:-translate-y-2 group">
+                    <div class="w-12 h-12 bg-purple-900/50 rounded-lg flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">機器學習與 AI</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">利用先進的算法預測市場趨勢，挖掘人類難以察覺的規律。</p>
+                    <ul class="text-slate-400 text-sm space-y-2 border-t border-slate-700 pt-4">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> LSTM 股價趨勢預測</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> XGBoost 因子選股模型</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> 強化學習 (RL) 交易代理人</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-brand-500/50 transition-all hover:-translate-y-2 group">
+                    <div class="w-12 h-12 bg-green-900/50 rounded-lg flex items-center justify-center text-green-400 text-2xl mb-6 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">量化策略開發</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">從理論到實踐，構建具有正期望值的交易策略系統。</p>
+                    <ul class="text-slate-400 text-sm space-y-2 border-t border-slate-700 pt-4">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 text-xs"></i> Event-driven 回測引擎</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 text-xs"></i> 雙均線與通道突破策略</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-green-500 text-xs"></i> 凱利公式與資金管理</li>
+                    </ul>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-brand-500/50 transition-all hover:-translate-y-2 group">
+                    <div class="w-12 h-12 bg-yellow-900/50 rounded-lg flex items-center justify-center text-yellow-400 text-2xl mb-6 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">另類數據分析</h3>
+                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">運用非傳統金融數據，獲取市場的資訊優勢 (Information Edge)。</p>
+                    <ul class="text-slate-400 text-sm space-y-2 border-t border-slate-700 pt-4">
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-yellow-500 text-xs"></i> NLP 新聞情緒分析</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-yellow-500 text-xs"></i> 網路爬蟲輿情監控</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check text-yellow-500 text-xs"></i> 鏈上數據 (On-chain) 追蹤</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center md:hidden">
+                <a href="https://aifinsys.com/kao.html" class="inline-flex items-center gap-2 text-brand-400 font-medium px-6 py-3 border border-brand-500/30 rounded-full">
+                    查看所有類別 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-brand-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/20">
+                <div class="p-4">
+                    <div class="text-4xl font-bold mb-2">V2.0</div>
+                    <div class="text-brand-100 text-sm font-medium">最新系統版本</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold mb-2">100%</div>
+                    <div class="text-brand-100 text-sm font-medium">SEO Friendly 架構</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold mb-2">50+</div>
+                    <div class="text-brand-100 text-sm font-medium">AI 實戰模型庫</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold mb-2">∞</div>
+                    <div class="text-brand-100 text-sm font-medium">持續更新的資源</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">準備好構建您的<br>第一個量化交易機器人了嗎？</h2>
+            <p class="text-lg text-slate-600 mb-10 max-w-2xl mx-auto">
+                立即訪問 KaoX.Ai 課程瀏覽器，免費獲取最新的 Python 範例代碼與教學資源。從這裡開始，掌握未來的金融科技。
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://aifinsys.com/kao.html" target="_blank" class="px-10 py-5 bg-brand-600 text-white rounded-full font-bold text-lg hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <i class="fas fa-external-link-alt"></i> 進入資源瀏覽器
+                </a>
+                <a href="mailto:kaoxxai@gmail.com" class="px-10 py-5 bg-white text-slate-700 border border-slate-300 rounded-full font-bold text-lg hover:bg-slate-50 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-3">
+                    <i class="fas fa-envelope"></i> 聯絡教學團隊
+                </a>
+            </div>
+        </div>
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-brand-200 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 opacity-60"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-200 rounded-full blur-[80px] translate-x-1/2 translate-y-1/2 opacity-60"></div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-300 py-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-8 h-8 bg-brand-600 rounded flex items-center justify-center text-white font-bold shadow-lg">K</div>
+                        <span class="text-2xl font-bold text-white tracking-tight">KaoX<span class="text-brand-500">.AI</span></span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-sm mb-6">
+                        專注於金融科技 (FinTech) 與人工智慧 (Artificial Intelligence) 結合的教育平台。我們提供系統化的學習資源與開源代碼，協助投資者與開發者跨越技術門檻，實現量化交易的自動化夢想。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/share/g/17uzqaZF15/" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-600 hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-600 hover:text-white transition-all"><i class="fab fa-github"></i></a>
+                        <a href="http://www.youtube.com/@5iAii" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-600 hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-6 text-lg">快速導覽</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-slate-400 hover:text-brand-400 transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i> 首頁概覽</a></li>
+                        <li><a href="#features" class="text-slate-400 hover:text-brand-400 transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i> 平台特色</a></li>
+                        <li><a href="#pathway" class="text-slate-400 hover:text-brand-400 transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i> 學習地圖</a></li>
+                        <li><a href="#resources" class="text-slate-400 hover:text-brand-400 transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i> 資源下載</a></li>
+                        <li><a href="https://aifinsys.com/kao.html" class="text-slate-400 hover:text-brand-400 transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i> 系統登入</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-6 text-lg">聯絡與支援</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-brand-500 mt-1"></i>
+                            <span>金融科技創新園區<br>FinTech Space</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-brand-500"></i>
+                            <a href="mailto:kaoxxai@gmail.com" class="hover:text-white transition-colors">contact@kaoxai.com</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-globe text-brand-500"></i>
+                            <a href="https://aifinsys.com" target="_blank" class="hover:text-white transition-colors">www.aifinsys.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                <p>&copy; 2026 KaoX.Ai 量化科學平台系統 V2.0 All Rights Reserved.</p>
+                 <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="javascript:void(0)" onclick="openLegal('privacy')" class="hover:text-white">隱私權政策</a>
+                    <a href="javascript:void(0)" onclick="openLegal('terms')" class="hover:text-white">服務條款</a>
+                    <a href="javascript:void(0)" onclick="openLegal('disclaimer')" class="hover:text-white">免責聲明</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+<!-- ================= 法律摘要 Modal ================= -->
+<div id="legalModal" class="fixed inset-0 z-[9999] hidden">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeLegal()"></div>
+  <div class="relative max-w-3xl mx-auto mt-24 bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h3 id="legalTitle" class="text-xl font-bold"></h3>
+      <button onclick="closeLegal()" class="text-2xl">&times;</button>
+    </div>
+    <div id="legalContent" class="px-6 py-6 max-h-[70vh] overflow-y-auto text-slate-600"></div>
+    <div class="px-6 py-4 bg-slate-50 text-right">
+      <button onclick="closeLegal()" class="px-6 py-2 bg-sky-600 text-white rounded-full">我已了解</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const legalData = {
+  privacy: {
+    title: "隱私權政策（摘要）",
+    content: `
+      <p>KaoX.AI（以下簡稱「本平台」）重視並尊重使用者的個人隱私權。
+      本平台僅於提供教學服務、系統功能運作與使用體驗優化的必要範圍內，蒐集最小化之使用資訊，並採取合理的技術與管理措施保護資料安全，不蒐集任何金融帳戶或身份資料。</p>
+    `
+  },
+  terms: {
+    title: "服務條款（摘要）",
+    content: `
+      <p>當您使用 KaoX.AI 平台，即表示您已閱讀、理解並同意遵守本平台之服務條款。
+      本平台所提供之所有內容，包括但不限於程式碼範例、策略說明、教學文章與研究資料，僅供教育、研究與學習用途，禁止未經授權之商業使用。</p>
+    `
+  },
+  disclaimer: {
+    title: "免責聲明",
+    content: `
+      <p>本平台所提供之所有金融、投資、量化交易與人工智慧相關內容，僅供教育與資訊參考用途，並不構成任何形式之投資建議、推薦、募集要約或獲利保證。</p>
+    `
+  }
+};
+
+function openLegal(type) {
+  legalTitle.innerText = legalData[type].title;
+  legalContent.innerHTML = legalData[type].content;
+  legalModal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+}
+function closeLegal() {
+  legalModal.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+}
+</script>
+
+<!-- ================= FAQ Schema ================= -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [{
+   "@type": "Question",
+   "name": "KaoX.AI 適合哪些人？",
+   "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "適合量化交易者、資料科學家與 AI 金融學習者。"
+   }
+ }]
+}
+</script>
+
+<!-- ================= Legal Policy Schema ================= -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://aifinsys.com/kao.html#privacy",
+   "name": "隱私權政策"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://aifinsys.com/kao.html#terms",
+   "name": "服務條款"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://aifinsys.com/kao.html#disclaimer",
+   "name": "免責聲明"
+  }
+ ]
+}
+</script>
+    
+
+<!-- ==================== FAQ Schema（SERP 佔位神器） ==================== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "KaoX.AI 適合哪些人？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "適合量化交易者、資料科學家、金融工程背景學習者與 AI 金融開發者。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "是否需要程式背景？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "建議具備基礎 Python 能力，平台提供循序漸進的學習路徑。"
+      }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
