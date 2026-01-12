@@ -456,57 +456,92 @@ def compute_factors(df, L_N=60, k=5, L_vol=20, L_base=60):
 
                 <div class="grid lg:grid-cols-3 gap-6 mb-8">
                     <div class="col-span-2">
-                         <pre class="language-python text-sm"><code class="language-python">def backtest_portfolio(factor_df, close_df, rebal_freq='M', n_q=5):
-    """
-    簡易多空投組回測
-    Long: TM Score 最低 (Theme Early)
-    Short: TM Score 最高 (Theme Mature)
-    """
-    # 取得 TM 因子與 Resample 日期
-    tm = factor_df.xs('tm_score', axis=1, level=1)
-    rebal_dates = tm.resample(rebal_freq).last().index
-    
-    # 使用明日報酬 (因為是收盤後計算訊號)
-    daily_ret = close_df.pct_change().shift(-1)
-    
-    portfolio_returns = []
+                         <pre class="language-python text-sm"><code class="language-python">import pandas as pd
+import numpy as np
 
-    for date in rebal_dates:
-        if date not in tm.index: continue
-            
-        # 取得當日因子值並去除空值
-        scores = tm.loc[date].dropna()
-        if scores.empty: continue
-            
-        # 分組 (Quantiles)
+def backtest_portfolio_monthly(
+    factor_df,
+    close_df,
+    rebal_freq='M',
+    n_q=5
+):
+    """
+    月度多空投組回測（Equal Weight, Long-Short）
+
+    Long  : TM Score 最低分組（Theme Early）
+    Short : TM Score 最高分組（Theme Mature）
+
+    假設：
+    - 訊號於收盤後產生
+    - 從下一交易日開始持有
+    - 持有至下一次 rebalance
+    """
+
+    # --- 1. 取 TM Score ---
+    tm = factor_df.xs('tm_score', axis=1, level=1)
+
+    # --- 2. Rebalance 日期（使用該期最後一個交易日） ---
+    rebal_dates = tm.resample(rebal_freq).last().index
+    rebal_dates = [d for d in rebal_dates if d in tm.index]
+
+    # --- 3. 日報酬（forward return） ---
+    daily_ret = close_df.pct_change()
+
+    results = []
+
+    for i in range(len(rebal_dates) - 1):
+
+        rebal_date = rebal_dates[i]
+        next_rebal_date = rebal_dates[i + 1]
+
+        # --- 4. 取得當期因子 ---
+        scores = tm.loc[rebal_date].dropna()
+        if scores.empty:
+            continue
+
+        # --- 5. Quantile 分組 ---
         try:
             labels = pd.qcut(scores, n_q, labels=False, duplicates='drop')
         except ValueError:
-            continue # 樣本不足
-            
-        # 定義多空名單
-        long_stocks = scores.index[labels == 0]       # Q1: Low TM
-        short_stocks = scores.index[labels == n_q-1]  # Q5: High TM
-        
-        # 計算持有期間 (直到下一次 Rebalance)
-        # 此處簡化為持有至月底
-        next_idx = tm.index.get_loc(date) + 1
-        if next_idx >= len(tm.index): break
-            
-        # 計算該月平均報酬 (Equal Weight)
-        # 實際應計算每日報酬序列
-        long_ret = daily_ret.loc[date, long_stocks].mean()
-        short_ret = daily_ret.loc[date, short_stocks].mean()
-        
-        # Long-Short Spread
-        portfolio_returns.append({
-            'date': date,
+            continue
+
+        low_label = labels.min()
+        high_label = labels.max()
+
+        long_stocks = scores.index[labels == low_label]
+        short_stocks = scores.index[labels == high_label]
+
+        if len(long_stocks) == 0 or len(short_stocks) == 0:
+            continue
+
+        # --- 6. 持有期間報酬（從下一交易日開始） ---
+        start_date = tm.index[tm.index.get_loc(rebal_date) + 1]
+
+        ret_slice = daily_ret.loc[start_date:next_rebal_date]
+
+        if ret_slice.empty:
+            continue
+
+        # Equal-weight daily portfolio return
+        long_daily = ret_slice[long_stocks].mean(axis=1)
+        short_daily = ret_slice[short_stocks].mean(axis=1)
+
+        # 累積報酬（近似）
+        long_ret = (1 + long_daily).prod() - 1
+        short_ret = (1 + short_daily).prod() - 1
+        spread = long_ret - short_ret
+
+        results.append({
+            'rebal_date': rebal_date,
             'long_ret': long_ret,
             'short_ret': short_ret,
-            'spread': long_ret - short_ret
+            'spread': spread,
+            'n_long': len(long_stocks),
+            'n_short': len(short_stocks)
         })
 
-    return pd.DataFrame(portfolio_returns).set_index('date')</code></pre>
+    return pd.DataFrame(results).set_index('rebal_date')
+</code></pre>
                     </div>
 
                     <!-- Strategy Logic Card -->
