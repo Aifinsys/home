@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AifinsysQR Labs: Theme Maturity Algo</title>
+    
+    <!-- MathJax for LaTeX Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (via CDN for simplicity in single file) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        quant: {
+                            bg: '#0a0c10',
+                            card: '#161b22',
+                            border: '#30363d',
+                            accent: '#2ea043', // Green for growth
+                            danger: '#da3633', // Red for short
+                            text: '#c9d1d9',
+                            muted: '#8b949e',
+                            terminal: '#0d1117'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a0c10;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #58a6ff;
+        }
+
+        /* Scanline effect for that retro terminal feel */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(56, 189, 248, 0.03) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        /* Code Block Styling */
+        pre[class*="language-"] {
+            border-radius: 0.5rem;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            margin: 1rem 0;
+            text-shadow: none;
+        }
+        
+        .math-block {
+            overflow-x: auto;
+            padding: 1rem;
+            background: #161b22;
+            border-radius: 0.5rem;
+            border-left: 3px solid #58a6ff;
+            margin: 1.5rem 0;
+        }
+
+        /* Grid Pattern Background */
+        .bg-grid {
+            background-image: linear-gradient(to right, #30363d 1px, transparent 1px),
+                              linear-gradient(to bottom, #30363d 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.05;
+        }
+        
+        .chart-mock {
+            position: relative;
+            height: 60px;
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+        }
+        .bar {
+            flex: 1;
+            background: #2ea043;
+            opacity: 0.6;
+            transition: height 0.5s ease;
+        }
+        .bar:hover { opacity: 1; background: #58a6ff; }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden">
+
+    <!-- Background Decoration -->
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+    <div class="scanline"></div>
+
+    <!-- Header / Nav -->
+    <header class="sticky top-0 z-50 bg-quant-bg/90 backdrop-blur border-b border-quant-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-8 w-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded flex items-center justify-center font-bold text-white font-mono">K</div>
+                <span class="font-bold text-xl tracking-tight text-white">Kaoshi.<span class="text-blue-400">xAi</span>_Alpha</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6 text-sm font-mono text-quant-muted">
+                <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>SYSTEM: ONLINE</div>
+                <div>DATA_FEED: TWSE/NYSE</div>
+                <div>LATENCY: 12ms</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block lg:col-span-3 sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto pr-2">
+            <nav class="space-y-1 font-mono text-sm">
+                <a href="#section-1" class="block px-3 py-2 rounded hover:bg-quant-card hover:text-white transition-colors border-l-2 border-transparent hover:border-blue-500">01. 資料與樣本設定</a>
+                <a href="#section-2" class="block px-3 py-2 rounded hover:bg-quant-card hover:text-white transition-colors border-l-2 border-transparent hover:border-blue-500">02. 數學模型公式</a>
+                <div class="pl-4 space-y-1 border-l border-quant-border ml-3 my-1">
+                    <a href="#formula-heat" class="block px-3 py-1 text-xs text-quant-muted hover:text-blue-400">2.1 熱度與加速度</a>
+                    <a href="#formula-price" class="block px-3 py-1 text-xs text-quant-muted hover:text-blue-400">2.2 價格與波動</a>
+                    <a href="#formula-flow" class="block px-3 py-1 text-xs text-quant-muted hover:text-blue-400">2.3 籌碼與資金流</a>
+                    <a href="#formula-tm" class="block px-3 py-1 text-xs text-quant-muted hover:text-blue-400">2.4 Theme Maturity</a>
+                </div>
+                <a href="#section-3" class="block px-3 py-2 rounded hover:bg-quant-card hover:text-white transition-colors border-l-2 border-transparent hover:border-blue-500">03. Python 因子實作</a>
+                <a href="#section-4" class="block px-3 py-2 rounded hover:bg-quant-card hover:text-white transition-colors border-l-2 border-transparent hover:border-blue-500">04. 迴測與排序</a>
+            </nav>
+            
+            <!-- Mini Status Widget -->
+            <div class="mt-8 p-4 bg-quant-card rounded border border-quant-border">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Market Status</h3>
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-2xl font-mono text-quant-accent">▲ 1.2%</span>
+                    <span class="text-xs text-quant-muted">TAIEX</span>
+                </div>
+                <div class="chart-mock">
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 30%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 90%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-9 space-y-12">
+
+            <!-- Title Section -->
+            <div class="border-b border-quant-border pb-8">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-900 text-blue-200">RESEARCH NOTE</span>
+                    <span class="px-2 py-0.5 rounded text-xs font-bold bg-purple-900 text-purple-200">FACTOR INVESTING</span>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-4">
+                    市場微結構：主題風口 (Theme Maturity) 指標設計
+                </h1>
+                <p class="text-lg text-quant-muted leading-relaxed">
+                    根據『巨人傑』選股邏輯，構建一個基於「新聞熱度」、「價格動能」與「籌碼流向」的複合因子模型，用於識別市場風口(主題)的生命週期。適用於台股與美股市場的量化交易策略。
+                </p>
+            </div>
+
+            <!-- Section 1: Data Settings -->
+            <section id="section-1" class="space-y-4">
+                <h2 class="text-2xl font-bold text-white flex items-center">
+                    <span class="text-blue-500 mr-2">01.</span> 資料與樣本設定
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-quant-card p-5 rounded-lg border border-quant-border">
+                        <h3 class="font-bold text-white mb-2 flex items-center"><span class="text-quant-accent mr-2">●</span> 台股市場 (TWSE/TPEX)</h3>
+                        <ul class="text-sm space-y-2 text-quant-muted">
+                            <li><strong class="text-gray-300">樣本：</strong>上市櫃普通股</li>
+                            <li><strong class="text-gray-300">排除：</strong>ETF、權證、全額交割、長期無量股</li>
+                            <li><strong class="text-gray-300">特徵：</strong>籌碼數據詳盡（外資/投信/自營）</li>
+                        </ul>
+                    </div>
+                    <div class="bg-quant-card p-5 rounded-lg border border-quant-border">
+                        <h3 class="font-bold text-white mb-2 flex items-center"><span class="text-blue-400 mr-2">●</span> 美股市場 (US Equities)</h3>
+                        <ul class="text-sm space-y-2 text-quant-muted">
+                            <li><strong class="text-gray-300">樣本：</strong>Russell 3000 或 S&P 500 / Nasdaq 100</li>
+                            <li><strong class="text-gray-300">替代數據：</strong>13F 機構持股、ETF 資金流、選擇權偏度 (Skew)</li>
+                            <li><strong class="text-gray-300">熱度：</strong>Google Trends, Reddit, Twitter API</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-quant-terminal p-4 rounded border border-dashed border-quant-border mt-2 font-mono text-sm text-gray-400">
+                    > 回測期間建議：至少 5-10 年 (Cover Bull/Bear Cycles)<br>
+                    > 資料頻率：Daily (日頻)
+                </div>
+            </section>
+
+            <!-- Section 2: Formulas -->
+            <section id="section-2" class="space-y-8">
+                <h2 class="text-2xl font-bold text-white flex items-center">
+                    <span class="text-blue-500 mr-2">02.</span> 數學模型與指標公式
+                </h2>
+
+                <!-- 2.1 Heat -->
+                <div id="formula-heat">
+                    <h3 class="text-lg font-semibold text-white mb-3 pl-2 border-l-4 border-purple-500">2.1 熱度水準與加速度 (Heat Dynamics)</h3>
+                    <p class="text-quant-muted mb-4">利用新聞篇數與搜尋量計算標準化熱度 (Z-Score) 及其變動率。</p>
+                    
+                    <div class="math-block">
+                        $$ HeatLevel_{i,t} = \frac{N_{i,t} - MA_{N}(N_{i,t}, L_N)}{Std_{N}(N_{i,t}, L_N)} $$
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                        <div class="math-block">
+                           <div class="text-xs text-gray-500 mb-1">熱度斜率 (Slope)</div>
+                           $$ HeatSlope_{i,t} = N_{i,t} - N_{i,t-k} $$
+                        </div>
+                        <div class="math-block">
+                           <div class="text-xs text-gray-500 mb-1">熱度加速度 (Accel)</div>
+                           $$ HeatAccel_{i,t} = HeatSlope_{i,t} - HeatSlope_{i,t-k} $$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.2 Price -->
+                <div id="formula-price">
+                    <h3 class="text-lg font-semibold text-white mb-3 pl-2 border-l-4 border-yellow-500">2.2 價格與波動 (Price & Volatility)</h3>
+                    
+                    <div class="bg-quant-card p-4 rounded border border-quant-border mb-4">
+                        <h4 class="font-mono text-sm text-blue-400 mb-2"># 創新高指標 (PriceNewHigh)</h4>
+                        <div class="math-block bg-transparent border-0 p-0 m-0">
+                            $$ PriceNewHigh_{i,t} = \begin{cases} 1, & P_{i,t} = \max(P_{i,t-N+1}, \dots, P_{i,t}) \\ 0, & \text{otherwise} \end{cases} $$
+                        </div>
+                    </div>
+
+                    <div class="bg-quant-card p-4 rounded border border-quant-border">
+                        <h4 class="font-mono text-sm text-blue-400 mb-2"># 波動率爆發 (VolSpike)</h4>
+                        <p class="text-sm text-gray-400 mb-2">短期波動率相對於長期波動率的倍數。</p>
+                        <div class="math-block bg-transparent border-0 p-0 m-0">
+                            $$ Volatility_{i,t} = Std(r_{i,t}, \dots, r_{i,t-L_{vol}}) $$
+                            $$ VolSpike_{i,t} = \frac{Volatility_{i,t}}{MA(Volatility_{i,t}, L_{base})} $$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.3 Flow -->
+                <div id="formula-flow">
+                    <h3 class="text-lg font-semibold text-white mb-3 pl-2 border-l-4 border-green-500">2.3 籌碼流向 (Flow Analytics)</h3>
+                    
+                    <div class="math-block">
+                        <div class="text-xs text-gray-500 mb-1">主力淨買超比率</div>
+                        $$ Flow_{i,t} = \frac{F_{i,t}}{V_{i,t}} $$
+                    </div>
+                    
+                    <p class="text-sm text-gray-400 mt-2">
+                        定義 <strong class="text-white">FlowTurn</strong> 為「短期均線 > 0 且 長期均線 < 0」（或由正轉負的轉折點，視策略方向而定）。
+                    </p>
+                    <div class="math-block">
+                         $$ FlowTurn_{i,t} = \mathbb{1}\big( MA(Flow_{i,t}, L_{in}) > 0 \land MA(Flow_{i,t}, L_{out}) < 0 \big) $$
+                    </div>
+                </div>
+
+                <!-- 2.4 TM Score -->
+                <div id="formula-tm">
+                    <h3 class="text-lg font-semibold text-white mb-3 pl-2 border-l-4 border-red-500">2.4 Theme Maturity (綜合分數)</h3>
+                    <p class="text-quant-muted mb-2">TM 指標用來判斷主題是否過熱或即將反轉。</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm font-mono">
+                            <thead>
+                                <tr class="border-b border-quant-border text-gray-400">
+                                    <th class="py-2">Component</th>
+                                    <th class="py-2">Logic</th>
+                                    <th class="py-2">Meaning</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-quant-border">
+                                <tr>
+                                    <td class="py-3 text-blue-300">Plateau</td>
+                                    <td class="py-3">$\mathbb{1}(Heat > \theta_1 \land |Slope| < \theta_2)$</td>
+                                    <td class="py-3 text-gray-400">熱度高檔鈍化</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 text-yellow-300">PriceHot</td>
+                                    <td class="py-3">$\mathbb{1}(NewHigh \land VolSpike > \theta_3)$</td>
+                                    <td class="py-3 text-gray-400">價格創高且波動放大</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 text-green-300">FlowWeak</td>
+                                    <td class="py-3">$\mathbb{1}(FlowTurn == 1)$</td>
+                                    <td class="py-3 text-gray-400">籌碼動能衰退</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="math-block mt-4 text-center">
+                        $$ TM_{i,t} = Plateau_{i,t} + PriceHot_{i,t} + FlowWeak_{i,t} $$
+                    </div>
+                    <div class="flex gap-4 mt-2">
+                        <div class="flex-1 bg-red-900/20 border border-red-900/50 p-3 rounded text-center">
+                            <span class="block text-red-400 font-bold">TM = 3</span>
+                            <span class="text-xs text-gray-500">High Risk / Mature</span>
+                        </div>
+                        <div class="flex-1 bg-green-900/20 border border-green-900/50 p-3 rounded text-center">
+                            <span class="block text-green-400 font-bold">TM = 0</span>
+                            <span class="text-xs text-gray-500">Early Stage / Safe</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Python Code -->
+            <section id="section-3" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-white flex items-center">
+                        <span class="text-blue-500 mr-2">03.</span> Python 因子計算 (Pandas Implementation)
+                    </h2>
+                    <span class="text-xs font-mono bg-quant-border px-2 py-1 rounded text-gray-400">pandas >= 1.3.0</span>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <pre class="language-python relative"><code class="language-python">import pandas as pd
+import numpy as np
+
+# 假設 df 為 MultiIndex DataFrame: index=date, columns=(stock_id, field)
+# fields: 'close', 'volume', 'news_count', 'search_index', 'flow'
+
+def rolling_zscore(x, window):
+    """計算滾動 Z-Score"""
+    ma = x.rolling(window).mean()
+    std = x.rolling(window).std()
+    # 避免除以零
+    return (x - ma) / std.replace(0, np.nan)
+
+def compute_factors(df, L_N=60, k=5, L_vol=20, L_base=60):
+    """
+    計算 Theme Maturity 相關因子
+    """
+    # 提取各欄位數據 (Cross-section view)
+    close = df.xs('close', axis=1, level=1)
+    volume = df.xs('volume', axis=1, level=1)
+    news = df.xs('news_count', axis=1, level=1)
+    search = df.xs('search_index', axis=1, level=1)
+    flow = df.xs('flow', axis=1, level=1)
+
+    # --- 1. 熱度因子 ---
+    news_z = rolling_zscore(news, L_N)
+    search_z = rolling_zscore(search, L_N)
+    # 綜合熱度 (等權重)
+    heat_level = 0.5 * news_z + 0.5 * search_z
+    
+    # 熱度動能
+    heat_slope = news.diff(k)
+    heat_slope_abs = heat_slope.abs()
+    # heat_accel = heat_slope.diff(k) # Optional
+
+    # --- 2. 價格與波動 ---
+    # Log Returns
+    ret = np.log(close / close.shift(1))
+    
+    # Volatility Spike
+    vol = ret.rolling(L_vol).std()
+    vol_base = vol.rolling(L_base).mean()
+    vol_spike = vol / vol_base
+
+    # 創新高 (New High) - 60日新高
+    price_new_high = (close == close.rolling(60).max()).astype(int)
+
+    # --- 3. 籌碼因子 ---
+    # 淨流量比率
+    flow_ratio = flow / volume.replace(0, np.nan)
+    
+    flow_short = flow_ratio.rolling(5).mean()
+    flow_long = flow_ratio.rolling(20).mean()
+    
+    # 籌碼轉弱 (短期 > 0 且 長期 < 0，或根據原邏輯調整轉折定義)
+    # 原始邏輯：FlowTurn (由多轉空 or 特定型態)
+    # 這裡實作：短期均線轉負的瞬間 (範例)
+    flow_turn = ((flow_short > 0) & (flow_long < 0)).astype(int)
+
+    # --- 4. 綜合訊號 (Theme Maturity) ---
+    # 設定閥值 (Thresholds)
+    TH_HEAT = 1.0
+    TH_SLOPE = 0.01
+    TH_VOL = 1.5
+
+    # Plateau: 熱度高但斜率趨緩
+    plateau = ((heat_level > TH_HEAT) & (heat_slope_abs < TH_SLOPE)).astype(int)
+    
+    # PriceHot: 創新高且波動放大
+    price_hot = ((price_new_high == 1) & (vol_spike > TH_VOL)).astype(int)
+    
+    # FlowWeak: 籌碼轉弱訊號
+    flow_weak = flow_turn
+
+    # TM Score (0-3)
+    tm_score = plateau + price_hot + flow_weak
+
+    # --- 整理輸出 ---
+    factors = {
+        'heat_level': heat_level,
+        'vol_spike': vol_spike,
+        'tm_score': tm_score
+    }
+    
+    # 將 Dictionary 轉換回 MultiIndex DataFrame
+    output_frames = []
+    for name, data in factors.items():
+        # 為 columns 增加一層 level
+        data.columns = pd.MultiIndex.from_product([data.columns, [name]])
+        output_frames.append(data)
+    
+    return pd.concat(output_frames, axis=1).sort_index(axis=1)</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 4: Backtest Logic -->
+            <section id="section-4" class="pb-20">
+                <h2 class="text-2xl font-bold text-white flex items-center mb-6">
+                    <span class="text-blue-500 mr-2">04.</span> 排序回測框架 (Ranking & Backtest)
+                </h2>
+
+                <div class="grid lg:grid-cols-3 gap-6 mb-8">
+                    <div class="col-span-2">
+                         <pre class="language-python text-sm"><code class="language-python">def backtest_portfolio(factor_df, close_df, rebal_freq='M', n_q=5):
+    """
+    簡易多空投組回測
+    Long: TM Score 最低 (Theme Early)
+    Short: TM Score 最高 (Theme Mature)
+    """
+    # 取得 TM 因子與 Resample 日期
+    tm = factor_df.xs('tm_score', axis=1, level=1)
+    rebal_dates = tm.resample(rebal_freq).last().index
+    
+    # 使用明日報酬 (因為是收盤後計算訊號)
+    daily_ret = close_df.pct_change().shift(-1)
+    
+    portfolio_returns = []
+
+    for date in rebal_dates:
+        if date not in tm.index: continue
+            
+        # 取得當日因子值並去除空值
+        scores = tm.loc[date].dropna()
+        if scores.empty: continue
+            
+        # 分組 (Quantiles)
+        try:
+            labels = pd.qcut(scores, n_q, labels=False, duplicates='drop')
+        except ValueError:
+            continue # 樣本不足
+            
+        # 定義多空名單
+        long_stocks = scores.index[labels == 0]       # Q1: Low TM
+        short_stocks = scores.index[labels == n_q-1]  # Q5: High TM
+        
+        # 計算持有期間 (直到下一次 Rebalance)
+        # 此處簡化為持有至月底
+        next_idx = tm.index.get_loc(date) + 1
+        if next_idx >= len(tm.index): break
+            
+        # 計算該月平均報酬 (Equal Weight)
+        # 實際應計算每日報酬序列
+        long_ret = daily_ret.loc[date, long_stocks].mean()
+        short_ret = daily_ret.loc[date, short_stocks].mean()
+        
+        # Long-Short Spread
+        portfolio_returns.append({
+            'date': date,
+            'long_ret': long_ret,
+            'short_ret': short_ret,
+            'spread': long_ret - short_ret
+        })
+
+    return pd.DataFrame(portfolio_returns).set_index('date')</code></pre>
+                    </div>
+
+                    <!-- Strategy Logic Card -->
+                    <div class="space-y-4">
+                        <div class="bg-quant-card p-5 rounded border border-quant-border">
+                            <h4 class="text-white font-bold mb-3">Strategy Logic</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 rounded-full bg-quant-accent mt-1.5 mr-2"></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Long (Q1)</div>
+                                        <div class="text-xs text-quant-muted">TM Score = 0. 主題初期，尚未過熱。</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 rounded-full bg-quant-danger mt-1.5 mr-2"></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Short (Q5)</div>
+                                        <div class="text-xs text-quant-muted">TM Score = 3. 主題成熟，伴隨籌碼渙散與波動放大。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-900/20 p-5 rounded border border-blue-800">
+                            <h4 class="text-blue-300 font-bold mb-2 text-sm">EVENT STUDY</h4>
+                            <p class="text-xs text-blue-200/70 mb-2">
+                                定義事件日 $t$: <br>
+                                $TM_{i,t} \ge 2$ 且 $TM_{i,t-1} < 2$
+                            </p>
+                            <div class="text-xs text-blue-200/70">
+                                觀察 $t+1, t+5, t+20$ 的累積報酬 (CAR)，檢驗反轉效應。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="border-t border-quant-border bg-quant-bg py-8 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center text-quant-muted text-xs font-mono">
+            <!-- Back to Home Button -->
+            <div class="mb-6">
+                <a href="http://www.aifinsys.com" class="inline-flex items-center px-4 py-2 border border-quant-border hover:border-blue-500 hover:text-blue-400 bg-quant-card/50 rounded transition-all duration-200 group">
+                    <span class="mr-2 group-hover:-translate-y-0.5 transition-transform">▲</span> 回首頁
+                </a>
+            </div>
+            <p>&copy;2026 Ai Fintech Corp. • Quant Research Labs</p>
+            <p class="mt-2 text-gray-600">DISCLAIMER: THIS IS A RESEARCH PROTOTYPE. NOT FINANCIAL ADVICE.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
