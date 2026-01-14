@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AifinsysQR Labs: TREND_SENTIMENT_V1.0</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter for UI, JetBrains Mono for Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quant-bg': '#0f172a',
+                        'quant-card': '#1e293b',
+                        'quant-border': '#334155',
+                        'quant-accent': '#06b6d4', /* Cyan */
+                        'quant-green': '#10b981',
+                        'quant-text': '#e2e8f0',
+                        'quant-muted': '#94a3b8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b1120;
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Scrollbar for Code Blocks */
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        .nav-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
+            transition: 0.5s;
+        }
+        .nav-btn:hover::after {
+            left: 100%;
+        }
+        .nav-btn:hover {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="text-quant-text font-sans antialiased selection:bg-quant-accent selection:text-black">
+
+    <!-- Top Status Bar -->
+    <div class="w-full bg-black border-b border-quant-border py-1 px-4 text-xs font-mono flex justify-between items-center text-quant-muted">
+        <div><span class="text-green-500">●</span> SYSTEM: ONLINE</div>
+        <div>MODEL: TREND_SENTIMENT_V1.0</div>
+        <div>DATETIME: <span id="clock"></span></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- Header Section -->
+        <header class="mb-12 text-center relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-quant-accent to-transparent"></div>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white glow-text mt-8">
+                趨勢主題<span class="text-quant-accent">情緒因子</span>演算
+            </h1>
+            <p class="text-quant-muted text-lg max-w-2xl mx-auto">
+                針對<span class="text-white font-semibold">「小型核能 (SMR)」</span>與<span class="text-white font-semibold">「儲能電池」</span>之量化回測指標設計<br>
+                整合 Google Trends 長期熱度與 PTT 短期交易情緒
+            </p>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- Section 1: Keyword Design -->
+            <section class="glass-panel rounded-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6 border-b border-quant-border pb-4">
+                    <i class="fa-solid fa-tags text-quant-accent text-xl"></i>
+                    <h2 class="text-2xl font-bold text-white">01. 主題關鍵字映射 (Keyword Mapping)</h2>
+                </div>
+                
+                <p class="text-quant-muted mb-4">
+                    構建量化模型的基礎在於定義精確的關鍵字集合，區分 Google (廣泛關注) 與 PTT (交易情緒) 兩個維度。
+                </p>
+
+                <div class="bg-[#0d1117] rounded-lg border border-quant-border overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-quant-border">
+                        <span class="text-xs text-quant-muted font-mono">config_keywords.py</span>
+                        <div class="flex gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500 opacity-50"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500 opacity-50"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500 opacity-50"></div>
+                        </div>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+<pre><code class="language-python text-sm font-mono"><span class="text-purple-400">theme_keywords</span> = {
+    <span class="text-green-400">"SMR"</span>: {
+        <span class="text-blue-400">"google"</span>: [
+            <span class="text-yellow-300">"小型核能"</span>, <span class="text-yellow-300">"小型模組化反應器"</span>, 
+            <span class="text-yellow-300">"SMR nuclear"</span>, <span class="text-yellow-300">"nuclear data center"</span>
+        ],
+        <span class="text-blue-400">"ptt"</span>: [<span class="text-yellow-300">"小型核能"</span>, <span class="text-yellow-300">"SMR"</span>, <span class="text-yellow-300">"核能小型"</span>]
+    },
+    <span class="text-green-400">"Battery"</span>: {
+        <span class="text-blue-400">"google"</span>: [
+            <span class="text-yellow-300">"儲能電池"</span>, <span class="text-yellow-300">"battery storage"</span>, 
+            <span class="text-yellow-300">"energy storage system"</span>
+        ],
+        <span class="text-blue-400">"ptt"</span>: [<span class="text-yellow-300">"儲能"</span>, <span class="text-yellow-300">"儲能電池"</span>, <span class="text-yellow-300">"電池儲能"</span>]
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Google Trends -->
+            <section class="glass-panel rounded-xl p-6 md:p-8 relative overflow-hidden">
+                <!-- Background decorative element -->
+                <div class="absolute -right-10 -top-10 text-9xl text-quant-accent opacity-5 rotate-12">
+                    <i class="fa-brands fa-google"></i>
+                </div>
+
+                <div class="flex items-center gap-3 mb-6 border-b border-quant-border pb-4 relative z-10">
+                    <i class="fa-solid fa-chart-line text-quant-accent text-xl"></i>
+                    <h2 class="text-2xl font-bold text-white">02. 長期熱度因子 (Google Trends)</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 relative z-10">
+                    <div>
+                        <h3 class="text-lg font-semibold text-quant-green mb-3"><i class="fa-solid fa-calculator mr-2"></i>演算邏輯</h3>
+                        <ul class="space-y-4 text-sm text-quant-text">
+                            <li class="flex items-start gap-2">
+                                <span class="text-quant-accent mt-1">➢</span>
+                                <div>
+                                    <span class="font-bold text-white">GT_Level (絕對熱度)</span>
+                                    <p class="text-quant-muted mt-1">最近 30 天的平均搜尋量。</p>
+                                    <div class="my-2 p-2 bg-quant-bg rounded border border-quant-border font-mono text-xs">
+                                        \( GT\_Level = \text{mean}(Series[-30:]) \)
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-quant-accent mt-1">➢</span>
+                                <div>
+                                    <span class="font-bold text-white">GT_Change (變化率)</span>
+                                    <p class="text-quant-muted mt-1">反映趨勢是否正在加速升溫。</p>
+                                    <div class="my-2 p-2 bg-quant-bg rounded border border-quant-border font-mono text-xs">
+                                        \( GT\_Change = \frac{Level_{30}}{Mean(Series[-120:-30])} - 1 \)
+                                    </div>
+                                    <p class="text-xs text-quant-green mt-1">若 \( GT\_Change > 0 \)，視為主題熱度正向因子。</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-quant-accent mb-3"><i class="fa-solid fa-code mr-2"></i>核心代碼實作</h3>
+                        <div class="bg-[#0d1117] rounded-lg border border-quant-border overflow-hidden h-full">
+                            <div class="p-3 text-xs font-mono text-quant-muted border-b border-quant-border">calc_trends.py</div>
+                            <div class="p-3 overflow-x-auto">
+<pre><code class="language-python text-xs font-mono"><span class="text-purple-400">def</span> <span class="text-blue-400">google_trends_factor</span>(keywords):
+    <span class="text-gray-500"># Fetch data using pytrends</span>
+    pytrends.build_payload(keywords, timeframe=<span class="text-green-400">"today 12-m"</span>)
+    gt = pytrends.interest_over_time()
+    
+    series = gt[keywords].mean(axis=<span class="text-orange-400">1</span>)
+    
+    <span class="text-gray-500"># Rolling Windows</span>
+    level_30 = series.tail(<span class="text-orange-400">30</span>).mean()
+    prev_90 = series.tail(<span class="text-orange-400">120</span>).head(<span class="text-orange-400">90</span>).mean()
+    
+    <span class="text-gray-500"># Change Rate Calculation</span>
+    chg = (level_30 / prev_90 - <span class="text-orange-400">1</span>) <span class="text-purple-400">if</span> prev_90 > <span class="text-orange-400">0</span> <span class="text-purple-400">else</span> <span class="text-orange-400">0</span>
+    
+    <span class="text-purple-400">return</span> {<span class="text-green-400">"level"</span>: level_30, <span class="text-green-400">"change"</span>: chg}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: PTT Sentiment -->
+            <section class="glass-panel rounded-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6 border-b border-quant-border pb-4">
+                    <i class="fa-solid fa-comments text-quant-accent text-xl"></i>
+                    <h2 class="text-2xl font-bold text-white">03. 短期交易情緒 (PTT Sentiment)</h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-quant-bg p-4 rounded border border-quant-border">
+                            <div class="text-quant-muted text-xs uppercase tracking-widest mb-1">Data Source</div>
+                            <div class="text-lg font-bold text-white">PTT Stock / Tech_Job</div>
+                        </div>
+                        <div class="bg-quant-bg p-4 rounded border border-quant-border">
+                            <div class="text-quant-muted text-xs uppercase tracking-widest mb-1">Metric</div>
+                            <div class="text-lg font-bold text-quant-accent">Term Frequency (Hits)</div>
+                        </div>
+                        <div class="bg-quant-bg p-4 rounded border border-quant-border">
+                            <div class="text-quant-muted text-xs uppercase tracking-widest mb-1">Signal Processing</div>
+                            <div class="text-lg font-bold text-white">Log1p + Z-Score</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-quant-card rounded-lg p-6 border border-quant-border">
+                        <h3 class="text-lg font-semibold text-white mb-4">標準化情緒分數 (Z-Score)</h3>
+                        <p class="text-quant-muted mb-4">
+                            使用 Log 轉換平滑極端值，再進行標準化，以判斷當前討論熱度是否顯著偏離平均。
+                        </p>
+                        <div class="flex justify-center my-6">
+                            <div class="bg-black/50 px-6 py-4 rounded-lg border border-quant-border shadow-inner">
+                                \( Z_{ptt\_hits} = \frac{\ln(1 + hits) - \mu_{\ln}}{\sigma_{\ln}} \)
+                            </div>
+                        </div>
+                        <div class="text-sm text-center text-quant-muted">
+                            <span class="text-quant-green font-bold">Signal:</span> 若 \( Z_{ptt\_hits} > 0 \)，表示散戶/市場關注度高於常態，短期情緒升溫。
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Integration Model -->
+            <section class="glass-panel rounded-xl p-6 md:p-8 border-l-4 border-l-quant-accent">
+                <div class="flex items-center gap-3 mb-6 border-b border-quant-border pb-4">
+                    <i class="fa-solid fa-layer-group text-quant-accent text-xl"></i>
+                    <h2 class="text-2xl font-bold text-white">04. 多因子整合模型 (Multi-Factor Model)</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="text-sm uppercase tracking-widest text-quant-muted mb-2">Total Score Equation</h4>
+                        <div class="bg-gradient-to-r from-quant-bg to-quant-card p-6 rounded-lg border border-quant-border flex flex-col items-center justify-center min-h-[120px]">
+                            <div class="text-xl md:text-2xl font-mono text-white">
+                                \( Score = 0.5 \cdot F_{fund} + 0.2 \cdot \color{#06b6d4}{Score_{GT}} + 0.3 \cdot \color{#10b981}{Score_{PTT}} \)
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
+                            <div class="p-2">
+                                <span class="block text-quant-muted">基本面 & 動能</span>
+                                <span class="font-bold text-white">50% Weight</span>
+                            </div>
+                            <div class="p-2 border-l border-quant-border">
+                                <span class="block text-quant-muted">長期趨勢 (Google)</span>
+                                <span class="font-bold text-quant-accent">20% Weight</span>
+                            </div>
+                            <div class="p-2 border-l border-quant-border">
+                                <span class="block text-quant-muted">短期情緒 (PTT)</span>
+                                <span class="font-bold text-quant-green">30% Weight</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-quant-bg/50 p-5 rounded-lg">
+                        <h4 class="text-white font-bold mb-3"><i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>策略實務建議</h4>
+                        <ul class="space-y-3 text-sm text-quant-muted">
+                            <li class="flex gap-3">
+                                <span class="px-2 py-0.5 bg-blue-900 text-blue-200 text-xs rounded h-fit">SMR</span>
+                                <span>觀察 "small modular reactor" 搜尋量作為長期配置指標；PTT 出現大量討論時，留意 FOMO 情緒，避免追高。</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="px-2 py-0.5 bg-green-900 text-green-200 text-xs rounded h-fit">儲能</span>
+                                <span>"Battery Storage" 搜尋量反映產業關注度；結合 PTT 上的政策/標案討論，作為供應鏈（如台達電）的短期進出依據。</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+   <footer class="border-t border-quant-border bg-quant-bg py-8 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center text-quant-muted text-xs font-mono">
+            <!-- Back to Home Button -->
+            <div class="mb-6">
+                <a href="http://www.aifinsys.com" class="inline-flex items-center px-4 py-2 border border-quant-border hover:border-blue-500 hover:text-blue-400 bg-quant-card/50 rounded transition-all duration-200 group">
+                    <span class="mr-2 group-hover:-translate-y-0.5 transition-transform">▲</span> 回首頁
+                </a>
+            </div>
+            <p>&copy;2026 Ai Fintech Corp. • Quant Research Labs</p>
+            <p class="mt-2 text-gray-600">DISCLAIMER: THIS IS A RESEARCH PROTOTYPE. NOT FINANCIAL ADVICE.</p>
+        </div>
+    </footer>
+
+   <script>
+    // Simple Clock for the status bar (Taipei Time)
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleString('zh-TW', {
+            timeZone: 'Asia/Taipei',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        }).replace(/\//g, '-');
+
+        document.getElementById('clock').textContent = timeString + " 台北時間";
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>
+
+</body>
+</html>
