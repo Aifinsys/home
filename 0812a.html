@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 试题模拟 · 一页式题库</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 24px 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .app {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.25);
+            padding: 28px 24px 40px;
+            transition: all 0.2s;
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 1.9rem;
+            color: #0b2b4a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid #e6edf6;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #3c5a7a;
+            margin-left: auto;
+            background: #eaf0f8;
+            padding: 4px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px 10px;
+            margin-bottom: 28px;
+            background: #f0f5fe;
+            padding: 14px 20px;
+            border-radius: 60px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-weight: 500;
+            color: #1b3a5e;
+        }
+        .stats span {
+            background: white;
+            padding: 2px 16px;
+            border-radius: 30px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .stats .num {
+            font-weight: 700;
+            color: #0057a3;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1f4970;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid transparent;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-primary {
+            background: #1f4970;
+            color: white;
+            box-shadow: 0 4px 8px rgba(26, 67, 113, 0.2);
+        }
+        .btn-primary:hover {
+            background: #123152;
+            transform: scale(0.97);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #b7cee5;
+        }
+        .btn-outline:hover {
+            background: #dce8f5;
+        }
+        .btn-danger {
+            background: #c72a2a;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #a02121;
+        }
+        .question-container {
+            margin-top: 6px;
+        }
+        .question-item {
+            background: white;
+            border-radius: 24px;
+            padding: 22px 22px 18px;
+            margin-bottom: 18px;
+            border: 1px solid #e3ecf7;
+            transition: 0.1s;
+            box-shadow: 0 6px 12px -8px rgba(0, 20, 30, 0.04);
+        }
+        .question-item:hover {
+            border-color: #b8d0e9;
+            background: #fbfdff;
+        }
+        .q-header {
+            display: flex;
+            gap: 8px 12px;
+            flex-wrap: wrap;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+        .q-number {
+            font-weight: 700;
+            color: #004080;
+            background: #dce8f5;
+            padding: 0 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            line-height: 26px;
+        }
+        .q-text {
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: #102a44;
+            line-height: 1.5;
+            flex: 1;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px 12px;
+            padding-left: 6px;
+            margin: 10px 0 6px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8faff;
+            padding: 6px 16px 6px 12px;
+            border-radius: 40px;
+            border: 1px solid #deeaf8;
+            transition: 0.08s;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #1a334f;
+        }
+        .option-label:hover {
+            background: #e6f0fd;
+            border-color: #92b4db;
+        }
+        .option-label input[type="radio"] {
+            accent-color: #1f6bb0;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        .answer-feedback {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            padding: 6px 12px 6px 18px;
+            border-radius: 50px;
+            background: #f1f7fe;
+        }
+        .answer-feedback .result {
+            font-weight: 600;
+            padding: 2px 16px;
+            border-radius: 30px;
+        }
+        .result.correct {
+            background: #c3e6cb;
+            color: #0a4b2a;
+        }
+        .result.wrong {
+            background: #f8d7da;
+            color: #9e2a2a;
+        }
+        .result.unanswered {
+            background: #eaeef3;
+            color: #385477;
+        }
+        .show-answer {
+            background: transparent;
+            border: none;
+            color: #0066b3;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: underline dotted;
+            padding: 0 4px;
+        }
+        .show-answer:hover {
+            color: #003c73;
+        }
+        .correct-answer-text {
+            color: #004d2b;
+            font-weight: 500;
+            background: #e3f0e6;
+            padding: 0 16px;
+            border-radius: 30px;
+            line-height: 26px;
+            display: inline-block;
+        }
+        .footer-bar {
+            margin-top: 28px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #dce4ef;
+            padding-top: 20px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 700px) {
+            .app { padding: 16px; }
+            .toolbar { flex-direction: column; align-items: stretch; border-radius: 30px; }
+            .stats { justify-content: center; }
+            .btn-group { justify-content: center; }
+            .options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+    <h1>
+        📋 模擬試題 · 數位邏輯/計算機概論
+        <small>共 <span id="totalCount">0</span> 題</small>
+    </h1>
+
+    <div class="toolbar">
+        <div class="stats">
+            <span>✅ 已答 <span class="num" id="answeredCount">0</span></span>
+            <span>🎯 正確 <span class="num" id="correctCount">0</span></span>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="submitAllBtn">📤 提交全部</button>
+            <button class="btn btn-outline" id="showAllAnswersBtn">👁️ 顯示答案</button>
+            <button class="btn btn-danger" id="resetBtn">⟳ 重設</button>
+        </div>
+    </div>
+
+    <div class="question-container" id="questionContainer"></div>
+
+    <div class="footer-bar">
+        <span style="color: #4e6d8c; font-size:0.9rem;">💡 點選選項即可作答 · 再次點擊可更改</span>
+    </div>
+</div>
+<script>
+    (function() {
+        // ---------- 完整題庫 (取自文件) ----------
+        const QUESTION_BANK = [
+            { id: 7, text: '(1) 表示 0 到 9 的十進制數值，至少需要幾個二進位位元？', options: ['①4', '②3', '③2', '④1'], correct: 0 },
+            { id: 8, text: '(2)「十進制數的 17」等於十六進制數的多少？', options: ['①17', '②11', '③10', '④21'], correct: 1 },
+            { id: 9, text: '(1) 二進制數值 1101001 轉換為十六進制時，其值為', options: ['①69', '②39', '③8A', '④7A'], correct: 0 },
+            { id: 10, text: '(3) 英文字母「A」的 10 進制 ASCII 值為 65，則字母「Q」的 16 進制 ASCII 值為', options: ['①73', '②81', '③51', '④50'], correct: 2 },
+            { id: 11, text: '(2) 二進制數值「00001101」之「1 的補數」為何？', options: ['①11110011', '②11110010', '③10001101', '④00001110'], correct: 1 },
+            { id: 12, text: '(3) 十進制數 (60.875) 以二進制表示為何？', options: ['①110110.111', '②101110.110', '③111100.111', '④110100.110'], correct: 2 },
+            { id: 13, text: '(3) 二進制數 1011 1001 1100 0011 以十六進制表示為何？', options: ['①C9E3', '②A9D3', '③B9C3', '④C8E4'], correct: 2 },
+            { id: 14, text: '(1) 假設某一 CPU 共有 20 條位址線，請問可定址出之實體記憶空間為', options: ['①1MB', '②512KB', '③16MB', '④64KB'], correct: 0 },
+            { id: 15, text: '(2) 下列兩個八進位數值之和為何？ (23.4) + (56.4) =', options: ['① (66.0)', '② (102.0)', '③ (79.8)', '④ (515.10)'], correct: 1 },
+            { id: 16, text: '(4) 八進位數值 (2345.67) 轉換成十六進位數值為', options: ['① (59.13)', '② (95.13)', '③ (45E.DC)', '④ (4E5.DC)'], correct: 3 },
+            { id: 17, text: '(2) 若一年以 365 日計算，則須使用多少位元才可表示該數目 365？', options: ['①1', '②9', '③18', '④2'], correct: 1 },
+            { id: 18, text: '(2) 網際網路的 IP 位址長度係由多少位元所組成？', options: ['①16', '②32', '③48', '④64'], correct: 1 },
+            { id: 19, text: '(4) 假設某一記憶體具有 14 條位址線，則此記憶體共有多少位址空間？', options: ['①24KB', '②24B', '③16MB', '④16KB'], correct: 3 },
+            { id: 20, text: '(2)「二進位數 1010101」等於「八進位數」的', options: ['①123', '②125', '③521', '④522'], correct: 1 },
+            { id: 21, text: '(3)「二進位數 01111」等於「十進位數」的', options: ['①10', '②16', '③15', '④1000'], correct: 2 },
+            { id: 22, text: '(1)「十進位數 77」等於「八進位數」的', options: ['①115', '②116', '③117', '④114'], correct: 0 },
+            { id: 23, text: '(3)「十六進位數 7D1」等於「十進位數」的', options: ['①2003', '②2101', '③2001', '④2103'], correct: 2 },
+            { id: 24, text: '(4)「十六進位數 1A1B」等於「八進位數」的', options: ['①977', '②6684', '③1123', '④15033'], correct: 3 },
+            { id: 25, text: '(2)「十六進位數 F0」等於「二進位數」的', options: ['①00001111', '②11110000', '③11000011', '④00111100'], correct: 1 },
+            { id: 26, text: '(1)「八進位數 123」等於「十進位數」的', options: ['①83', '②38', '③79', '④97'], correct: 0 },
+            { id: 27, text: '(2) 1 個「八進位」的數字可由幾個「二進位」的數字組成', options: ['①2', '②3', '③4', '④5'], correct: 1 },
+            { id: 28, text: '(2) 每張 Ethernet 網路卡都編有一個獨一無二的位址，這個位址稱為「MAC 位址」，MAC 位址是以', options: ['①4Bytes', '②6Bytes', '③7Bytes', '④8Bytes'], correct: 1 },
+            { id: 29, text: '(2) 某辦公室內有數台電腦，將這些電腦以網路線與集線器 (Hub) 連接，此種連接方式為', options: ['①匯流排網路', '②星狀網路', '③環狀網路', '④網狀網路'], correct: 1 },
+            { id: 30, text: '(2) ISO 所提出的 OSI 架構共分成幾層？', options: ['①9', '②7', '③5', '④3'], correct: 1 },
+            { id: 31, text: '(1) 具有後進先出 (Last In Fast Out) 的資料結構是', options: ['①堆疊', '②佇列', '③樹狀', '④串列'], correct: 0 },
+            { id: 32, text: '(1) 一張長 2 英吋、寬 1 英吋的照片，若以解析度為 200dpi 的掃描器掃描進入電腦，該影像的像素為', options: ['①80000', '②120000', '③100000', '④60000'], correct: 0 },
+            { id: 33, text: '(4)「八進位數 66」等於「二進位數」的', options: ['①110011', '②101101', '③011011', '④110110'], correct: 3 },
+            { id: 34, text: '(2) 電腦中為檢查資料是否正確，常在每筆資料後增加一個核對位元，此位元稱之為同位檢查位元。請問當資料為 01101111 時，若採偶數同位檢查，則同位檢查位元應為？', options: ['①1', '②0', '③-1', '④101'], correct: 1 },
+            { id: 35, text: '(3) EBCDIC 碼使用 X 位元表示一個字元，UTF-16 使用 Y 位元表示一個字元，則 X+Y 等於？', options: ['①64', '②32', '③24', '④16'], correct: 2 },
+            { id: 36, text: '(1) 數位簽章運作流程，不包含下列何者？', options: ['①用傳送者的公鑰將訊息摘要加密', '②用傳送者的公鑰將訊息摘要解密', '③利用雜湊函數產生訊息摘要', '④比對訊息摘要'], correct: 0 },
+            { id: 37, text: '(2) IPv4 將 IP 分為多少個等級？', options: ['①4', '②5', '③6', '④7'], correct: 1 },
+            { id: 38, text: '(2) 對 TB (Tera Byte) 之敘述，下列何者正確？', options: ['①1TB=10 億位元組', '②1TB=2²⁰ X 2²⁰Byte', '③1TB=1024 X 1024GB', '④1TB=1024 X 1024 Byte'], correct: 1 },
+            { id: 39, text: '(2) 若某顯示卡最高支援 1024x768 全彩顯示，則該顯示卡至少需要多少容量的 Video RAM？', options: ['①2MB', '②4MB', '③8MB', '④16MB'], correct: 1 },
+            { id: 40, text: '(1) 十進位的 29.5，若以十六進位表示，結果為何？', options: ['①1D.8', '②1D.9', '③1D.A', '④1D.B'], correct: 0 },
+            { id: 41, text: '(2) CPU 存取下列何種記憶體的速度最快？', options: ['①快取記憶體 (Cache Memory)', '②暫存器 (Register)', '③主記憶體 (RAM)', '④輔助記憶體 (Auxiliary Memory)'], correct: 1 },
+            { id: 42, text: '(2) 中央處理單元 (CPU) 內部的 ALU 功能為何？', options: ['①執行資料傳輸', '②執行加法、減法及邏輯運算', '③執行中斷程式', '④執行控制作業'], correct: 1 },
+            { id: 43, text: '(4) 若某電腦可定址的最大記憶體容量為 4GB，則該電腦有幾條位址線？', options: ['①4', '②8', '③16', '④32'], correct: 3 },
+            { id: 44, text: '(3) 若一硬碟的轉速為 5000RPM，則該硬碟旋轉一圈需要幾秒？', options: ['①0.002', '②0.12', '③0.012', '④0.025'], correct: 2 },
+            { id: 45, text: '(1) 若 CPU 可直接存取 1GB 的記憶體，則該部電腦最少應有幾條位址線？', options: ['①30', '②28', '③24', '④2'], correct: 0 },
+            { id: 46, text: '(3) 若某電腦有 34 條位址線，則此電腦可定址的最大空間為何？', options: ['①128MB', '②512MB', '③16GB', '④8GB'], correct: 2 },
+            { id: 47, text: '(2) 十進位數的 0.25，以二進位數表示為下列何者？', options: ['①0.1', '②0.01', '③0.001', '④0.11'], correct: 1 },
+            { id: 48, text: '(3) CPU 可從下列何者找到下一個要執行的指令之所在位址？', options: ['①指令暫存器 (IR)', '②旗標暫存器 (FR)', '③程式計數器 (PC)', '④位址暫存器 (MAR)'], correct: 2 },
+            { id: 49, text: '(3) 下列何者十進位數值為兩個二進位數值 101.01 及 111.11 相加的結果？', options: ['①12.5', '②12', '③13', '④13.75'], correct: 2 }
+        ];
+
+        // ---------- state ----------
+        let userAnswers = new Array(QUESTION_BANK.length).fill(null);   // 儲存所選 option index (0~3)
+        let showAllAnswers = false;    // 是否顯示正確答案
+
+        const container = document.getElementById('questionContainer');
+        const totalSpan = document.getElementById('totalCount');
+        const answeredSpan = document.getElementById('answeredCount');
+        const correctSpan = document.getElementById('correctCount');
+
+        function render() {
+            let html = '';
+            QUESTION_BANK.forEach((q, index) => {
+                const selectedIdx = userAnswers[index];
+                const isCorrect = (selectedIdx !== null && selectedIdx === q.correct);
+                const hasAnswered = (selectedIdx !== null);
+                // 顯示答案的標記
+                let feedbackHtml = '';
+                if (showAllAnswers || hasAnswered) {
+                    let resultText = '';
+                    let resultClass = 'unanswered';
+                    if (hasAnswered) {
+                        resultClass = isCorrect ? 'correct' : 'wrong';
+                        resultText = isCorrect ? '✓ 正確' : '✗ 錯誤';
+                    } else {
+                        resultText = '未作答';
+                    }
+                    const correctOptionText = q.options[q.correct];
+                    feedbackHtml = `
+                        <div class="answer-feedback">
+                            <span class="result ${resultClass}">${resultText}</span>
+                            ${showAllAnswers ? `<span class="correct-answer-text">✅ 正確答案：${correctOptionText}</span>` : ''}
+                            ${(!showAllAnswers && hasAnswered && !isCorrect) ? `<span class="correct-answer-text" style="background:#f0e6e6;color:#7a2a2a;">正確：${correctOptionText}</span>` : ''}
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="question-item" data-qindex="${index}">
+                        <div class="q-header">
+                            <span class="q-number">${q.id}.</span>
+                            <span class="q-text">${q.text}</span>
+                        </div>
+                        <div class="options">
+                            ${q.options.map((opt, optIdx) => {
+                                const checked = (selectedIdx === optIdx) ? 'checked' : '';
+                                return `
+                                    <label class="option-label">
+                                        <input type="radio" name="q_${index}" value="${optIdx}" ${checked} data-index="${index}" data-optidx="${optIdx}">
+                                        ${opt}
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
+                        ${feedbackHtml}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // 更新統計
+            totalSpan.textContent = QUESTION_BANK.length;
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            answeredSpan.textContent = answeredCount;
+            let correctCount = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === QUESTION_BANK[i].correct) correctCount++;
+            }
+            correctSpan.textContent = correctCount;
+
+            // 綁定事件 (radio change)
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function(e) {
+                    const idx = parseInt(this.dataset.index, 10);
+                    const optIdx = parseInt(this.dataset.optidx, 10);
+                    if (this.checked) {
+                        userAnswers[idx] = optIdx;
+                    } else {
+                        // 如果取消選中 (但radio不會自行取消，但我們可以防止，但保持一致性)
+                    }
+                    // 重新渲染 (保持狀態)
+                    render();
+                });
+            });
+        }
+
+        // ---------- 按鈕功能 ----------
+        document.getElementById('submitAllBtn').addEventListener('click', function() {
+            // 強制顯示所有題目的正確/錯誤反饋 (即顯示答案)
+            showAllAnswers = true;
+            render();
+        });
+
+        document.getElementById('showAllAnswersBtn').addEventListener('click', function() {
+            showAllAnswers = !showAllAnswers;  // toggle
+            render();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            userAnswers.fill(null);
+            showAllAnswers = false;
+            render();
+        });
+
+        // 初始渲染
+        render();
+    })();
+</script>
+</body>
+</html>
