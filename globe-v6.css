@@ -1,0 +1,20 @@
+.earth.enhanced-earth {
+  transform: none !important;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 50%;
+}
+.earth.enhanced-earth::after { display:none; }
+.earth.enhanced-earth > :not(.globe-canvas) { visibility:hidden; }
+.globe-canvas {
+  position:absolute;
+  inset:-4%;
+  width:108%;
+  height:108%;
+  cursor:grab;
+  touch-action:none;
+  filter:drop-shadow(0 24px 35px rgba(32,85,35,.32));
+  z-index:4;
+}
+.globe-canvas:active { cursor:grabbing; }
