@@ -1,0 +1,14 @@
+{
+  "spreadsheet": {
+    "id": "1HB_pFT8Pc8-HlalDQO30tOcNEj1fCcwITW1cn-vFES4",
+    "url": "https://docs.google.com/spreadsheets/d/1HB_pFT8Pc8-HlalDQO30tOcNEj1fCcwITW1cn-vFES4/edit?usp=sharing",
+    "role": "canonical_news_source",
+    "columns": ["名稱", "英文", "日期", "內容", "新聞連結1", "新聞連結2", "新聞連結3", "圖片連結"]
+  },
+  "photoFolder": {
+    "id": "1W-xslnaXUpRSQyOnHQ78uRVOkGD1TQYQ",
+    "url": "https://drive.google.com/drive/folders/1W-xslnaXUpRSQyOnHQ78uRVOkGD1TQYQ?usp=sharing",
+    "matchingRule": "Match photos to spreadsheet rows by activity name first, then by filename/date. Numbered suffixes belong to the same activity."
+  },
+  "publishingRule": "Every news item links to an Ai FinTech company article. Each article contains original company copy, inline event photographs with captions, and official external sources at the end."
+}
