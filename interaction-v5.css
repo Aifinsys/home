@@ -14,16 +14,23 @@
 .partners { overflow:hidden; }
 .official-partners {
   display:flex;
-  width:max-content;
+  width:100%;
   border:0;
   gap:18px;
-  animation:partnerMarquee 34s linear infinite;
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+  cursor:grab;
+  touch-action:pan-y;
+  padding:4px 0 16px;
 }
-.official-partners:hover { animation-play-state:paused; }
+.official-partners::-webkit-scrollbar { display:none; }
+.official-partners.is-dragging { cursor:grabbing; scroll-snap-type:none; user-select:none; }
 .official-partners a {
   flex:0 0 clamp(220px,24vw,330px);
   width:clamp(220px,24vw,330px);
   border:1px solid #bdc6bc;
+  scroll-snap-align:start;
 }
-@keyframes partnerMarquee { to { transform:translateX(calc(-50% - 9px)); } }
-@media (prefers-reduced-motion: reduce) { .official-partners { animation-play-state:paused; } }
+.official-partners::after { content:'左右滑動瀏覽  /  SWIPE TO EXPLORE'; flex:0 0 auto; align-self:center; padding:0 24px; color:#667067; font:500 11px/1.5 'DM Mono',monospace; letter-spacing:.12em; }

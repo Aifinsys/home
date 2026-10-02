@@ -49,4 +49,46 @@ if (partnerTrack && !partnerTrack.dataset.loopReady) {
     partnerTrack.appendChild(clone);
   });
   partnerTrack.dataset.loopReady = 'true';
+
+  let partnerDragging = false;
+  let partnerStartX = 0;
+  let partnerStartScroll = 0;
+  let partnerResumeAt = 0;
+  const pausePartnerAuto = () => { partnerResumeAt = performance.now() + 2800; };
+  partnerTrack.addEventListener('pointerdown', event => {
+    partnerDragging = true;
+    partnerStartX = event.clientX;
+    partnerStartScroll = partnerTrack.scrollLeft;
+    partnerTrack.setPointerCapture(event.pointerId);
+    partnerTrack.classList.add('is-dragging');
+    pausePartnerAuto();
+  });
+  partnerTrack.addEventListener('pointermove', event => {
+    if (!partnerDragging) return;
+    partnerTrack.scrollLeft = partnerStartScroll - (event.clientX - partnerStartX);
+  });
+  const endPartnerDrag = event => {
+    if (!partnerDragging) return;
+    partnerDragging = false;
+    if (event.pointerId != null && partnerTrack.hasPointerCapture(event.pointerId)) partnerTrack.releasePointerCapture(event.pointerId);
+    partnerTrack.classList.remove('is-dragging');
+    pausePartnerAuto();
+  };
+  partnerTrack.addEventListener('pointerup', endPartnerDrag);
+  partnerTrack.addEventListener('pointercancel', endPartnerDrag);
+  partnerTrack.addEventListener('wheel', pausePartnerAuto, { passive:true });
+  partnerTrack.addEventListener('mouseenter', pausePartnerAuto);
+
+  let partnerLastFrame = performance.now();
+  const animatePartners = now => {
+    const elapsed = Math.min(40, now - partnerLastFrame);
+    partnerLastFrame = now;
+    if (!partnerDragging && now > partnerResumeAt && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      partnerTrack.scrollLeft += elapsed * .035;
+      const midpoint = partnerTrack.scrollWidth / 2;
+      if (partnerTrack.scrollLeft >= midpoint) partnerTrack.scrollLeft -= midpoint;
+    }
+    requestAnimationFrame(animatePartners);
+  };
+  requestAnimationFrame(animatePartners);
 }
