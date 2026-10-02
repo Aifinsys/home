@@ -1,16 +1,16 @@
 const copy = {
   zh: {
-    brandSub: 'CLIMATE INTELLIGENCE', navHome: '首頁', navNews: '最新消息', navAbout: '關於我們',
+    brandName: '中山永續金融科技', brandSub: 'AI Fintech Corp.', navHome: '首頁', navNews: '最新消息', navAbout: '關於我們',
     navProducts: '產品服務', navPartners: '合作夥伴',
     navContact: '聯絡我們 <i class="fa-solid fa-arrow-up-right-from-square"></i>',
     eyebrow: 'CLIMATE RISK INTELLIGENCE · TAIWAN',
-    heroTitle: '提供氣候數據<br>為<strong>金融避險</strong>',
+    heroTitle: '提供氣候數據為<strong>金融避險</strong>',
     heroText: '全球氣候資料以 AI 科學計算，成為金融投資與避險決策。',
     explore: '探索解決方案 <i class="fa-solid fa-arrow-down"></i>',
     talk: '與我們對話 <i class="fa-solid fa-arrow-up-right-from-square"></i>',
     statRisk: '實體氣候風險因子', statEngine: '科學建模引擎', statSignal: '動態訊號監測',
     aboutTag: 'ABOUT AI FINTECH',
-    aboutTitle: '氣候變遷不是背景雜訊。<br>它是<strong>每一項金融決策</strong>的變數。',
+    aboutTitle: '讓氣候變遷成為每一筆<strong>重要金融決策</strong>',
     aboutText: '中山永續金融科技整合環境及金融數據，量化氣候風險的財務影響。',
     productTag: 'PRODUCTS & SERVICES', productsTitle: '我們的服務',
     aiProductKicker: 'AI INVESTMENT PLATFORM', aiProductTitle: 'AI 投資平台',
@@ -31,7 +31,7 @@ const copy = {
     formSend: '送出資訊 <i class="fa-solid fa-arrow-up-right-from-square"></i>'
   },
   en: {
-    brandSub: 'CLIMATE INTELLIGENCE', navHome: 'Home', navNews: 'News', navAbout: 'About',
+    brandName: 'AI Fintech Corp.', brandSub: 'CLIMATE INTELLIGENCE', navHome: 'Home', navNews: 'News', navAbout: 'About',
     navProducts: 'Solutions', navPartners: 'Partners',
     navContact: 'Contact us <i class="fa-solid fa-arrow-up-right-from-square"></i>',
     eyebrow: 'CLIMATE RISK INTELLIGENCE · TAIWAN',
@@ -92,12 +92,24 @@ document.querySelector('#themeToggle').onclick = event => {
 const dialog = document.querySelector('#contactDialog');
 document.querySelectorAll('.open-contact').forEach(element => element.onclick = () => dialog.showModal());
 document.querySelector('.close-dialog').onclick = () => dialog.close();
-dialog.querySelector('form').onsubmit = event => {
+dialog.querySelector('form').onsubmit = async event => {
   event.preventDefault();
-  alert(language === 'zh'
-    ? '謝謝！這是聯絡表單原型，送出串接完成後將由專人聯繫。'
-    : 'Thank you! This contact-form prototype will be connected to your service soon.');
-  dialog.close();
+  const form = event.currentTarget;
+  const button = form.querySelector('[type="submit"]');
+  const status = form.querySelector('.form-status');
+  button.disabled = true;
+  status.textContent = language === 'zh' ? '正在送出…' : 'Sending…';
+  try {
+    const response = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{ Accept:'application/json' } });
+    if (!response.ok) throw new Error('Submission failed');
+    form.reset();
+    status.textContent = language === 'zh' ? '已成功送出，我們會儘快與您聯繫。' : 'Sent successfully. We will contact you soon.';
+    setTimeout(() => dialog.close(), 1800);
+  } catch (error) {
+    status.textContent = language === 'zh' ? '送出失敗，請直接寄信至 nsysr8@gmail.com。' : 'Unable to send. Please email nsysr8@gmail.com.';
+  } finally {
+    button.disabled = false;
+  }
 };
 document.querySelector('.menu-button').onclick = () => {
   const nav = document.querySelector('nav');
