@@ -5,6 +5,34 @@ const demos={portfolio:{score:'84.2',change:'+ 6.4%',title:'Projected climate-ad
 document.querySelectorAll('.demo-tabs button').forEach(button=>button.addEventListener('click',()=>{const d=demos[button.dataset.demo];document.querySelectorAll('.demo-tabs button').forEach(x=>x.classList.remove('active'));button.classList.add('active');document.querySelector('.demo-score').textContent=d.score;document.querySelector('.demo-change').textContent=d.change;document.querySelector('.demo-chart-title').textContent=d.title;document.querySelector('.demo-allocation').textContent=d.allocation;document.querySelector('.demo-market').textContent=d.market;const line=document.querySelector('.chart-line'),fill=document.querySelector('.chart-fill');line.setAttribute('d',d.path);fill.setAttribute('d',d.path+' L600,190 L0,190Z')}));
 document.querySelectorAll('.stock-row').forEach(stock=>stock.addEventListener('click',()=>{document.querySelectorAll('.stock-row').forEach(x=>x.classList.remove('selected'));stock.classList.add('selected');const code=stock.querySelector('b').textContent,name=stock.querySelector('span').textContent,price=stock.querySelector('em').textContent;document.querySelector('.quant-title b').textContent=`${code} · ${name}`;document.querySelector('.demo-market').textContent=`${code} / AI QUANT SIGNAL`;document.querySelector('.demo-chart-title').textContent=`${name} climate-adjusted price momentum`;document.querySelector('.demo-score').textContent=code==='2454'?'74.2':code==='TAIEX'?'81.6':'86.4';document.querySelector('.demo-change').textContent=stock.querySelector('i').textContent;document.querySelector('.quant-title strong').firstChild.textContent=code==='2454'?'74.2 ':code==='TAIEX'?'81.6 ':'86.4 '}));
 
+const renderCandles=(seed=2330)=>{
+  const svg=document.querySelector('.quant-demo .chart svg');
+  if(!svg)return;
+  svg.querySelectorAll('.k-candles,.k-volume,.k-average').forEach(node=>node.remove());
+  const ns='http://www.w3.org/2000/svg',candles=document.createElementNS(ns,'g'),volume=document.createElementNS(ns,'g'),average=document.createElementNS(ns,'path');
+  candles.setAttribute('class','k-candles');volume.setAttribute('class','k-volume');average.setAttribute('class','k-average');
+  const values=[];let close=118+(seed%17),state=(seed%97)+11;
+  const random=()=>{state=(state*9301+49297)%233280;return state/233280};
+  for(let index=0;index<24;index++){
+    const open=close+(random()-.48)*7,trend=(index<7?.9:index<14?-.28:1.05),next=open+(random()-.43)*9+trend,high=Math.max(open,next)+random()*5+1,low=Math.min(open,next)-random()*5-1;
+    close=next;values.push({open,close,high,low,vol:random()*22+8});
+  }
+  const max=Math.max(...values.map(v=>v.high)),min=Math.min(...values.map(v=>v.low)),scale=value=>18+(max-value)/(max-min)*119;
+  const step=600/values.length,ma=[];
+  values.forEach((value,index)=>{
+    const x=index*step+step/2,up=value.close>=value.open,kind=Math.abs(value.close-value.open)<.45?'flat':up?'up':'down',group=document.createElementNS(ns,'g'),wick=document.createElementNS(ns,'line'),body=document.createElementNS(ns,'rect');
+    group.setAttribute('class',kind);wick.setAttribute('class','wick');wick.setAttribute('x1',x);wick.setAttribute('x2',x);wick.setAttribute('y1',scale(value.high));wick.setAttribute('y2',scale(value.low));body.setAttribute('class','body');body.setAttribute('x',x-step*.29);body.setAttribute('width',step*.58);body.setAttribute('y',Math.min(scale(value.open),scale(value.close)));body.setAttribute('height',Math.max(2,Math.abs(scale(value.open)-scale(value.close))));group.append(wick,body);candles.append(group);
+    const bar=document.createElementNS(ns,'rect');bar.setAttribute('class',up?'up':'down');bar.setAttribute('x',x-step*.3);bar.setAttribute('width',step*.6);bar.setAttribute('y',184-value.vol);bar.setAttribute('height',value.vol);volume.append(bar);
+    const from=Math.max(0,index-4),slice=values.slice(from,index+1),mean=slice.reduce((sum,item)=>sum+item.close,0)/slice.length;ma.push(`${index?'L':'M'}${x.toFixed(1)},${scale(mean).toFixed(1)}`);
+  });
+  average.setAttribute('d',ma.join(' '));
+  const fill=svg.querySelector('.chart-fill');svg.insertBefore(volume,fill);svg.insertBefore(candles,fill);svg.insertBefore(average,fill);
+  const chart=svg.closest('.chart');if(chart&&!chart.querySelector('.chart-legend')){const legend=document.createElement('div');legend.className='chart-legend';legend.innerHTML='<i class="up">● 上漲</i><i class="down">● 下跌</i><i class="ma">— MA5</i>';chart.append(legend)}
+};
+renderCandles();
+document.querySelectorAll('.demo-tabs button').forEach((button,index)=>button.addEventListener('click',()=>renderCandles([2330,8801,7003][index])));
+document.querySelectorAll('.stock-row').forEach(stock=>stock.addEventListener('click',()=>renderCandles([...stock.querySelector('b').textContent].reduce((sum,char)=>sum+char.charCodeAt(0),0))));
+
 const earth = document.querySelector('.earth');
 let globeRotationX = -8;
 let globeRotationY = -18;

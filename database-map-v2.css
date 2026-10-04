@@ -1,0 +1,19 @@
+.climate-map-demo .impact-map{height:310px;background:radial-gradient(circle at 52% 45%,#183b35 0,#0d2724 46%,#081a19 100%);border-color:#4d7167;isolation:isolate}
+.climate-map-demo .map-grid{z-index:0;opacity:.36;background-image:linear-gradient(rgba(117,187,168,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(117,187,168,.14) 1px,transparent 1px);background-size:10% 20%}
+.climate-map-demo .world-shape{display:none}
+.climate-world{position:absolute;inset:10px 10px 52px;width:calc(100% - 20px);height:calc(100% - 62px);z-index:1;object-fit:fill;filter:drop-shadow(0 8px 15px rgba(0,0,0,.27))}
+.impact-point{z-index:3;color:var(--hazard,#ff6e5a);transform:translate(-50%,-50%)}
+.impact-point i{width:9px;height:9px;background:var(--hazard,#ff614a);border-color:#fff8;box-shadow:0 0 0 0 color-mix(in srgb,var(--hazard,#ff614a) 70%,transparent);animation:hazardPulse 1.9s infinite}
+.impact-point b{top:-11px;left:15px;color:var(--hazard,#fff);font-weight:700;letter-spacing:.08em}
+.impact-point small{top:7px;left:14px;color:#f2faf5;background:rgba(4,22,18,.82);border:1px solid color-mix(in srgb,var(--hazard,#fff) 45%,transparent);padding:3px 5px;border-radius:2px}
+.impact-point.typhoon{top:44%;left:79%;--hazard:#ffd14a}.impact-point.quake{top:31%;left:83%;--hazard:#ff6258}.impact-point.flood{top:29%;left:50%;--hazard:#55c8ff}.impact-point.wildfire{top:39%;left:22%;--hazard:#ff8a3d}.impact-point.drought{top:61%;left:53%;--hazard:#e8c85a}
+.impact-point.heatwave{top:49%;left:67%;--hazard:#ff4f91}.impact-point.hurricane{top:44%;left:34%;--hazard:#b586ff}.impact-point.australia-fire{top:72%;left:85%;--hazard:#ff9e42}
+.impact-point.is-active small{box-shadow:0 0 14px color-mix(in srgb,var(--hazard) 28%,transparent);border-color:var(--hazard)}
+.impact-status{position:absolute;z-index:4;left:11px;bottom:10px;right:11px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 10px;background:rgba(5,20,17,.9);border-top:1px solid #4f7167;font:7px var(--mono);color:#9fb6ae;backdrop-filter:blur(5px)}
+.impact-status span{color:#baff39;letter-spacing:.1em}.impact-status b{color:#eef8f2;font-size:9px;font-weight:500}.impact-status small{color:#a9bbb5;white-space:nowrap}
+.impact-legend{gap:10px;flex-wrap:wrap}.impact-legend span{white-space:nowrap}.impact-legend i{background:var(--legend)}
+.impact-legend .legend-typhoon{--legend:#ffd14a}.impact-legend .legend-flood{--legend:#55c8ff}.impact-legend .legend-wildfire{--legend:#ff8a3d}.impact-legend .legend-drought{--legend:#e8c85a}.impact-legend .legend-heatwave{--legend:#ff4f91}.impact-legend .legend-quake{--legend:#ff6258}
+.official-partners a[href*="cnyes.com"] img{width:72%!important;height:102px!important}
+@keyframes hazardPulse{70%{box-shadow:0 0 0 13px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@media(max-width:850px){.climate-map-demo .impact-map{height:280px}.impact-point small{font-size:7px}.impact-status{grid-template-columns:auto 1fr}.impact-status small{grid-column:1/-1}}
+@media(max-width:510px){.climate-map-demo .impact-map{height:250px}.climate-world{inset:5px 2px 52px;width:calc(100% - 4px);height:calc(100% - 57px)}.impact-point small{display:none}.impact-point b{left:12px}.impact-status{font-size:6px}.impact-status b{font-size:8px}.impact-legend b{width:100%}}
