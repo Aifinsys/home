@@ -9,19 +9,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="news.css">
-  <link rel="stylesheet" href="v2.css">
-  <link rel="stylesheet" href="map.css">
-  <link rel="stylesheet" href="product-v3.css">
+  <link rel="stylesheet" href="style.css?v=20261009-2">
+  <link rel="stylesheet" href="news.css?v=20261009-2">
+  <link rel="stylesheet" href="v2.css?v=20261009-2">
+  <link rel="stylesheet" href="map.css?v=20261009-2">
+  <link rel="stylesheet" href="product-v3.css?v=20261009-2">
   <link rel="stylesheet" href="candlestick.css?v=1">
   <link rel="stylesheet" href="database-map-v2.css?v=2">
-  <link rel="stylesheet" href="news-sync.css">
-  <link rel="stylesheet" href="partner-v4.css">
-  <link rel="stylesheet" href="partner-scale.css">
-  <link rel="stylesheet" href="interaction-v5.css">
-  <link rel="stylesheet" href="globe-v6.css">
-  <link rel="stylesheet" href="jupiter-inspired.css?v=1">
+  <link rel="stylesheet" href="news-sync.css?v=20261009-2">
+  <link rel="stylesheet" href="partner-v4.css?v=20261009-2">
+  <link rel="stylesheet" href="partner-scale.css?v=20261009-2">
+  <link rel="stylesheet" href="interaction-v5.css?v=20261009-2">
+  <link rel="stylesheet" href="globe-v6.css?v=20261009-2">
+  <link rel="stylesheet" href="jupiter-inspired.css?v=20261009-2">
+  <link rel="stylesheet" href="logo-v2.css?v=20261009-2">
+  <link rel="stylesheet" href="ui-polish-v3.css?v=20261009-2">
+  <link rel="stylesheet" href="climate-process-v1.css?v=20261009-2">
 </head>
 <body>
   <div class="cursor-glow"></div>
@@ -58,10 +61,61 @@
       <div class="method-line"><span>01 / INGEST</span><i></i><span>02 / MODEL</span><i></i><span>03 / DECIDE</span><i></i><span>04 / ADAPT</span></div>
     </section>
 
+    <section class="climate-process section-grid" id="climate-process">
+      <div class="climate-process-heading">
+        <p class="section-tag">PROCESS — <span data-i18n="flowTag">CLIMATE FINANCE WORKFLOW</span></p>
+        <h2 data-i18n="flowTitle">從氣候訊號到金融避險</h2>
+        <p data-i18n="flowText">整合全球環境與金融資料，將氣候衝擊逐步轉譯為可執行的投資策略。</p>
+      </div>
+      <div class="climate-step-nav" role="tablist" aria-label="氣候金融分析流程">
+        <button class="is-active" role="tab" aria-selected="true" data-flow-step="0"><b>01</b><span><strong data-i18n="flowStep1Title">氣候資料</strong><small data-i18n="flowStep1Sub">全球訊號匯入</small></span><i></i></button>
+        <button role="tab" aria-selected="false" data-flow-step="1"><b>02</b><span><strong data-i18n="flowStep2Title">科學計算</strong><small data-i18n="flowStep2Sub">數值模型運算</small></span><i></i></button>
+        <button role="tab" aria-selected="false" data-flow-step="2"><b>03</b><span><strong data-i18n="flowStep3Title">財務量化</strong><small data-i18n="flowStep3Sub">股市波動定價</small></span><i></i></button>
+        <button role="tab" aria-selected="false" data-flow-step="3"><b>04</b><span><strong data-i18n="flowStep4Title">投資避險</strong><small data-i18n="flowStep4Sub">全球策略配置</small></span><i></i></button>
+      </div>
+      <div class="climate-process-stage" role="tabpanel" aria-live="polite">
+        <div class="flow-visual-card">
+          <div class="flow-visual-head"><span class="flow-visual-kicker">DATA INGESTION</span><em class="flow-visual-state">LIVE · 24/7</em></div>
+          <div class="flow-network" aria-hidden="true">
+            <div class="flow-scene flow-scene-data">
+              <span class="source-chip source-a"><i class="fa-solid fa-satellite"></i>SATELLITE</span><span class="source-chip source-b"><i class="fa-solid fa-water"></i>OCEAN</span><span class="source-chip source-c"><i class="fa-solid fa-cloud-rain"></i>WEATHER</span><span class="source-chip source-d"><i class="fa-solid fa-hurricane"></i>DISASTER</span>
+              <i class="data-packet packet-a"></i><i class="data-packet packet-b"></i><i class="data-packet packet-c"></i><i class="data-packet packet-d"></i>
+              <span class="flow-core"><img src="logo-source.png" alt=""></span>
+            </div>
+            <div class="flow-scene flow-scene-compute">
+              <div class="number-column col-a">0.831<br>24.602<br>0.194<br>71.480<br>0.923<br>18.204<br>0.517<br>86.400<br>0.288<br>97.600<br>0.831<br>24.602</div>
+              <div class="number-column col-b">101101<br>011010<br>110001<br>001101<br>111010<br>010111<br>100101<br>011001<br>101110<br>000111<br>101101<br>011010</div>
+              <div class="number-column col-c">−2.81<br>+0.42<br>23.1°C<br>155KM<br>RCP4.5<br>0.037<br>VAR95<br>+1.72<br>0.864<br>−0.18<br>−2.81<br>+0.42</div>
+              <div class="compute-core"><small>AI MODEL</small><b>97.6%</b><em>CONFIDENCE</em></div>
+            </div>
+            <div class="flow-scene flow-scene-market">
+              <div class="market-head"><span>TAIEX · CLIMATE ADJUSTED</span><b>+0.42%</b></div>
+              <svg class="market-chart" viewBox="0 0 620 250" preserveAspectRatio="none"><g class="market-grid"><path d="M0 50H620M0 100H620M0 150H620M0 200H620"/><path d="M100 0V250M200 0V250M300 0V250M400 0V250M500 0V250"/></g><g class="candles"><path class="up" d="M52 174V99M42 119H62V158H42Z"/><path class="down" d="M102 190V128M92 140H112V174H92Z"/><path class="up" d="M152 166V78M142 94H162V145H142Z"/><path class="up" d="M202 139V61M192 73H212V120H192Z"/><path class="down" d="M252 154V82M242 92H262V136H242Z"/><path class="up" d="M302 134V42M292 60H312V108H292Z"/><path class="down" d="M352 150V79M342 91H362V128H342Z"/><path class="up" d="M402 119V35M392 48H412V98H392Z"/><path class="up" d="M452 92V20M442 34H462V77H442Z"/><path class="down" d="M502 116V49M492 60H512V98H492Z"/><path class="up" d="M552 81V12M542 25H562V65H542Z"/></g><path class="market-line" d="M20 185C70 176 86 192 125 157S186 120 220 133 277 145 310 102 365 117 410 77 474 95 515 55 569 61 610 27"/></svg>
+              <div class="market-ticker"><span>VOL <b>18.4</b></span><span>RISK <b>24.6</b></span><span>AI SCORE <b>86.4</b></span></div>
+            </div>
+            <div class="flow-scene flow-scene-global">
+              <div class="mini-globe"><div class="mini-grid"></div><span class="land land-a"></span><span class="land land-b"></span><span class="land land-c"></span><i class="global-pin gp-a"></i><i class="global-pin gp-b"></i><i class="global-pin gp-c"></i><i class="global-pin gp-d"></i></div>
+              <span class="global-market gm-a">TAIWAN<br><b>TAIEX</b></span><span class="global-market gm-b">USA<br><b>S&P 500</b></span><span class="global-market gm-c">EUROPE<br><b>EUA</b></span><span class="global-market gm-d">ASIA<br><b>NIKKEI</b></span>
+              <i class="global-packet gpk-a"></i><i class="global-packet gpk-b"></i><i class="global-packet gpk-c"></i><i class="global-packet gpk-d"></i>
+            </div>
+            <div class="flow-scan"></div>
+          </div>
+          <div class="flow-metrics"><span><small>SATELLITE</small><b>18 TB</b></span><span><small>OCEAN</small><b>23.1°C</b></span><span><small>WEATHER</small><b>24/7</b></span></div>
+        </div>
+        <div class="flow-decision-card">
+          <div class="flow-step-label">STEP 01 / 04</div>
+          <h3>匯入全球氣候與市場訊號</h3>
+          <p>衛星雲圖、海溫、降雨、颱風路徑與市場資料，進入同一套可追溯的資料環境。</p>
+          <ul><li>多源資料同步</li><li>品質檢查與時間對齊</li><li>地理座標標準化</li></ul>
+          <div class="flow-output"><span>OUTPUT</span><b>標準化氣候資料層</b><i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </section>
+
     <section class="decision-grade section-grid" aria-labelledby="decisionTitle">
       <div class="decision-intro">
         <p class="section-tag">02 — <span data-i18n="decisionTag">DECISION-GRADE CLIMATE INTELLIGENCE</span></p>
-        <h2 id="decisionTitle" data-i18n-html="decisionTitle">氣候風險，<br>就是<strong>資本風險。</strong></h2>
+        <h2 id="decisionTitle" data-i18n-html="decisionTitle">氣候風險，<br>就是<strong>財務風險。</strong></h2>
         <p data-i18n="decisionText">從實體災害到市場波動，我們把氣候衝擊轉譯為金融機構可追溯、可比較、可執行的決策依據。</p>
       </div>
       <div class="decision-points">
@@ -110,12 +164,13 @@
 
     <section class="contact-block" id="contact"><div><p class="section-tag">05 — <span data-i18n="contactTag">CONTACT</span></p><h2 data-i18n-html="contactTitle">讓資料與決策，<br><strong>開始產生影響。</strong></h2></div><button class="contact-cta open-contact"><span data-i18n="contactCta">立即聯絡我們</span><i class="fa-solid fa-arrow-up-right-from-square"></i></button><div class="contact-details"><div><small data-i18n="addressLabel">地址</small><p data-i18n="address">高雄市前鎮區復興四路 1 號<br>宏泰高雄新創大樓 2 樓</p></div><div><small data-i18n="hoursLabel">營業時間</small><p>09:00 — 18:00</p></div><div><small data-i18n="emailLabel">電子信箱</small><a href="mailto:nsysr8@gmail.com">nsysr8@gmail.com</a></div></div><div class="map"><iframe title="Ai FinTech location map" src="https://www.google.com/maps?q=高雄市前鎮區復興四路1號&output=embed" loading="lazy"></iframe><span>KAOHSIUNG / TAIWAN</span></div></section>
   </main>
-  <footer><a class="brand" href="#top"><img class="brand-logo" src="logo-source.png" alt="中山永續金融科技標誌"><span><b data-i18n="brandName">中山永續金融科技</b><small>AI Fintech Corp.</small></span></a><div class="socials"><span data-i18n="follow">追蹤我們</span><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" aria-label="LINE"><i class="fa-brands fa-line"></i></a></div><small>© 2026 AI Fintech Corp.</small></footer>
+  <footer id="site-footer"><a class="brand" href="#top"><img class="brand-logo" src="logo-source.png" alt="中山永續金融科技標誌"><span><b data-i18n="brandName">中山永續金融科技</b><small>AI Fintech Corp.</small></span></a><div class="socials"><span data-i18n="follow">追蹤我們</span><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" aria-label="LINE"><i class="fa-brands fa-line"></i></a></div><small>© 2026 AI Fintech Corp.</small></footer>
 
   <dialog id="contactDialog"><button class="close-dialog" aria-label="Close"><i class="fa-solid fa-xmark"></i></button><p class="eyebrow">CONTACT · AI Fintech Corp.</p><h2 data-i18n="formTitle">開始一場<br>有影響力的對話。</h2><p class="form-intro" data-i18n="formText">告訴我們您的需求，我們會儘快與您聯繫。</p><form action="https://formsubmit.co/ajax/nsysr8@gmail.com" method="POST"><input type="hidden" name="_subject" value="AI Fintech Corp. 網站新聯絡訊息"><input type="hidden" name="_template" value="table"><label><span data-i18n="formName">您的姓名</span><input name="name" required placeholder="Name"></label><label><span data-i18n="formEmail">電子信箱</span><input name="email" type="email" required placeholder="Email"></label><label><span data-i18n="formCompany">公司名稱（選填）</span><input name="company" placeholder="Company"></label><label><span data-i18n="formNeed">您想了解什麼？</span><select name="interest"><option>AI 投資平台</option><option>永續金融資料庫</option><option>合作提案</option><option>其他</option></select></label><label><span data-i18n="formMessage">訊息</span><textarea name="message" rows="3" required placeholder="Message"></textarea></label><button class="button primary" type="submit" data-i18n="formSend">送出資訊 <i class="fa-solid fa-arrow-up-right-from-square"></i></button><p class="form-status" role="status" aria-live="polite"></p></form></dialog>
-  <script src="script.js?v=10"></script>
-  <script src="improve.js?v=11"></script>
+  <script src="script.js?v=11"></script>
+  <script src="improve.js?v=12"></script>
   <script src="database-map-v2.js?v=2"></script>
   <script src="globe-v9.js?v=2"></script>
+  <script src="climate-process-v1.js?v=20261009-2"></script>
 </body>
 </html>
