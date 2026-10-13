@@ -1,6 +1,11 @@
-.official-partners a:nth-child(1) img { width: 172%; }
-.official-partners a:nth-child(2) img { width: 138%; }
-.official-partners a:nth-child(3) img { width: 132%; }
-.official-partners a:nth-child(5) img { width: 128%; }
-.official-partners a:nth-child(6) img { width: 142%; }
-.official-partners a:nth-child(8) img { width: 134%; }
+.official-partners .partner-google img { width: 128%; }
+.official-partners .partner-ntu img { width: 112%; }
+.official-partners .partner-ait img { width: 172%; }
+.official-partners .partner-stanford img { width: 112%; }
+.official-partners .partner-anue img { width: 138%; }
+.official-partners .partner-nsysu img { width: 132%; }
+.official-partners .partner-taiwan-ai img { width: 134%; }
+.official-partners .partner-finnovation img { width: 142%; }
+.official-partners .partner-sbf img { width: 112%; }
+
+.climate-map-demo::before { content:'MVP DATASET  ·  10,000+ 筆永續金融資料'; display:block; margin:12px 0 3px; color:#baff39; font:500 14px/1.5 var(--mono); letter-spacing:.035em; }

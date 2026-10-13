@@ -47,3 +47,11 @@ body.dark .climate-process{background:#0f1d18}.dark .climate-process-heading h2,
 @media(max-width:900px){.climate-process-heading{grid-template-columns:1fr}.climate-step-nav{position:relative;top:auto;overflow-x:auto;grid-template-columns:repeat(4,minmax(165px,1fr));padding-bottom:10px}.climate-process-stage{grid-template-columns:1fr;width:100%}.flow-decision-card{min-height:330px}}
 @media(max-width:560px){.climate-process{padding-top:80px;padding-bottom:85px}.climate-process-heading{margin-bottom:42px}.climate-process-heading h2{letter-spacing:-1.8px}.climate-step-nav{margin-bottom:45px}.flow-visual-card{min-height:365px;border-radius:20px}.flow-network{height:240px}.flow-core{width:82px;height:82px}.flow-core img{width:48px;height:48px}.flow-metrics span{padding:14px 12px}.flow-decision-card{border-radius:20px;padding:27px 24px}.flow-decision-card h3{font-size:25px}}
 @media(prefers-reduced-motion:reduce){.hero-stats>div.stat-flip b,.flow-scan,.data-packet,.number-column,.candles path,.market-line,.mini-globe,.global-packet{animation:none}}
+
+/* 2026-10-13: product identity refinements */
+.flow-core{width:132px;height:132px;background:transparent;box-shadow:none}
+.flow-core img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 15px 24px rgba(16,42,36,.2))}
+.market-head{gap:16px}
+.market-head b{color:#286d46;background:#dff2e5;border:1px solid rgba(40,109,70,.18);border-radius:999px;padding:5px 9px;letter-spacing:.04em}
+.market-chart{height:207px;margin-top:4px}
+@media(max-width:560px){.flow-core{width:102px;height:102px}.flow-core img{width:100%;height:100%}.market-head b{font-size:7px;padding:4px 6px}}
