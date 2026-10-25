@@ -26,12 +26,10 @@
   let lastX = 0;
   let lastY = 0;
   let lastTime = performance.now();
-  let zoom = 1;
+  const zoom = 1.08;
   let clouds = true;
   let cloudTime = 0;
   let lastCloudFrame = -1;
-  let pinchDistance = 0;
-  let pinchZoom = 1;
 
   const locations = [
     { lon: 121, lat: 24, label: 'TAIWAN', value: 'RISK 24.6' },
@@ -78,15 +76,6 @@
     };
   };
 
-  const updateReadout = () => {
-    const label = document.querySelector('.globe-readout em');
-    if (label) label.textContent = Math.round(zoom * 100) + '%';
-  };
-  const setZoom = value => {
-    zoom = Math.max(.72, Math.min(1.62, value));
-    radius = Math.min(width, height) * .315 * zoom;
-    updateReadout();
-  };
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
     width = rect.width;
@@ -94,7 +83,7 @@
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    setZoom(zoom);
+    radius = Math.min(width, height) * .315 * zoom;
   };
 
   texture.addEventListener('load', () => {
@@ -259,10 +248,6 @@
   canvas.addEventListener('pointermove', event => { event.stopPropagation(); if (!dragging) return; centerLon -= (event.clientX - lastX) * .42; centerLat = Math.max(-70, Math.min(70, centerLat + (event.clientY - lastY) * .28)); lastX = event.clientX; lastY = event.clientY; });
   const stop = event => { event.stopPropagation(); dragging = false; };
   canvas.addEventListener('pointerup', stop); canvas.addEventListener('pointercancel', stop);
-  canvas.addEventListener('wheel', event => { event.preventDefault(); setZoom(zoom + (event.deltaY < 0 ? .09 : -.09)); }, { passive: false });
-  canvas.addEventListener('dblclick', event => { event.preventDefault(); setZoom(zoom >= 1.48 ? 1 : zoom + .18); });
-  canvas.addEventListener('touchstart', event => { if (event.touches.length === 2) { pinchDistance = Math.hypot(event.touches[0].clientX - event.touches[1].clientX, event.touches[0].clientY - event.touches[1].clientY); pinchZoom = zoom; } }, { passive: true });
-  canvas.addEventListener('touchmove', event => { if (event.touches.length === 2 && pinchDistance) { const distance = Math.hypot(event.touches[0].clientX - event.touches[1].clientX, event.touches[0].clientY - event.touches[1].clientY); setZoom(pinchZoom * distance / pinchDistance); } }, { passive: true });
   new ResizeObserver(resize).observe(canvas);
   resize();
   buildCloudMap();

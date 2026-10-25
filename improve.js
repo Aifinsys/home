@@ -1,5 +1,5 @@
-const heroCopy={zh:{title:'AI演算將氣候衝擊轉化成可計算、可驗證、可交易的<strong>金融數據資產。</strong>',text:'協助企業提升投資效率、降低風險，推動全球永續金融創新。',news:'最新消息'},en:{title:'AI transforms climate impacts into computable, verifiable, and tradable <strong>financial data assets.</strong>',text:'Helping enterprises improve investment efficiency, reduce risk, and advance global sustainable finance innovation.',news:'Latest news'}};
-const updateHero=()=>{const isEn=document.documentElement.lang==='en',t=heroCopy[isEn?'en':'zh'];document.querySelector('[data-i18n-html="heroTitle"]').innerHTML=t.title;document.querySelector('.hero-copy h1+p').textContent=t.text;document.querySelector('[data-i18n="newsTitle"]').textContent=t.news};
+const heroCopy={zh:{title:'氣候衝擊金融數據資產',text:'AI演算將氣候衝擊轉化成可計算、可驗證、可交易的<strong>金融數據資產。</strong>',news:'最新消息'},en:{title:'Climate Impact Financial Data Assets',text:'AI transforms climate impacts into computable, verifiable, and tradable <strong>financial data assets.</strong>',news:'Latest news'}};
+const updateHero=()=>{const isEn=document.documentElement.lang==='en',t=heroCopy[isEn?'en':'zh'];document.querySelector('[data-i18n-html="heroTitle"]').innerHTML=t.title;document.querySelector('.hero-copy h1+p').innerHTML=t.text;document.querySelector('[data-i18n="newsTitle"]').textContent=t.news};
 document.querySelector('#languageToggle').addEventListener('click',updateHero);updateHero();
 const demos={portfolio:{score:'84.2',change:'+ 6.4%',title:'Projected climate-adjusted alpha',allocation:'ESG 65% · TAIEX FUT 20% · EUA 15%',market:'TAIEX / ESG PORTFOLIO',path:'M0,155 C55,142 70,160 112,135 S180,80 218,105 S267,132 303,94 S367,48 402,70 S455,122 492,66 S560,35 600,18'},futures:{score:'91.6',change:'+ 9.1%',title:'Futures hedge impact simulation',allocation:'WTI 30% · GOLD 25% · EUA 25% · CASH 20%',market:'GLOBAL CLIMATE FUTURES',path:'M0,139 C55,157 73,95 115,122 S171,48 220,99 S282,76 318,62 S370,111 410,48 S489,86 530,40 S570,29 600,24'},global:{score:'78.9',change:'+ 3.8%',title:'Global portfolio risk projection',allocation:'US EQ 40% · APAC 30% · EU EQ 15% · HEDGE 15%',market:'GLOBAL EQUITY / CLIMATE RISK',path:'M0,152 C44,130 70,105 112,128 S181,82 222,115 S276,140 319,95 S383,116 419,77 S470,101 507,58 S557,78 600,38'}};
 document.querySelectorAll('.demo-tabs button').forEach(button=>button.addEventListener('click',()=>{const d=demos[button.dataset.demo];document.querySelectorAll('.demo-tabs button').forEach(x=>x.classList.remove('active'));button.classList.add('active');document.querySelector('.demo-score').textContent=d.score;document.querySelector('.demo-change').textContent=d.change;document.querySelector('.demo-chart-title').textContent=d.title;document.querySelector('.demo-allocation').textContent=d.allocation;document.querySelector('.demo-market').textContent=d.market;const line=document.querySelector('.chart-line'),fill=document.querySelector('.chart-fill');line.setAttribute('d',d.path);fill.setAttribute('d',d.path+' L600,190 L0,190Z')}));
@@ -119,4 +119,58 @@ if (partnerTrack && !partnerTrack.dataset.loopReady) {
     requestAnimationFrame(animatePartners);
   };
   requestAnimationFrame(animatePartners);
+}
+
+const metricCounters = document.querySelectorAll('.animated-metric');
+const counterDuration = 4500;
+const formatCounter = (value, format) => {
+  const rounded = Math.round(value);
+  if (format === 'two-digit') return String(rounded).padStart(2, '0');
+  if (format === 'comma-plus') return `${rounded.toLocaleString('en-US')}+`;
+  if (format === 'fraction') return `${rounded}/7`;
+  return String(rounded);
+};
+const animateMetric = card => {
+  const number = card.querySelector('[data-counter-value],[data-counter-text]');
+  if (!number || card.classList.contains('is-counting')) return;
+  const target = Number(number.dataset.counterValue || 0);
+  const format = number.dataset.counterFormat;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    number.textContent = format === 'text' ? number.dataset.counterText : formatCounter(target, format);
+    return;
+  }
+  card.classList.add('is-counting');
+  card.classList.remove('has-counted');
+  const startedAt = performance.now();
+  const startValue = format === 'fraction' ? 1 : 0;
+  const glyphs = 'AIFNX01';
+  const tick = now => {
+    const progress = Math.min(1, (now - startedAt) / counterDuration);
+    const eased = 1 - Math.pow(1 - progress, 1.4);
+    const current = startValue + (target - startValue) * eased;
+    if (format === 'text') {
+      const settled = Math.floor(eased * number.dataset.counterText.length);
+      number.textContent = [...number.dataset.counterText].map((letter, index) => index < settled ? letter : glyphs[Math.floor((now / 75 + index * 3) % glyphs.length)]).join('');
+    } else {
+      number.textContent = formatCounter(current, format);
+    }
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      number.textContent = format === 'text' ? number.dataset.counterText : formatCounter(target, format);
+      card.classList.remove('is-counting');
+      card.classList.add('has-counted');
+    }
+  };
+  requestAnimationFrame(tick);
+};
+document.querySelectorAll('.hero-metric').forEach((card, index) => setTimeout(() => animateMetric(card), 180 + index * 140));
+const lowerMetrics = document.querySelectorAll('.trust-metrics .metric-counter');
+if (lowerMetrics.length) {
+  const metricObserver = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    lowerMetrics.forEach((card, index) => setTimeout(() => animateMetric(card), index * 110));
+    metricObserver.disconnect();
+  }, { threshold: .35 });
+  metricObserver.observe(document.querySelector('.trust-metrics'));
 }
