@@ -1,4 +1,5 @@
 /* Header, hero controls, and globe readability refinements */
+.hero-copy h1{letter-spacing:.01em}
 .brand{gap:9px}
 .brand small{margin-top:1px}
 
@@ -82,7 +83,7 @@ body.dark .hero .text-button{background:rgba(255,255,255,.06);color:#e9f4ed;bord
 @media(min-width:721px) and (max-width:900px){
   .hero{grid-template-columns:minmax(300px,.82fr) minmax(390px,1.18fr);padding-left:4vw;padding-right:2vw}
   .hero-copy{padding:72px 8px 72px 0}
-  .hero-copy h1{white-space:normal;font-size:clamp(28px,4.2vw,38px);letter-spacing:-2px}
+  .hero-copy h1{white-space:normal;font-size:clamp(28px,4.2vw,38px);letter-spacing:.005em}
   .hero-copy>p{font-size:13px}
   .hero-stats{gap:16px;margin-top:46px}
   .hero-stats div{min-width:0}.hero-stats b{font-size:20px}.hero-stats span{font-size:8px}
