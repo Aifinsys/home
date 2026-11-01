@@ -4,7 +4,9 @@ const storyKey = params.get('story') || 'etf-2025';
 const story = NEWS_DATA[storyKey] || NEWS_DATA['etf-2025'];
 const leadImages = {
   'etf-2025': ['assets/news/lead-etf.jpg', '2025 臺灣週 ETF 投資博覽會活動首圖。'],
-  'forum-2025': ['assets/news/lead-forum.jpg', '2025 永續金融科技創新投資國際論壇活動首圖。']
+  'forum-2025': ['assets/news/lead-forum.jpg', '2025 永續金融科技創新投資國際論壇活動首圖。'],
+  'sic-next-2026': ['assets/news/sic-next-2026-02.jpg', 'SIC 永續影響力投資 Next+ 學院結業式團體合影。'],
+  'climate-finance-forum-2026': ['assets/news/climate-finance-2026-01.jpg', '氣候金融新視野論壇現場分享。']
 };
 const leadImage = leadImages[storyKey];
 const esc = value => String(value).replace(/[&<>"']/g, character => ({
@@ -24,6 +26,6 @@ document.querySelector('#articleRoot').innerHTML = `
     <div class="story-body">
       <p class="story-lead">${esc(story.lead)}</p>
       ${story.sections.map((section, index) => `<section><h2>${esc(section.heading)}</h2><p>${esc(section.text)}</p><figure><img src="${section.image}" alt="${esc(section.caption)}"><figcaption><b>0${index + 1}</b>${esc(section.caption)}</figcaption></figure></section>`).join('')}
-      <aside class="official-links"><span>延伸閱讀 · OFFICIAL SOURCES</span>${story.links.map(link => `<a target="_blank" rel="noopener" href="${link[1]}">${esc(link[0])}<i>↗</i></a>`).join('')}</aside>
+      ${story.links.length ? `<aside class="official-links"><span>延伸閱讀 · OFFICIAL SOURCES</span>${story.links.map(link => `<a target="_blank" rel="noopener" href="${link[1]}">${esc(link[0])}<i>↗</i></a>`).join('')}</aside>` : ''}
     </div>
   </article>`;
