@@ -30,7 +30,7 @@ const copy = {
     dbProductKicker: 'SUSTAINABLE FINANCE DATA', dbProductTitle: '永續金融資料庫',
     dbProductText: '將風險數據整合成可直接使用的投資策略。',
     exploreData: '探索資料能力 <i class="fa-solid fa-arrow-right"></i>',
-    newsTag: 'LATEST NEWS', newsTitle: '最新消息',
+    newsTag: 'LATEST NEWS', newsTitle: '最新消息', newsMore: '查看更多', newsLess: '收合消息',
     partnerTag: 'TRUSTED COLLABORATORS', partnersTitle: '合作夥伴',
     contactTag: 'CONTACT', contactTitle: '讓氣候決策<br><strong>開始產生影響。</strong>',
     contactCta: '立即聯絡我們', addressLabel: '地址',
@@ -72,7 +72,7 @@ const copy = {
     dbProductKicker: 'SUSTAINABLE FINANCE DATA', dbProductTitle: 'Sustainable Finance Database',
     dbProductText: 'We integrate risk data into investment strategies ready for direct use.',
     exploreData: 'Explore data capability <i class="fa-solid fa-arrow-right"></i>',
-    newsTag: 'LATEST NEWS', newsTitle: 'Latest news',
+    newsTag: 'LATEST NEWS', newsTitle: 'Latest news', newsMore: 'View more', newsLess: 'Show less',
     partnerTag: 'TRUSTED COLLABORATORS',
     partnersTitle: 'Partners',
     contactTag: 'CONTACT', contactTitle: 'Make data and decisions<br><strong>matter.</strong>',
@@ -102,14 +102,18 @@ const renderLanguage = () => {
     if (value) element.innerHTML = value;
   });
 };
-langButton.onclick = () => { language = language === 'zh' ? 'en' : 'zh'; renderLanguage(); };
+langButton.onclick = () => { language = language === 'zh' ? 'en' : 'zh'; renderLanguage(); syncNewsToggle(); };
 renderLanguage();
 
-document.querySelector('#themeToggle').onclick = event => {
-  document.body.classList.toggle('dark');
-  event.currentTarget.innerHTML = document.body.classList.contains('dark')
-    ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+const newsList = document.querySelector('.news-list');
+const newsToggle = document.querySelector('#newsToggle');
+const syncNewsToggle = () => {
+  const expanded = newsList.classList.contains('is-expanded');
+  newsToggle.innerHTML = `${copy[language][expanded ? 'newsLess' : 'newsMore']} <i class="fa-solid fa-${expanded ? 'minus' : 'plus'}"></i>`;
+  newsToggle.setAttribute('aria-expanded', String(expanded));
 };
+newsToggle.onclick = () => { newsList.classList.toggle('is-expanded'); syncNewsToggle(); };
+syncNewsToggle();
 
 const dialog = document.querySelector('#contactDialog');
 document.querySelectorAll('.open-contact').forEach(element => element.onclick = () => dialog.showModal());

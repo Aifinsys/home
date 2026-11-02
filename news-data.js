@@ -20,3 +20,4 @@ NEWS_DATA['meet-south-2026'].sections[0].heading='青年局長蒞臨展位交流
 NEWS_DATA['meet-south-2026'].sections[0].text='高雄市政府青年局局長於亞灣新創大南方活動期間蒞臨中山永續金融科技展位，了解團隊如何整合全球氣候資料、金融模型與 AI 科學計算，將氣候衝擊轉化為企業與投資決策可使用的金融數據資產。';
 NEWS_DATA['meet-south-2026'].sections[0].image='assets/news/meet-south-youth-director.jpg';
 NEWS_DATA['meet-south-2026'].sections[0].caption='高雄市政府青年局局長蒞臨中山永續金融科技展位交流。';
+NEWS_DATA['meet-south-2026'].sections.push({heading:'串連高雄新創與城市資源',text:'亞灣新創大南方匯聚高雄市政府、新創團隊、企業與投資夥伴，讓創新服務能在城市場域中交流與驗證。中山永續金融科技與參展團隊共同展現南台灣的科技創新能量，持續拓展氣候金融科技的產業合作。',image:'assets/news/meet-south-cloud.jpg',caption:'亞灣新創大南方匯聚高雄市政府與新創團隊，共同展現南台灣創新能量。'});

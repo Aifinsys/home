@@ -456,3 +456,22 @@ body.dark .product-feature,body.dark .news-feature,body.dark .news-item{backgrou
   background:var(--ug-lime);
   color:var(--ug-deep);
 }
+
+.news-list:not(.is-expanded) .news-extra{display:none}
+.news-toggle{
+  min-width:160px;
+  margin:34px auto 0;
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  border:1px solid rgba(13,58,41,.25);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ug-deep);
+  font:700 13px var(--font);
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+.news-toggle:hover{background:var(--ug-deep);color:#f0fff4;transform:translateY(-2px)}
