@@ -25,7 +25,7 @@ document.querySelector('#articleRoot').innerHTML = `
     ${leadImage ? `<figure class="story-hero"><img src="${leadImage[0]}" alt="${esc(leadImage[1])}"><figcaption>${esc(leadImage[1])}</figcaption></figure>` : ''}
     <div class="story-body">
       <p class="story-lead">${esc(story.lead)}</p>
-      ${story.sections.map((section, index) => `<section><h2>${esc(section.heading)}</h2><p>${esc(section.text)}</p><figure><img src="${section.image}" alt="${esc(section.caption)}"><figcaption><b>0${index + 1}</b>${esc(section.caption)}</figcaption></figure></section>`).join('')}
+      ${story.sections.map((section, index) => `<section><h2>${esc(section.heading)}</h2><p>${esc(section.text)}</p>${section.image ? `<figure><img src="${section.image}" alt="${esc(section.caption)}"><figcaption><b>0${index + 1}</b>${esc(section.caption)}</figcaption></figure>` : ''}</section>`).join('')}
       ${story.links.length ? `<aside class="official-links"><span>延伸閱讀 · OFFICIAL SOURCES</span>${story.links.map(link => `<a target="_blank" rel="noopener" href="${link[1]}">${esc(link[0])}<i>↗</i></a>`).join('')}</aside>` : ''}
     </div>
   </article>`;

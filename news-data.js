@@ -9,3 +9,14 @@ const NEWS_DATA={
   'meet-south-2026':{date:'2026.08.28',tag:'STARTUP · SOUTH',title:'2026 亞灣新創大南方',dek:'在南台灣創新聚落展示 AI 氣候金融科技，連結產業、資本與城市場域。',lead:'中山永續金融科技於亞灣新創大南方分享 AI 氣候金融避險系統，與企業及創業生態夥伴交流氣候數據的商業應用。',sections:[{heading:'從高雄走向全球市場',text:'以高雄為研發與應用基地，我們持續將全球氣候資料、金融模型與產業需求結合，打造可擴展的永續金融科技服務。',image:'assets/news/meet-south.jpg',caption:'亞灣新創大南方匯聚南台灣創業與產業創新能量。'}],links:[['高雄市政府青年局｜亞灣新創大南方','https://youth.kcg.gov.tw/News_Content.aspx?n=9&s=13705&sms=10146']]},
   'finnovation-2025':{date:'2025.01.15',tag:'MILESTONE · KAOHSIUNG',title:'進駐高雄金融科技創新園區',dek:'以高雄作為 AI 氣候金融科技的研發基地，開啟產品驗證與跨域合作的新階段。',lead:'中山永續金融科技正式進駐高雄金融科技創新園區，持續推進氣候資料、金融模型與 AI 投資決策系統的研發。',sections:[{heading:'打造氣候金融科技的研發節點',text:'園區提供金融、科技與創業資源的連結，使我們能更快速與金融機構、企業及研究夥伴展開驗證與合作。',image:'assets/news/finnovation-01.jpg',caption:'中山永續金融科技進駐高雄金融科技創新園區。'},{heading:'從原型走向應用',text:'團隊將持續優化氣候衝擊因子、投資量化介面與永續金融資料庫，讓風險資訊可以進入實際決策流程。',image:'assets/news/finnovation-02.jpg',caption:'以園區為基地，串連金融科技創新生態。'}],links:[['工商時報｜高雄金融科技創新園區相關新聞','https://www.ctee.com.tw/news/20250115701305-430503']]}
 };
+
+// Keep event galleries factual and free of repeated images.
+NEWS_DATA['sic-next-2026'].sections[0].image='';
+NEWS_DATA['sic-next-2026'].sections[2].image='';
+
+// 2026 Meet Greater South: Kaohsiung Youth Bureau director visited our booth.
+NEWS_DATA['meet-south-2026'].lead='中山永續金融科技於亞灣新創大南方分享 AI 氣候金融避險系統，與企業及創業生態夥伴交流氣候數據的商業應用；活動期間，高雄市政府青年局局長亦蒞臨展位交流。';
+NEWS_DATA['meet-south-2026'].sections[0].heading='青年局長蒞臨展位交流';
+NEWS_DATA['meet-south-2026'].sections[0].text='高雄市政府青年局局長於亞灣新創大南方活動期間蒞臨中山永續金融科技展位，了解團隊如何整合全球氣候資料、金融模型與 AI 科學計算，將氣候衝擊轉化為企業與投資決策可使用的金融數據資產。';
+NEWS_DATA['meet-south-2026'].sections[0].image='assets/news/meet-south-youth-director.jpg';
+NEWS_DATA['meet-south-2026'].sections[0].caption='高雄市政府青年局局長蒞臨中山永續金融科技展位交流。';
